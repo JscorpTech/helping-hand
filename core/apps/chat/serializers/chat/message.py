@@ -1,9 +1,12 @@
 from rest_framework import serializers
 
 from ...models import MessageModel
+from ..user import ListUserSerializer
 
 
 class BaseMessageSerializer(serializers.ModelSerializer):
+    user = ListUserSerializer()
+
     class Meta:
         model = MessageModel
         exclude = [
@@ -26,7 +29,4 @@ class RetrieveMessageSerializer(BaseMessageSerializer):
 class CreateMessageSerializer(BaseMessageSerializer):
     class Meta(BaseMessageSerializer.Meta):
         exclude = None
-        fields = [
-            "text",
-            "file"
-        ]
+        fields = ["text", "file"]

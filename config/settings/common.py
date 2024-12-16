@@ -63,7 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "silk.middleware.SilkyMiddleware"
+    "silk.middleware.SilkyMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -90,13 +90,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 # fmt: on
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.{}".format(validator)
-    } for validator in [
+    {"NAME": "django.contrib.auth.password_validation.{}".format(validator)}
+    for validator in [
         "UserAttributeSimilarityValidator",
         "MinimumLengthValidator",
         "CommonPasswordValidator",
-        "NumericPasswordValidator"
+        "NumericPasswordValidator",
     ]
 ]
 
@@ -113,7 +112,10 @@ TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
 
-SEEDERS = ["core.apps.accounts.seeder.UserSeeder"]
+SEEDERS = [
+    # "core.apps.accounts.seeder.UserSeeder",
+    "core.apps.chat.seeders.ChatSeeder",
+]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "resources/static"),

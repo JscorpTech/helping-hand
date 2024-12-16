@@ -9,11 +9,3 @@ class ContentFilter(filters.FilterSet):
     class Meta:
         model = GroupModel
         fields = ("name",)
-
-
-class ContentFilter(filters.FilterSet):
-    name = filters.CharFilter(field_name="name", lookup_expr="icontains")
-
-    class Meta:
-        model = MessageModel
-        fields = ("name",)

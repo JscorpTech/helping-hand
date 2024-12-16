@@ -9,6 +9,7 @@ class BaseGroupSerializer(serializers.ModelSerializer):
         exclude = [
             "created_at",
             "updated_at",
+            "users",
         ]
 
 

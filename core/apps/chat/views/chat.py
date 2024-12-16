@@ -22,7 +22,9 @@ from ..serializers.chat import (
 
 @extend_schema(tags=["group"])
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
-    queryset = GroupModel.objects.all()
+
+    def get_queryset(self):
+        return GroupModel.objects.filter(is_public=True)
 
     @extend_schema(
         responses={
@@ -51,7 +53,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         queryset = paginator.paginate_queryset(
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
-        return paginator.get_paginated_response(self.get_serializer(queryset, many=True).data)
+        return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
 
     def get_serializer_class(self) -> Any:
         match self.action:

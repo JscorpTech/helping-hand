@@ -28,6 +28,7 @@ jst-django-core~=1.0.5
 rich
 pydantic
 bcrypt
+faker~=33.1.0
 
 # !NOTE: on-server
 # gunicorn

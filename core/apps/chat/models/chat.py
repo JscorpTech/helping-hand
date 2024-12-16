@@ -8,6 +8,9 @@ from django_core.models import AbstractBaseModel
 
 class GroupModel(AbstractBaseModel):
     name = models.CharField(max_length=255)
+    is_public = models.BooleanField(_("is:public"), default=False)
+    image = models.ImageField(_("image"), upload_to="groups/", blank=True, null=True)
+    users = models.ManyToManyField(verbose_name=_("users"), to=get_user_model(), related_name="chats")
 
     def __str__(self):
         return self.name
