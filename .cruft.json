@@ -1,0 +1,30 @@
+{
+  "template": "git@github.com:JscorpTech/django.git",
+  "commit": "940242309d0bd8cf730c6f90998cdd6fe24d9d90",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "helping_hand",
+      "project_slug": "helping_hand",
+      "settings_module": "config.settings.local",
+      "runner": "wsgi",
+      "celery": "no",
+      "cache": "no",
+      "script": "entrypoint.sh",
+      "key": "key",
+      "port": "8081",
+      "phone": "998888112309",
+      "password": "2309",
+      "max_line_length": "120",
+      "silk": true,
+      "storage": true,
+      "channels": true,
+      "rosetta": true,
+      "cacheops": true,
+      "ckeditor": true,
+      "version": "0.1.0",
+      "_template": "git@github.com:JscorpTech/django.git"
+    }
+  },
+  "directory": null
+}
