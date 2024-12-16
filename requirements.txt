@@ -26,7 +26,8 @@ django-cacheops~=7.1
 django-silk
 jst-django-core~=1.0.5
 rich
-
+pydantic
+bcrypt
 
 # !NOTE: on-server
 # gunicorn
