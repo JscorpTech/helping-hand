@@ -15,6 +15,8 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
 urlpatterns = [
     path("", include("core.apps.accounts.urls")),
     path("chat/", include("core.apps.chat.urls")),
+    path("news/", include("core.apps.news.urls")),
+    path("sos/", include("core.apps.sos.urls")),
 ]
 
 

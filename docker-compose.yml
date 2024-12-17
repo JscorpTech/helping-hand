@@ -32,9 +32,11 @@ services:
       - db
       - redis
   db:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.postgres
     networks:
       - helping_hand
-    image: postgres:16
     restart: always
     environment:
       POSTGRES_DB: django

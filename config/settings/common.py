@@ -33,6 +33,7 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptPasswordHasher",
 ]
 
+
 INSTALLED_APPS = [
     "modeltranslation",
     "unfold",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
 ] + APPS
 
 MODULES = [app for app in MODULES if isinstance(app, str)]

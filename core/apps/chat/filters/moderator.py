@@ -1,0 +1,17 @@
+from django_filters import rest_framework as filters
+from django.contrib.auth import get_user_model
+from core.apps.accounts.choices import RoleChoice
+
+
+class ModeratorFilter(filters.FilterSet):
+    role = filters.ChoiceFilter(
+        field_name="role",
+        choices=[
+            (RoleChoice.LAWYER.value, RoleChoice.LAWYER.label),
+            (RoleChoice.PSIXOLOG.value, RoleChoice.PSIXOLOG.label),
+        ],
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = ("role",)

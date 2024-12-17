@@ -10,3 +10,5 @@ class RoleChoice(models.TextChoices):
     SUPERUSER = "superuser", _("Superuser")
     ADMIN = "admin", _("Admin")
     USER = "user", _("User")
+    PSIXOLOG = "psixolog", _("Psixolog")
+    LAWYER = "lawyer", _("Lawyer")

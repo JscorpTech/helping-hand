@@ -9,8 +9,9 @@ from rest_framework.response import Response
 from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from django_core.mixins import BaseViewSetMixin
-
 from ..models import GroupModel, MessageModel
+from django_filters.rest_framework import DjangoFilterBackend
+from django.db import models
 from ..serializers.chat import (
     CreateGroupSerializer,
     ListGroupSerializer,
@@ -22,9 +23,41 @@ from ..serializers.chat import (
 
 @extend_schema(tags=["group"])
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['chat_type', "is_public"]
 
     def get_queryset(self):
-        return GroupModel.objects.filter(is_public=True)
+        queryset = GroupModel.objects.all()
+        if self.request.user.is_authenticated:
+            queryset = queryset.filter(models.Q(users__in=[self.request.user]) | models.Q(is_public=True))
+        else:
+            queryset = queryset.filter(is_public=True)
+        return queryset
+
+    def get_serializer_class(self) -> Any:
+        match self.action:
+            case "list":
+                return ListGroupSerializer
+            case "retrieve":
+                return RetrieveGroupSerializer
+            case "create":
+                return CreateGroupSerializer
+            case "get_messages":
+                return ListMessageSerializer
+            case "send_message":
+                return CreateMessageSerializer
+            case _:
+                return ListGroupSerializer
+
+    def get_permissions(self) -> Any:
+        perms = []
+        match self.action:
+            case "send_message":
+                perms.extend([IsAuthenticated])
+            case _:
+                perms.extend([AllowAny])
+        self.permission_classes = perms
+        return super().get_permissions()
 
     @extend_schema(
         responses={
@@ -54,28 +87,3 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
         return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
-
-    def get_serializer_class(self) -> Any:
-        match self.action:
-            case "list":
-                return ListGroupSerializer
-            case "retrieve":
-                return RetrieveGroupSerializer
-            case "create":
-                return CreateGroupSerializer
-            case "get_messages":
-                return ListMessageSerializer
-            case "send_message":
-                return CreateMessageSerializer
-            case _:
-                return ListGroupSerializer
-
-    def get_permissions(self) -> Any:
-        perms = []
-        match self.action:
-            case "send_message":
-                perms.extend([IsAuthenticated])
-            case _:
-                perms.extend([AllowAny])
-        self.permission_classes = perms
-        return super().get_permissions()

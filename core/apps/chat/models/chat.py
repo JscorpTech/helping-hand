@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from ..choices import ChatTypeChoice
 
 
 from django_core.models import AbstractBaseModel
@@ -10,7 +11,8 @@ class GroupModel(AbstractBaseModel):
     name = models.CharField(max_length=255)
     is_public = models.BooleanField(_("is:public"), default=False)
     image = models.ImageField(_("image"), upload_to="groups/", blank=True, null=True)
-    users = models.ManyToManyField(verbose_name=_("users"), to=get_user_model(), related_name="chats")
+    chat_type = models.CharField(_("chat type"), choices=ChatTypeChoice.choices, null=True, blank=True)
+    users = models.ManyToManyField(verbose_name=_("users"), to=get_user_model(), related_name="chats", blank=True)
 
     def __str__(self):
         return self.name
@@ -19,6 +21,10 @@ class GroupModel(AbstractBaseModel):
         db_table = "group"
         verbose_name = _("GroupModel")
         verbose_name_plural = _("GroupModels")
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["chat_type"]),
+        ]
 
 
 class MessageModel(AbstractBaseModel):

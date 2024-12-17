@@ -4,6 +4,8 @@ WORKDIR /code
 
 COPY requirements.txt /code/requirements.txt
 
+RUN apk add --no-cache gdal gdal-dev python3-dev geos geos-dev proj proj-dev g++ make gcc
+
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 CMD ["sh", "./resources/scripts/entrypoint.sh"]

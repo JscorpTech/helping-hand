@@ -29,6 +29,7 @@ rich
 pydantic
 bcrypt
 faker~=33.1.0
+GDAL==3.9.3
 
 # !NOTE: on-server
 # gunicorn
