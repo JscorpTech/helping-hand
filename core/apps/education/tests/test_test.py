@@ -3,7 +3,7 @@
 from django.test import TestCase
 
 
-class BannerTest(TestCase):
+class TestTest(TestCase):
 
     # def setUp(self):
     #    self.client = APIClient()
@@ -37,7 +37,7 @@ class BannerTest(TestCase):
     #    self.assertEqual(response.status_code, 200)
 
 
-class BannerTest(TestCase):
+class QuestionTest(TestCase):
 
     # def setUp(self):
     #    self.client = APIClient()
@@ -71,7 +71,7 @@ class BannerTest(TestCase):
     #    self.assertEqual(response.status_code, 200)
 
 
-class BannerTest(TestCase):
+class VariantTest(TestCase):
 
     # def setUp(self):
     #    self.client = APIClient()
@@ -105,7 +105,7 @@ class BannerTest(TestCase):
     #    self.assertEqual(response.status_code, 200)
 
 
-class BannerTest(TestCase):
+class AnswerTest(TestCase):
 
     # def setUp(self):
     #    self.client = APIClient()

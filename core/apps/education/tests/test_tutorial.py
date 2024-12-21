@@ -3,7 +3,7 @@
 from django.test import TestCase
 
 
-class BannerTest(TestCase):
+class TutorialTest(TestCase):
 
     # def setUp(self):
     #    self.client = APIClient()

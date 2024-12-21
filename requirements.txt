@@ -31,6 +31,9 @@ bcrypt
 faker~=33.1.0
 GDAL==3.9.3
 
+
+pytest
+pytest-django
 # !NOTE: on-server
 # gunicorn
 
