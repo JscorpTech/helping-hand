@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from django_core import exceptions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt import tokens
+import logging
 
 
 class UserService(sms.SmsService):
@@ -34,7 +35,8 @@ class UserService(sms.SmsService):
             return True
         except exceptions.SmsException as e:
             raise PermissionDenied(_("Qayta sms yuborish uchun kuting: {}").format(e.kwargs.get("expired")))
-        except Exception:
+        except Exception as e:
+            logging.error(e)
             raise PermissionDenied(_("Serverda xatolik yuz berdi"))
 
     def validate_user(self, user) -> dict:
