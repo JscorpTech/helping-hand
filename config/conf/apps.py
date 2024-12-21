@@ -1,6 +1,7 @@
+from config.env import env
+
 APPS = [
     "channels",
-    "silk",
     "cacheops",
     "rosetta",
     "django_ckeditor_5",
@@ -13,3 +14,8 @@ APPS = [
     "django_core",
     "core.apps.accounts.apps.AccountsConfig",
 ]
+
+if env.str("PROJECT_ENV") == "debug":
+    APPS += [
+        "silk",
+    ]
