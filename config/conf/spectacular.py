@@ -7,6 +7,7 @@ SPECTACULAR_SETTINGS = {
     "POSTPROCESSING_HOOKS": ["config.conf.spectacular.custom_postprocessing_hook"],
 }
 
+
 def custom_postprocessing_hook(result, generator, request, public):
     """
     Customizes the API schema to wrap all responses in a standard format.

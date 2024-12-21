@@ -18,6 +18,7 @@ urlpatterns = [
     path("chat/", include("core.apps.chat.urls")),
     path("news/", include("core.apps.news.urls")),
     path("sos/", include("core.apps.sos.urls")),
+    path("education/", include("core.apps.education.urls")),
 ]
 
 
