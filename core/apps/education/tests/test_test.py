@@ -6,15 +6,15 @@ from django.test import TestCase
 class TestTest(TestCase):
 
     # def setUp(self):
-    #    self.client = APIClient()
-    #    self.urls = {
-    #        "list": reverse("list"),
-    #        "retrieve": reverse("detail", kwargs={"pk": 1}),
-    #        "create": reverse("create"),
-    #        "update": reverse("update", kwargs={"pk": 1}),
-    #        "partial_update": reverse("partial-update", kwargs={"pk": 1}),
-    #        "destroy": reverse("destroy", kwargs={"pk": 1}),
-    #    }
+    #     self.client = APIClient()
+    #     self.urls = {
+    #         "list": reverse("list"),
+    #         "retrieve": reverse("detail", kwargs={"pk": 1}),
+    #         "create": reverse("create"),
+    #         "update": reverse("update", kwargs={"pk": 1}),
+    #         "partial_update": reverse("partial-update", kwargs={"pk": 1}),
+    #         "destroy": reverse("destroy", kwargs={"pk": 1}),
+    #     }
 
     def test_create(self):
         self.assertTrue(True)
