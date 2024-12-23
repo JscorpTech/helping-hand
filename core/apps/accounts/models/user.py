@@ -12,14 +12,16 @@ class User(auth_models.AbstractUser):
     phone = models.CharField(max_length=255, unique=True)
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
     username = models.CharField(max_length=255, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    validated_at = models.DateTimeField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
     role = models.CharField(
         max_length=255,
         choices=RoleChoice,
         default=RoleChoice.USER,
     )
+
+    updated_at = models.DateTimeField(auto_now=True)
+    validated_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "phone"
     objects = UserManager()
