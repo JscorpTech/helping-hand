@@ -1,11 +1,14 @@
-from django.contrib.auth import admin
+from django.contrib.auth import admin as djadmin
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
+from django.contrib import admin
 from unfold.forms import AdminPasswordChangeForm  # UserCreationForm,
 from unfold.forms import UserChangeForm
 
+from ..models import ModeratorModel
 
-class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
+
+class CustomUserAdmin(djadmin.UserAdmin, ModelAdmin):
     change_password_form = AdminPasswordChangeForm
     # add_form = UserCreationForm
     form = UserChangeForm
@@ -52,3 +55,11 @@ class GroupAdmin(ModelAdmin):
 class SmsConfirmAdmin(ModelAdmin):
     list_display = ["phone", "code", "resend_count", "try_count"]
     search_fields = ["phone", "code"]
+
+
+@admin.register(ModeratorModel)
+class ModeratorAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "__str__",
+    )
