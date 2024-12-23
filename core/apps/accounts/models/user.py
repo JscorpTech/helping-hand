@@ -7,6 +7,7 @@ from ..managers import UserManager
 
 class User(auth_models.AbstractUser):
     phone = models.CharField(max_length=255, unique=True)
+    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
     username = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

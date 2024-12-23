@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at",
             "password",
             "groups",
-            "user_permissions"
+            "user_permissions",
         ]
         model = get_user_model()
 
@@ -19,5 +19,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = [
             "first_name",
-            "last_name"
+            "last_name",
+            "avatar",
         ]
