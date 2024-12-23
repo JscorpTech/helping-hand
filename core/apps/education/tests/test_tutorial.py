@@ -1,7 +1,8 @@
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-from django.test import TestCase
-from ..models import TutorialModel, TestModel, QuestionModel, VariantModel
+
+from ..models import QuestionModel, TestModel, TutorialModel, VariantModel
 
 
 class TutorialTest(TestCase):

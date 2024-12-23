@@ -1,18 +1,18 @@
 from typing import Any
 
+from django.contrib.gis.geos import Point
+from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiResponse
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.viewsets import GenericViewSet
 
 from ..models import PositionModel
-from django.contrib.gis.geos import Point
-from rest_framework.response import Response
-from rest_framework import status
-from django.utils.translation import gettext as _
-from rest_framework.permissions import IsAuthenticated
 from ..permissions import PositionPermission
 from ..serializers.position import CreatePositionSerializer, ListPositionSerializer, RetrievePositionSerializer
-from rest_framework.throttling import UserRateThrottle
 
 
 @extend_schema(tags=["sos"])

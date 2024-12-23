@@ -1,16 +1,16 @@
 import logging
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django_core.models import SmsConfirm
 from pydantic import BaseModel
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.apps.accounts.models import ResetToken
-from django_core.models import SmsConfirm
 from core.services import SmsService
-from django.contrib.auth import get_user_model
 
 
 class TokenModel(BaseModel):

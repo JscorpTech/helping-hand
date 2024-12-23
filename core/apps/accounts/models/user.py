@@ -1,11 +1,11 @@
 from django.contrib.auth import models as auth_models
 from django.db import models
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
+from django_core.models import AbstractBaseModel
 
 from ..choices import RoleChoice
 from ..managers import UserManager
-from django_core.models import AbstractBaseModel
-from django.utils.translation import gettext_lazy as _
-from django.utils.functional import cached_property
 
 
 class User(auth_models.AbstractUser):

@@ -2,9 +2,9 @@ from typing import Any
 
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin
 
 from ..models import UserRequestModel
 from ..serializers.sos import CreateUserRequestSerializer, ListUserRequestSerializer, RetrieveUserRequestSerializer
