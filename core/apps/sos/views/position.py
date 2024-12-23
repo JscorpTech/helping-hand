@@ -15,7 +15,7 @@ from ..serializers.position import CreatePositionSerializer, ListPositionSeriali
 from rest_framework.throttling import UserRateThrottle
 
 
-@extend_schema(tags=["position"])
+@extend_schema(tags=["sos"])
 class PositionView(
     BaseViewSetMixin,
     GenericViewSet,
