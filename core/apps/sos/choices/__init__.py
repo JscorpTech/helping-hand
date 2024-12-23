@@ -1,1 +1,1 @@
-from .sos import * # noqa
+from .sos import *  # noqa

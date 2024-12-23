@@ -1,23 +1,24 @@
 from typing import Any
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.decorators import action
-from django_core.paginations import CustomPagination
-from rest_framework import status
-from rest_framework.response import Response
-from django.utils.translation import gettext as _
-from drf_spectacular.utils import extend_schema, OpenApiResponse
-from django_core.mixins import BaseViewSetMixin
-from ..models import GroupModel, MessageModel
-from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
+from django.utils.translation import gettext as _
+from django_core.mixins import BaseViewSetMixin
+from django_core.paginations import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
     CreateGroupSerializer,
+    CreateMessageSerializer,
     ListGroupSerializer,
     ListMessageSerializer,
     RetrieveGroupSerializer,
-    CreateMessageSerializer,
 )
 
 

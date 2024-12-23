@@ -1,12 +1,13 @@
+import logging
 from datetime import datetime
 
-from core.services import sms
 from django.contrib.auth import get_user_model, hashers
 from django.utils.translation import gettext as _
 from django_core import exceptions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt import tokens
-import logging
+
+from core.services import sms
 
 
 class UserService(sms.SmsService):

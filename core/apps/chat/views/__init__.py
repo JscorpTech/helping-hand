@@ -1,2 +1,2 @@
 from .chat import *  # noqa
-from .moderator import * # noqa
+from .moderator import *  # noqa

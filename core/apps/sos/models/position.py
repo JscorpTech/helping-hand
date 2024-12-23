@@ -1,7 +1,7 @@
+from django.contrib.auth import get_user_model
+from django.contrib.gis.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
-from django.contrib.gis.db import models
-from django.contrib.auth import get_user_model
 
 
 class PositionModel(AbstractBaseModel):

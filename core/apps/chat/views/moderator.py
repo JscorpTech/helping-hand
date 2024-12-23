@@ -1,20 +1,20 @@
 from typing import Any
 
-from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-from django.shortcuts import get_object_or_404
-from django_core.mixins import BaseViewSetMixin
 from django.contrib.auth import get_user_model
-from core.apps.accounts.choices import RoleChoice
-from rest_framework.exceptions import NotFound
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django_core.mixins import BaseViewSetMixin
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+from core.apps.accounts.choices import RoleChoice
+
 from ..filters import ModeratorFilter
-from ..serializers.chat import (
-    ListUserSerializer,
-)
+from ..serializers.chat import ListUserSerializer
 
 
 @extend_schema(tags=["moderator"])

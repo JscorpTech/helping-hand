@@ -1,34 +1,33 @@
 import uuid
 from typing import Type
 
-from core.services import UserService, SmsService
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from django_core import exceptions
-from drf_spectacular.utils import extend_schema
-from rest_framework import status, throttling, request
-from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.viewsets import GenericViewSet
 from django_core.mixins import BaseViewSetMixin
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import request, status, throttling
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+from core.services import SmsService, UserService
+
+from .. import models
 from ..serializers import (
-    RegisterSerializer,
+    ChangePasswordSerializer,
     ConfirmSerializer,
+    RegisterSerializer,
     ResendSerializer,
-    ResetPasswordSerializer,
     ResetConfirmationSerializer,
+    ResetPasswordSerializer,
     SetPasswordSerializer,
     UserSerializer,
     UserUpdateSerializer,
 )
-from rest_framework.permissions import AllowAny
-from django.contrib.auth.hashers import make_password
-from drf_spectacular.utils import OpenApiResponse
-from rest_framework.permissions import IsAuthenticated
-from ..serializers import ChangePasswordSerializer
-
-from .. import models
 
 
 @extend_schema(tags=["register"])

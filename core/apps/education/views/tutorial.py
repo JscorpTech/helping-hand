@@ -2,13 +2,14 @@ from typing import Any
 
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
-from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.decorators import action
-from ..models import TutorialModel
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from ..models import TutorialModel
 from ..serializers.test import RetrieveTestSerializer
+from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
 
 
 @extend_schema(tags=["tutorial"])

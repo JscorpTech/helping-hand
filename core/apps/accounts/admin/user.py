@@ -1,7 +1,7 @@
+from django.contrib import admin
 from django.contrib.auth import admin as djadmin
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
-from django.contrib import admin
 from unfold.forms import AdminPasswordChangeForm  # UserCreationForm,
 from unfold.forms import UserChangeForm
 
