@@ -8,6 +8,14 @@ class PostModel(AbstractBaseModel):
     content = models.TextField(_("content"))
     image = models.ImageField(_("image"), upload_to="news/")
 
+    @classmethod
+    def _create_face(self):
+        return self.objects.create(
+            title="Test",
+            content="Test",
+            image="image.jpg",
+        )
+
     def __str__(self):
         return self.title
 
