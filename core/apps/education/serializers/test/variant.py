@@ -9,7 +9,8 @@ class BaseVariantSerializer(serializers.ModelSerializer):
         exclude = [
             "created_at",
             "updated_at",
-            "question"
+            "question",
+            "is_true"
         ]
 
 
