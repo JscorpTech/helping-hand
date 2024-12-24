@@ -1,30 +1,34 @@
 from typing import Any
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.decorators import action
-from django_core.paginations import CustomPagination
-from rest_framework import status
-from rest_framework.response import Response
-from django.utils.translation import gettext as _
-from drf_spectacular.utils import extend_schema, OpenApiResponse
-from django_core.mixins import BaseViewSetMixin
-from ..models import GroupModel, MessageModel
-from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
+from django.utils.translation import gettext as _
+from django_core.mixins import BaseViewSetMixin
+from django_core.paginations import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
     CreateGroupSerializer,
+    CreateMessageSerializer,
     ListGroupSerializer,
     ListMessageSerializer,
     RetrieveGroupSerializer,
-    CreateMessageSerializer,
+    WsMessageSerializer,
 )
 
 
 @extend_schema(tags=["group"])
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['chat_type', "is_public"]
+    filterset_fields = ["chat_type", "is_public"]
 
     def get_queryset(self):
         queryset = GroupModel.objects.all()
@@ -77,6 +81,13 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
         ser.save(group_id=pk, user_id=request.user.id)
+        async_to_sync(get_channel_layer().group_send)(
+            f"group_{pk}",
+            {
+                "type": "chat_message",
+                "data": WsMessageSerializer(ser.instance).data,
+            },
+        )
         return Response({"detail": _("Message sent successfully")}, status=status.HTTP_201_CREATED)
 
     @action(methods=["GET"], detail=True, url_path="get-messages")

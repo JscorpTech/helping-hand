@@ -13,6 +13,16 @@ class BaseGroupSerializer(serializers.ModelSerializer):
         ]
 
 
+class WsGroupSerializer(BaseGroupSerializer):
+    class Meta(BaseGroupSerializer.Meta):
+        exclude = None
+        fields = [
+            "id",
+            "name",
+            "chat_type",
+        ]
+
+
 class ListGroupSerializer(BaseGroupSerializer):
     class Meta(BaseGroupSerializer.Meta): ...
 

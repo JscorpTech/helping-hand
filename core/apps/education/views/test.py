@@ -6,11 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from ..models import AnswerModel
-from ..serializers.test import (
-    CreateAnswerSerializer,
-    ListAnswerSerializer,
-    RetrieveAnswerSerializer,
-)
+from ..serializers.test import CreateAnswerSerializer, ListAnswerSerializer, RetrieveAnswerSerializer
 
 
 @extend_schema(tags=["answer"])

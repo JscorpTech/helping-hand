@@ -10,13 +10,14 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))
 
 from channels.routing import ProtocolTypeRouter  # noqa
 from channels.routing import URLRouter  # noqa
-# from core.apps.websocket.urls import websocket_urlpatterns  # noqa
-# from core.apps.websocket.middlewares import JWTAuthMiddlewareStack  # noqa
+
+from core.apps.chat.ws_urls import websocket_urlpatterns  # noqa
+from core.apps.chat.middlewares import JWTAuthMiddlewareStack  # noqa
+
 
 application = ProtocolTypeRouter(
     {
         "http": asgi_application,
-        # "websocket": JWTAuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+        "websocket": JWTAuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
     }
 )
-

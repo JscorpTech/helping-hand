@@ -1,10 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
-from ..choices import ChatTypeChoice
-
-
 from django_core.models import AbstractBaseModel
+
+from ..choices import ChatTypeChoice, FileTypeChoice
 
 
 class GroupModel(AbstractBaseModel):
@@ -16,6 +15,14 @@ class GroupModel(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def _create_fake(self):
+        return self.objects.create(
+            name="Test",
+            is_public=True,
+            chat_type=ChatTypeChoice.LAWYER,
+        )
 
     class Meta:
         db_table = "group"
@@ -30,6 +37,9 @@ class GroupModel(AbstractBaseModel):
 class MessageModel(AbstractBaseModel):
     text = models.CharField(verbose_name=_("text"), max_length=500, null=True, blank=True)
     file = models.FileField(verbose_name=_("file"), upload_to="message/", null=True, blank=True)
+    file_type = models.CharField(
+        verbose_name=_("file type"), max_length=50, null=True, blank=True, choices=FileTypeChoice.choices
+    )
     group = models.ForeignKey(verbose_name=_("group"), to="GroupModel", on_delete=models.CASCADE)
     user = models.ForeignKey(verbose_name=_("user"), to=get_user_model(), on_delete=models.CASCADE)
 

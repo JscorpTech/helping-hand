@@ -1,7 +1,8 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-from ..models import PositionModel
 from django.contrib.gis import admin as gisadmin
+from unfold.admin import ModelAdmin
+
+from ..models import PositionModel
 
 
 @admin.register(PositionModel)

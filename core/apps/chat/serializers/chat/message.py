@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from ...models import MessageModel
 from ..user import ListUserSerializer
+from .group import WsGroupSerializer
 
 
 class BaseMessageSerializer(serializers.ModelSerializer):
@@ -22,6 +23,22 @@ class ListMessageSerializer(BaseMessageSerializer):
         ]
 
 
+class WsMessageSerializer(BaseMessageSerializer):
+    group = WsGroupSerializer()
+
+    class Meta(BaseMessageSerializer.Meta):
+        exclude = None
+        fields = [
+            "id",
+            "text",
+            "file",
+            "file_type",
+            "user",
+            "group",
+            "created_at",
+        ]
+
+
 class RetrieveMessageSerializer(BaseMessageSerializer):
     class Meta(BaseMessageSerializer.Meta): ...
 
@@ -29,4 +46,8 @@ class RetrieveMessageSerializer(BaseMessageSerializer):
 class CreateMessageSerializer(BaseMessageSerializer):
     class Meta(BaseMessageSerializer.Meta):
         exclude = None
-        fields = ["text", "file"]
+        fields = [
+            "text",
+            "file",
+            "file_type",
+        ]

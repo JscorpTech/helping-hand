@@ -43,5 +43,7 @@ boto3
 
 
 # !NOTE: on-websocket
-# websockets
-# channels-redis
+websockets
+channels-redis
+daphne
+pytest-asyncio
