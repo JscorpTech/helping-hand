@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
+from django.contrib.auth import get_user_model
 
 from ..models import QuestionModel, TestModel, TutorialModel, VariantModel
 
@@ -14,7 +15,7 @@ class TutorialTest(TestCase):
         VariantModel.objects.create(question=question, variant="Test", is_true=True)
 
         return TutorialModel.objects.create(
-            type="video", name="Test", desc="Test", image="image.jpg", file="file.zip", video="video.mp4", test=test
+            name="Test", desc="Test", image="image.jpg", file="file.zip", video="video.mp4", test=test
         )
 
     def setUp(self):
@@ -24,6 +25,7 @@ class TutorialTest(TestCase):
             "list": reverse("tutorial-list"),
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "test": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
+            "completed": reverse("tutorial-completed"),
         }
 
     def test_create(self):
@@ -55,5 +57,11 @@ class TutorialTest(TestCase):
 
     def test_test_list(self):
         response = self.client.get(self.urls["test"])
+        self.assertEqual(response.json()["status"], True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_test_completed(self):
+        self.client.force_authenticate(user=get_user_model()._create_fake())
+        response = self.client.get(self.urls["completed"])
         self.assertEqual(response.json()["status"], True)
         self.assertEqual(response.status_code, 200)
