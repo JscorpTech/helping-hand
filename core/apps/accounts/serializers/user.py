@@ -7,7 +7,7 @@ from ..choices import RoleChoice
 class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if data["role"] in [RoleChoice.PSIXOLOG, RoleChoice.LAWYER]:
+        if data["role"] in RoleChoice.moderator_roles():
             if instance.moderator:
                 data["level"] = instance.moderator.level
                 data["experience"] = instance.moderator.experience

@@ -12,3 +12,18 @@ class RoleChoice(models.TextChoices):
     USER = "user", _("User")
     PSIXOLOG = "psixolog", _("Psixolog")
     LAWYER = "lawyer", _("Lawyer")
+    BUSINESS = "business", _("Business")
+
+    def moderator_roles() -> list:
+        return [
+            RoleChoice.LAWYER,
+            RoleChoice.PSIXOLOG,
+            RoleChoice.BUSINESS,
+        ]
+
+    def moderator_tuple() -> list:
+        return [
+            (RoleChoice.LAWYER.value, RoleChoice.LAWYER.label),
+            (RoleChoice.PSIXOLOG.value, RoleChoice.PSIXOLOG.label),
+            (RoleChoice.BUSINESS.value, RoleChoice.BUSINESS.label),
+        ]
