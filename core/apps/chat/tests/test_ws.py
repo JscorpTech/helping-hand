@@ -32,7 +32,7 @@ class WebSocketTest(TestCase):
             {"text": "salom"},
         )
         self.assertEqual(response.status_code, 201)
-        self.assertTrue(response.json()['status'])
+        self.assertTrue(response.json()["status"])
 
     @sync_to_async
     def _create_fake(self):

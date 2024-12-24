@@ -4,13 +4,19 @@ from ...models import TutorialModel
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
+    is_completed = serializers.SerializerMethodField()
+
+    def get_is_completed(self, obj) -> bool:
+        request = self.context.get("request")
+        if request:
+            user = request.user
+            if user.is_authenticated:
+                return obj.users.filter(id=user.id).exists()
+        return False
+
     class Meta:
         model = TutorialModel
-        exclude = [
-            "created_at",
-            "updated_at",
-            "test",
-        ]
+        exclude = ["created_at", "updated_at", "test", "users"]
 
 
 class ListTutorialSerializer(BaseTutorialSerializer):
