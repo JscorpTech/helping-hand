@@ -33,6 +33,14 @@ class User(auth_models.AbstractUser):
     def __str__(self):
         return self.phone
 
+    @classmethod
+    def _create_fake(cls):
+        return cls.objects.create(
+            phone="998998998",
+            username="test",
+            role=RoleChoice.USER,
+        )
+
 
 class ModeratorModel(AbstractBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="moderator")

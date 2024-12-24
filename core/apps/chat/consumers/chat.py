@@ -2,12 +2,12 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-import logging
+from ..models import GroupModel
+from django.db.models import Q
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        if self.scope["user"].is_anonymous:
-            return await self.close()
         await self._add_groups(await self._get_user_groups())
         await self.accept()
 
@@ -15,13 +15,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self._remove_groups(await self._get_user_groups())
 
     async def receive(self, text_data):
-        text_data_json = self._get_data(text_data)
-        message = text_data_json.get("message", None)
-        await self.channel_layer.group_send("group_1", {"type": "chat_message", "message": message})
+        try:
+            text_data_json = self._get_data(text_data)
+            message = text_data_json.get("data", None).get("message", None)
+            await self.send(text_data=json.dumps({"status": True, "data": {"message": message}}))
+        except Exception as e:
+            await self.send(text_data=json.dumps({"status": False, "data": {"error": str(e)}}))
 
     async def chat_message(self, event):
-        message = event["message"]
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps({"status": event.get("status", True), "data": event.get("data", None)}))
 
     def _get_data(self, text_data) -> dict:
         try:
@@ -39,6 +41,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def _get_user_groups(self) -> list:
-        groups = ["group_%s" % i for i in list(self.scope["user"].chats.values_list("id", flat=True))]
-        groups.append(self.scope["user"].username)
-        return groups
+        user = self.scope.get("user")
+        groups = GroupModel.objects.filter(
+            Q(is_public=True) | Q(users=user) if user and user.is_authenticated else Q(is_public=True)
+        ).values_list("id", flat=True)
+        return [f"group_{i}" for i in groups] + ([user.username] if user and user.is_authenticated else [])
