@@ -13,6 +13,11 @@ class BaseGuideSerializer(serializers.ModelSerializer):
 
 
 class ListGuideSerializer(BaseGuideSerializer):
+    desc = serializers.SerializerMethodField()
+
+    def get_desc(self, obj):
+        return "%s..." % obj.desc[:200]
+
     class Meta(BaseGuideSerializer.Meta): ...
 
 

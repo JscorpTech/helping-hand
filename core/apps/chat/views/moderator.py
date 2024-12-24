@@ -43,17 +43,14 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
                 type=str,
                 description="Filter by role",
                 required=False,
-                enum=[RoleChoice.LAWYER, RoleChoice.PSIXOLOG],
+                enum=RoleChoice.moderator_roles(),
             ),
         ],
     )
     @method_decorator(cache_page(60))
     def list(self, request):
         users = get_user_model().objects.filter(
-            role__in=[
-                RoleChoice.PSIXOLOG,
-                RoleChoice.LAWYER,
-            ]
+            role__in=RoleChoice.moderator_roles()
         )
         django_filter = ModeratorFilter(request.GET, queryset=users)
         if not django_filter.is_valid():

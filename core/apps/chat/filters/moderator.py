@@ -7,10 +7,7 @@ from core.apps.accounts.choices import RoleChoice
 class ModeratorFilter(filters.FilterSet):
     role = filters.ChoiceFilter(
         field_name="role",
-        choices=[
-            (RoleChoice.LAWYER.value, RoleChoice.LAWYER.label),
-            (RoleChoice.PSIXOLOG.value, RoleChoice.PSIXOLOG.label),
-        ],
+        choices=RoleChoice.moderator_tuple(),
     )
 
     class Meta:
