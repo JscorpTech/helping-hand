@@ -1,7 +1,7 @@
 from typing import Any
 
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -11,10 +11,18 @@ from ..models import TutorialModel
 from ..serializers.test import RetrieveTestSerializer
 from django_core.paginations import CustomPagination
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
+from rest_framework.filters import SearchFilter
 
 
-@extend_schema(tags=["tutorial"])
+@extend_schema(
+    tags=["tutorial"],
+    parameters=[
+        OpenApiParameter(name="search", type=str, description="Search by name, desc, tags"),
+    ],
+)
 class TutorialView(BaseViewSetMixin, ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    search_fields = ["name", "desc", "tags"]
 
     def get_queryset(self):
         match self.action:
