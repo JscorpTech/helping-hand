@@ -19,6 +19,7 @@ from ..serializers.chat import ListUserSerializer
 
 @extend_schema(tags=["moderator"])
 class ModeratorView(BaseViewSetMixin, GenericViewSet):
+    pagination_class = None
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -45,12 +46,11 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
                 enum=RoleChoice.moderator_roles(),
             ),
         ],
+        responses={200: ListUserSerializer(many=True)},
     )
     @method_decorator(cache_page(60))
     def list(self, request):
-        users = get_user_model().objects.filter(
-            role__in=RoleChoice.moderator_roles()
-        )
+        users = get_user_model().objects.filter(role__in=RoleChoice.moderator_roles())
         django_filter = ModeratorFilter(request.GET, queryset=users)
         if not django_filter.is_valid():
             raise ValidationError({"detail": django_filter.errors})
