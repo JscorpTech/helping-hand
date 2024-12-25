@@ -7,19 +7,26 @@ from core.apps.accounts.choices import RoleChoice
 from ..models import QuestionModel, TestModel, TutorialModel, VariantModel
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+import json
 
 
 class TutorialTest(TestCase):
 
     def _create_tutorial(self):
         test = TestModel.objects.create(topic="Test", desc="Test", time=100)
-        question = QuestionModel.objects.create(test=test, question="Test")
-        VariantModel.objects.create(question=question, variant="Test 2")
-        VariantModel.objects.create(question=question, variant="Test", is_true=True)
+        self.question = QuestionModel.objects.create(test=test, question="Test")
+        VariantModel.objects.create(question=self.question, variant="Test 2")
+        VariantModel.objects.create(question=self.question, variant="Test", is_true=True)
 
         return TutorialModel.objects.create(
             name="Test", desc="Test", image="image.jpg", file="file.zip", video="video.mp4", test=test
         )
+
+    def _create_lawyer(self):
+        user = get_user_model()._create_fake()
+        user.role = RoleChoice.LAWYER
+        user.save()
+        return user
 
     def setUp(self):
         self.client = APIClient()
@@ -27,11 +34,53 @@ class TutorialTest(TestCase):
         self.urls = {
             "list": reverse("tutorial-list"),
             "create": reverse("tutorial-list"),
+            "test-answer": reverse("tutorial-test-answer", kwargs={"pk": self.tutorial.pk}),
             "update": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "test": reverse("tutorial-test", kwargs={"pk": self.tutorial.pk}),
             "completed": reverse("tutorial-completed"),
         }
+
+    def test_test_answer_success(self):
+        self.client.force_authenticate(user=self._create_lawyer())
+        response = self.client.post(
+            self.urls["test-answer"],
+            json.dumps(
+                [{"question": self.question.pk, "variant": [self.question.variants.order_by("-id").first().pk]}]
+            ),
+            content_type="application/json",
+        )
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(data["status"])
+        self.assertEqual(data["data"]["success"], 1)
+        self.assertEqual(data["data"]["total"], 1)
+
+    def test_test_answer_invalid_question(self):
+        self.client.force_authenticate(user=get_user_model()._create_fake())
+        response = self.client.post(
+            self.urls["test-answer"],
+            json.dumps([{"question": 100, "variant": [100]}]),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["status"])
+
+    def test_test_answer_invalid_question_count(self):
+        self.client.force_authenticate(user=get_user_model()._create_fake())
+        response = self.client.post(
+            self.urls["test-answer"],
+            json.dumps(
+                [
+                    {"question": 100, "variant": [100]},
+                    {"question": 100, "variant": [100]},
+                    {"question": 100, "variant": [100]},
+                ]
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["status"])
 
     def test_create(self):
         user = get_user_model()._create_fake()
