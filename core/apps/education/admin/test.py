@@ -1,7 +1,18 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin, TabularInline
 
 from ..models import AnswerModel, QuestionModel, TestModel, VariantModel
+
+
+class VariantInline(TabularInline):
+    model = VariantModel
+    extra = 1
+    tab = True
+
+
+class QuestionInline(TabularInline):
+    model = QuestionModel
+    extra = 1
 
 
 @admin.register(TestModel)
@@ -10,6 +21,11 @@ class TestAdmin(ModelAdmin):
         "id",
         "__str__",
     )
+
+    inlines = [QuestionInline]
+
+    autocomplete_fields = ["questions"]
+    search_fields = ["topic", "desc"]
 
 
 @admin.register(VariantModel)
@@ -26,6 +42,8 @@ class QuestionAdmin(ModelAdmin):
         "id",
         "__str__",
     )
+    search_fields = ["question"]
+    inlines = [VariantInline]
 
 
 @admin.register(AnswerModel)

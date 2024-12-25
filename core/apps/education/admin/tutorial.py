@@ -10,3 +10,5 @@ class TutorialAdmin(ModelAdmin):
         "id",
         "__str__",
     )
+    search_fields = ["name", "desc"]
+    autocomplete_fields = ["users"]
