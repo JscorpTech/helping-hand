@@ -21,4 +21,16 @@ class RetrieveAnswerSerializer(BaseAnswerSerializer):
 
 
 class CreateAnswerSerializer(BaseAnswerSerializer):
-    class Meta(BaseAnswerSerializer.Meta): ...
+    any = serializers.CharField(required=False)
+
+    class Meta(BaseAnswerSerializer.Meta):
+        exclude = None
+        fields = [
+            "question",
+            "variant",
+            "any",
+        ]
+
+
+class AnswerSerializer(serializers.ListSerializer):
+    child = CreateAnswerSerializer()

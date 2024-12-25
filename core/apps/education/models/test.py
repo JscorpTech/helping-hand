@@ -55,6 +55,9 @@ class AnswerModel(AbstractBaseModel):
     question = models.ForeignKey(
         "QuestionModel", verbose_name=_("question"), on_delete=models.CASCADE, related_name="answers"
     )
+    tutorial = models.ForeignKey(
+        "TutorialModel", verbose_name=_("tutorial"), on_delete=models.CASCADE, related_name="answers"
+    )
     variant = models.ManyToManyField("VariantModel", verbose_name=_("variant"), related_name="answers")
 
     def __str__(self):

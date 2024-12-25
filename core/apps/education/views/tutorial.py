@@ -9,11 +9,14 @@ from rest_framework.viewsets import ModelViewSet
 from core.apps.accounts.permissions import IsModeratorPermission
 
 
-from ..models import TutorialModel
+from ..models import TutorialModel, AnswerModel
 from ..serializers.test import RetrieveTestSerializer
 from django_core.paginations import CustomPagination
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
 from rest_framework.filters import SearchFilter
+from ..serializers.test import AnswerSerializer
+from rest_framework.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 
 @extend_schema(
@@ -28,7 +31,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
     def get_queryset(self):
         match self.action:
-            case "test":
+            case "test" | "test_answer":
                 return (
                     TutorialModel.objects.select_related("test")
                     .prefetch_related("test__questions", "test__questions__variants")
@@ -37,6 +40,35 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 )
             case _:
                 return TutorialModel.objects.prefetch_related("users").order_by("position").all()
+
+    @extend_schema(request=AnswerSerializer)
+    @action(methods=["POST"], detail=True, url_path="test-answer", url_name="test-answer")
+    def test_answer(self, request, pk=None):
+        """Test javoblarini tekshirish"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        test = self.get_queryset()
+        questions = test.questions.all()
+        success = 0
+
+        if len(data) != len(questions):
+            raise ValidationError({"detail": _("test javoblar soni noto'g'ri")})
+
+        for i in data:
+            question = i["question"]
+            variants = i["variant"]
+            if not question.is_many and len(variants) > 1:
+                raise ValidationError({"detail": _("variantlar soni 1 ta bo'lishi kerak")})
+            answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
+            for j in variants:
+                answer.variant.add(j)
+                if j.is_true:
+                    success += 1
+        TutorialModel.objects.get(pk=pk).users.add(request.user)
+        return Response(
+            {"detail": _("Test javoblari qabul qildi"), "success": success, "total": len(questions)},
+        )
 
     @action(methods=["GET"], detail=True, url_path="test", url_name="test")
     def test(self, request, pk=None):
@@ -54,9 +86,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         queryset = paginator.paginate_queryset(queryset, request)
         return paginator.get_paginated_response(self.get_serializer(queryset, many=True).data)
 
-    def paginate_queryset(self, queryset):
-        return super().paginate_queryset(queryset)
-
     def get_serializer_class(self) -> Any:
         match self.action:
             case "list" | "completed":
@@ -67,6 +96,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return CreateTutorialSerializer
             case "test":
                 return RetrieveTestSerializer
+            case "test_answer":
+                return AnswerSerializer
             case _:
                 return ListTutorialSerializer
 
