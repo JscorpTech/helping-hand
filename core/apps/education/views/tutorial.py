@@ -3,7 +3,7 @@ from typing import Any
 from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
 from django_core.paginations import CustomPagination
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiResponse
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
@@ -40,7 +40,21 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             case _:
                 return TutorialModel.objects.prefetch_related("users").order_by("position").all()
 
-    @extend_schema(request=AnswerSerializer)
+    @extend_schema(
+        request=AnswerSerializer,
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Test javoblari qabul qildi"},
+                        "success": {"type": "integer", "example": 5},
+                        "total": {"type": "integer", "example": 10},
+                    },
+                }
+            )
+        },
+    )
     @action(methods=["POST"], detail=True, url_path="test-answer", url_name="test-answer")
     def test_answer(self, request, pk=None):
         """Test javoblarini tekshirish"""
