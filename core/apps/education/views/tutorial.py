@@ -5,7 +5,9 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
+from core.apps.accounts.permissions import IsModeratorPermission
+
 
 from ..models import TutorialModel
 from ..serializers.test import RetrieveTestSerializer
@@ -20,7 +22,7 @@ from rest_framework.filters import SearchFilter
         OpenApiParameter(name="search", type=str, description="Search by name, desc, tags"),
     ],
 )
-class TutorialView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class TutorialView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [SearchFilter]
     search_fields = ["name", "desc", "tags"]
 
@@ -61,7 +63,7 @@ class TutorialView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 return ListTutorialSerializer
             case "retrieve":
                 return RetrieveTutorialSerializer
-            case "create":
+            case "create" | "update" | "partial_update":
                 return CreateTutorialSerializer
             case "test":
                 return RetrieveTestSerializer
@@ -71,6 +73,8 @@ class TutorialView(BaseViewSetMixin, ReadOnlyModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
+            case "create" | "update" | "partial_update" | "destroy":
+                perms.extend([IsAuthenticated, IsModeratorPermission])
             case "completed":
                 perms.extend([IsAuthenticated])
             case _:

@@ -33,4 +33,17 @@ class RetrieveTutorialSerializer(BaseTutorialSerializer):
 
 
 class CreateTutorialSerializer(BaseTutorialSerializer):
-    class Meta(BaseTutorialSerializer.Meta): ...
+    class Meta(BaseTutorialSerializer.Meta):
+        exclude = None
+        fields = [
+            "id",
+            "name",
+            "desc",
+            "image",
+            "file",
+            "video",
+            "test",
+            "tags",
+            "position",
+            "source",
+        ]
