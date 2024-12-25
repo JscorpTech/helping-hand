@@ -23,7 +23,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({"status": False, "data": {"error": str(e)}}))
 
     async def chat_message(self, event):
-        await self.send(text_data=json.dumps({"status": event.get("status", True), "data": event.get("data", None)}))
+        await self.send(text_data=json.dumps({"status": event.get("status", True), "data": {
+            "result": event.get("data", None),
+            "action": event.get("action", None)
+        }}))
 
     def _get_data(self, text_data) -> dict:
         try:

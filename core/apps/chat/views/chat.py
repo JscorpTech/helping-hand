@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from rest_framework.exceptions import NotFound
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -29,6 +30,16 @@ from ..serializers.chat import (
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["chat_type", "is_public"]
+
+    def _send_ws_message(self, group, data):
+        # Send message to group
+        async_to_sync(get_channel_layer().group_send)(
+            group,
+            {
+                "type": "chat_message",
+                **data,
+            },
+        )
 
     def get_queryset(self):
         queryset = GroupModel.objects.all()
@@ -56,12 +67,48 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
-            case "send_message":
+            case "send_message" | "update_message" | "delete_message":
                 perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
+
+    @action(methods=["POST"], detail=True, url_path="update-message/(?P<message_id>[0-9]+)")
+    def update_message(self, request, pk, message_id):
+        message = MessageModel.objects.filter(id=message_id, group_id=pk, user_id=request.user.id)
+        if not message.exists():
+            raise NotFound(_("Message not found"))
+        ser = self.get_serializer(
+            message.first(),
+            data=request.data,
+            partial=True,
+        )
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        self._send_ws_message(
+            f"group_{pk}",
+            {
+                "action": "update_message",
+                "data": WsMessageSerializer(ser.instance).data,
+            },
+        )
+        return Response({"detail": _("Message updated successfully"), "message_id": int(message_id)})
+
+    @action(methods=["POST"], detail=True, url_path="delete-message/(?P<message_id>[0-9]+)")
+    def delete_message(self, request, pk, message_id):
+        message = MessageModel.objects.filter(id=message_id, group_id=pk, user_id=request.user.id)
+        if not message.exists():
+            raise NotFound(_("Message not found"))
+        message.delete()
+        self._send_ws_message(
+            f"group_{pk}",
+            {
+                "action": "delete_message",
+                "data": {"id": pk},
+            },
+        )
+        return Response({"detail": _("Message deleted successfully"), "message_id": int(message_id)})
 
     @extend_schema(
         responses={
@@ -81,14 +128,16 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
         ser.save(group_id=pk, user_id=request.user.id)
-        async_to_sync(get_channel_layer().group_send)(
+        self._send_ws_message(
             f"group_{pk}",
             {
-                "type": "chat_message",
+                "action": "send_message",
                 "data": WsMessageSerializer(ser.instance).data,
             },
         )
-        return Response({"detail": _("Message sent successfully")}, status=status.HTTP_201_CREATED)
+        return Response(
+            {"detail": _("Message sent successfully"), "message_id": ser.instance.id}, status=status.HTTP_201_CREATED
+        )
 
     @action(methods=["GET"], detail=True, url_path="get-messages")
     def get_messages(self, request, pk):
@@ -98,3 +147,4 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
         return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
+
