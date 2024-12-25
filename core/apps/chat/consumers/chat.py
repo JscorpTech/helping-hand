@@ -1,9 +1,10 @@
 import json
 
-from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from ..models import GroupModel
+from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models import Q
+
+from ..models import GroupModel
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

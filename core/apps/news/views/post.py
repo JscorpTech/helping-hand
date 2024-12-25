@@ -4,6 +4,7 @@ from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+
 from core.apps.accounts.permissions import IsModeratorPermission
 
 from ..models import PostModel

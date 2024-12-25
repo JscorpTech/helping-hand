@@ -1,6 +1,7 @@
-from rest_framework import permissions
-from ..choices import RoleChoice
 from django.utils.translation import gettext_lazy as _
+from rest_framework import permissions
+
+from ..choices import RoleChoice
 
 
 class PsixologPermission(permissions.BasePermission):

@@ -1,22 +1,21 @@
 from typing import Any
 
+from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from django_core.paginations import CustomPagination
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
 from core.apps.accounts.permissions import IsModeratorPermission
 
-
-from ..models import TutorialModel, AnswerModel
-from ..serializers.test import RetrieveTestSerializer
-from django_core.paginations import CustomPagination
+from ..models import AnswerModel, TutorialModel
+from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
-from rest_framework.filters import SearchFilter
-from ..serializers.test import AnswerSerializer
-from rest_framework.exceptions import ValidationError
-from django.utils.translation import gettext as _
 
 
 @extend_schema(

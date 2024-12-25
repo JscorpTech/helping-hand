@@ -1,13 +1,15 @@
+import json
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-from django.contrib.auth import get_user_model
 
 from core.apps.accounts.choices import RoleChoice
+
 from ..models import QuestionModel, TestModel, TutorialModel, VariantModel
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
-import json
 
 
 class TutorialTest(TestCase):

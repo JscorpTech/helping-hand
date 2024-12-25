@@ -1,5 +1,7 @@
 from typing import Any
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
@@ -8,12 +10,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from rest_framework.exceptions import NotFound
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -147,4 +147,3 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
         return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
-

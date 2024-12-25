@@ -1,11 +1,13 @@
-from django.test import TestCase
-from channels.testing import WebsocketCommunicator
-from config.asgi import application
-from rest_framework.test import APIClient
-from django.urls import reverse
-from ..models import GroupModel
-from django.contrib.auth import get_user_model
 from asgiref.sync import sync_to_async
+from channels.testing import WebsocketCommunicator
+from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework.test import APIClient
+
+from config.asgi import application
+
+from ..models import GroupModel
 
 
 class WebSocketTest(TestCase):
