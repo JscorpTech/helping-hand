@@ -10,6 +10,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from django.db import transaction
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
@@ -61,30 +62,57 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+
         test = self.get_queryset()
         questions = test.questions.all()
-        success = 0
 
         if len(data) != len(questions):
-            raise ValidationError({"detail": _("test javoblar soni noto'g'ri")})
+            raise ValidationError({"detail": _("Test javoblar soni noto'g'ri.")})
 
-        for i in data:
-            question = i["question"]
-            variants = i["variant"]
-            if not question.is_many and len(variants) > 1:
-                raise ValidationError({"detail": _("variantlar soni 1 ta bo'lishi kerak")})
-            answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
-            for j in variants:
-                answer.variant.add(j)
-                if j.is_true:
+        success = 0
+        answers = []
+
+        with transaction.atomic():
+            for item in data:
+                question = item["question"]
+                variants = item["variant"]
+
+                # Tekshirish: Ko'p variantli savollar uchun cheklov
+                if not question.is_many and len(variants) > 1:
+                    raise ValidationError({"detail": _("Variantlar soni 1 ta bo'lishi kerak.")})
+
+                # Tekshirish: Variantlarning to'g'riligi
+                variant_ids = [variant.id for variant in variants]
+                if question.variants.filter(id__in=variant_ids).count() != len(variants):
+                    raise ValidationError({"detail": _("Variantlar noto'g'ri tekshirilishi kerak.")})
+
+                # Javobni yaratish yoki yangilash
+                answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
+                answer.variant.set(variants)
+
+                # To'g'ri javoblarni tekshirish
+                correct_count = question.variants.filter(is_true=True).count()
+                selected_correct = sum(1 for variant in variants if variant.is_true)
+
+                if correct_count == selected_correct:
                     success += 1
-        TutorialModel.objects.get(pk=pk).users.add(request.user)
-        ResultModel.objects.update_or_create(
-            user=request.user, tutorial_id=pk, defaults={"score": success, "total": len(questions)}
-        )
-        return Response(
-            {"detail": _("Test javoblari qabul qildi"), "success": success, "total": len(questions)},
-        )
+
+                answers.append(answer)
+
+            TutorialModel.objects.get(pk=pk).users.add(request.user)
+            ResultModel.objects.update_or_create(
+                user=request.user,
+                tutorial_id=pk,
+                defaults={"score": success, "total": len(questions)},
+            )
+
+            return Response(
+                {
+                    "detail": _("Test javoblari qabul qilindi."),
+                    "success": success,
+                    "total": len(questions),
+                }
+            )
 
     @action(methods=["GET"], detail=True, url_path="test", url_name="test")
     def test(self, request, pk=None):
