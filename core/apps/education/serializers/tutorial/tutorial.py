@@ -28,16 +28,24 @@ class ListTutorialSerializer(BaseTutorialSerializer):
     class Meta(BaseTutorialSerializer.Meta): ...
 
 
-class RetrieveTutorialSerializer(BaseTutorialSerializer):
-    passed_test = serializers.SerializerMethodField()
+class ScoreSerializer(serializers.Serializer):
+    success = serializers.IntegerField()
+    total = serializers.IntegerField()
+    passed = serializers.BooleanField(default=False)
 
-    def get_passed_test(self, obj) -> bool:
+
+class RetrieveTutorialSerializer(BaseTutorialSerializer):
+    test_score = serializers.SerializerMethodField()
+
+    def get_test_score(self, obj) -> ScoreSerializer:
         request = self.context.get("request")
         if request:
             user = request.user
             if user.is_authenticated:
-                return ResultModel.objects.filter(tutorial=obj, user=user).exists()
-        return False
+                result = ResultModel.objects.filter(tutorial=obj, user=user).first()
+                if result:
+                    return ScoreSerializer({"success": result.score, "total": result.total, "passed": True}).data
+        return ScoreSerializer({"success": 0, "total": 0}).data
 
     class Meta(BaseTutorialSerializer.Meta): ...
 
