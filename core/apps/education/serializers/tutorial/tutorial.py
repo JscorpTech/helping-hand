@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import TutorialModel
+from ...models import TutorialModel, ResultModel
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
@@ -29,6 +29,16 @@ class ListTutorialSerializer(BaseTutorialSerializer):
 
 
 class RetrieveTutorialSerializer(BaseTutorialSerializer):
+    passed_test = serializers.SerializerMethodField()
+
+    def get_passed_test(self, obj):
+        request = self.context.get("request")
+        if request:
+            user = request.user
+            if user.is_authenticated:
+                return ResultModel.objects.filter(tutorial=obj, user=user).exists()
+        return False
+
     class Meta(BaseTutorialSerializer.Meta): ...
 
 

@@ -1,6 +1,8 @@
-# from django.urls import reverse
-# from rest_framework.test import APIClient
+from django.urls import reverse
+from rest_framework.test import APIClient
 from django.test import TestCase
+
+from ..models import ResultModel
 
 
 class TestTest(TestCase):

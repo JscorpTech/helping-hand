@@ -13,7 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
-from ..models import AnswerModel, TutorialModel
+from ..models import AnswerModel, TutorialModel, ResultModel
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
 
@@ -79,6 +79,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 if j.is_true:
                     success += 1
         TutorialModel.objects.get(pk=pk).users.add(request.user)
+        ResultModel.objects.update_or_create(user=request.user, tutorial_id=pk, defaults={"score": success})
         return Response(
             {"detail": _("Test javoblari qabul qildi"), "success": success, "total": len(questions)},
         )
