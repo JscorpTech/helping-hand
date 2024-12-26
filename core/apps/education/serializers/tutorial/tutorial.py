@@ -31,7 +31,7 @@ class ListTutorialSerializer(BaseTutorialSerializer):
 class RetrieveTutorialSerializer(BaseTutorialSerializer):
     passed_test = serializers.SerializerMethodField()
 
-    def get_passed_test(self, obj):
+    def get_passed_test(self, obj) -> bool:
         request = self.context.get("request")
         if request:
             user = request.user
