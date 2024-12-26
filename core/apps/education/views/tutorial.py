@@ -79,7 +79,9 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 if j.is_true:
                     success += 1
         TutorialModel.objects.get(pk=pk).users.add(request.user)
-        ResultModel.objects.update_or_create(user=request.user, tutorial_id=pk, defaults={"score": success})
+        ResultModel.objects.update_or_create(
+            user=request.user, tutorial_id=pk, defaults={"score": success, "total": len(questions)}
+        )
         return Response(
             {"detail": _("Test javoblari qabul qildi"), "success": success, "total": len(questions)},
         )

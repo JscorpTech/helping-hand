@@ -76,6 +76,7 @@ class ResultModel(AbstractBaseModel):
         "TutorialModel", verbose_name=_("tutorial"), on_delete=models.CASCADE, related_name="results"
     )
     score = models.PositiveIntegerField(_("score"), default=0)
+    total = models.PositiveIntegerField(_("total"), default=0)
 
     def __str__(self):
         return self.user.full_name
