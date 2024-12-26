@@ -29,11 +29,7 @@ class Console(management.BaseCommand):
 
     def log(self, message):
         self.get_stdout().write(
-            self.get_style().ERROR(
-                "\n{line}\n{message}\n{line}\n".format(
-                    message=message, line="=" * len(message)
-                )
-            )
+            self.get_style().ERROR("\n{line}\n{message}\n{line}\n".format(message=message, line="=" * len(message)))
         )
 
 
@@ -55,14 +51,10 @@ class BaseMake(management.BaseCommand):
         stub = open(os.path.join(settings.BASE_DIR, f"resources/stub/{self.path}.stub"))
         data: Union[Any] = stub.read()
         stub.close()
-        
         stub = data.replace("{{name}}", name or "")
-        
 
         core_http_path = os.path.join(settings.BASE_DIR, "core/http")
-        if os.path.exists(
-            os.path.join(core_http_path, f"{self.path}/{name.lower()}.py")
-        ):  # noqa
+        if os.path.exists(os.path.join(core_http_path, f"{self.path}/{name.lower()}.py")):  # noqa
             self.console.error(f"{self.name} already exists")
             return
 

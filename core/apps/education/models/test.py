@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
+from .tutorial import TutorialModel
 
 
 class TestModel(AbstractBaseModel):
@@ -67,3 +68,31 @@ class AnswerModel(AbstractBaseModel):
         db_table = "answer"
         verbose_name = _("AnswerModel")
         verbose_name_plural = _("AnswerModels")
+
+
+class ResultModel(AbstractBaseModel):
+    user = models.ForeignKey(get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE, related_name="results")
+    tutorial = models.ForeignKey(
+        "TutorialModel", verbose_name=_("tutorial"), on_delete=models.CASCADE, related_name="results"
+    )
+    score = models.PositiveIntegerField(_("score"), default=0)
+
+    def __str__(self):
+        return self.user.full_name
+
+    @classmethod
+    def _create_face(self):
+        return self.objects.create(
+            user=get_user_model()._create_fake(),
+            tutorial=TutorialModel._create_face(),
+            score=10,
+        )
+
+    class Meta:
+        db_table = "result"
+        verbose_name = _("ResultModel")
+        verbose_name_plural = _("ResultModels")
+        unique_together = (
+            "user",
+            "tutorial",
+        )

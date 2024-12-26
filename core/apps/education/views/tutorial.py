@@ -3,7 +3,7 @@ from typing import Any
 from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
 from django_core.paginations import CustomPagination
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiResponse
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
@@ -13,7 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
-from ..models import AnswerModel, TutorialModel
+from ..models import AnswerModel, TutorialModel, ResultModel
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
 
@@ -40,7 +40,21 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             case _:
                 return TutorialModel.objects.prefetch_related("users").order_by("position").all()
 
-    @extend_schema(request=AnswerSerializer)
+    @extend_schema(
+        request=AnswerSerializer,
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Test javoblari qabul qildi"},
+                        "success": {"type": "integer", "example": 5},
+                        "total": {"type": "integer", "example": 10},
+                    },
+                }
+            )
+        },
+    )
     @action(methods=["POST"], detail=True, url_path="test-answer", url_name="test-answer")
     def test_answer(self, request, pk=None):
         """Test javoblarini tekshirish"""
@@ -65,6 +79,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 if j.is_true:
                     success += 1
         TutorialModel.objects.get(pk=pk).users.add(request.user)
+        ResultModel.objects.update_or_create(user=request.user, tutorial_id=pk, defaults={"score": success})
         return Response(
             {"detail": _("Test javoblari qabul qildi"), "success": success, "total": len(questions)},
         )

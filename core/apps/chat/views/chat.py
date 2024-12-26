@@ -74,6 +74,20 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         self.permission_classes = perms
         return super().get_permissions()
 
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Message updated successfully"},
+                        "message_id": {"type": "integer", "example": 1},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
     @action(methods=["POST"], detail=True, url_path="update-message/(?P<message_id>[0-9]+)")
     def update_message(self, request, pk, message_id):
         message = MessageModel.objects.filter(id=message_id, group_id=pk, user_id=request.user.id)
@@ -95,6 +109,20 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         )
         return Response({"detail": _("Message updated successfully"), "message_id": int(message_id)})
 
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Message deleted successfully"},
+                        "message_id": {"type": "integer", "example": 1},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
     @action(methods=["POST"], detail=True, url_path="delete-message/(?P<message_id>[0-9]+)")
     def delete_message(self, request, pk, message_id):
         message = MessageModel.objects.filter(id=message_id, group_id=pk, user_id=request.user.id)
@@ -112,7 +140,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
 
     @extend_schema(
         responses={
-            201: OpenApiResponse(
+            200: OpenApiResponse(
                 response={
                     "type": "object",
                     "properties": {

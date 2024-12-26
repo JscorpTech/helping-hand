@@ -23,6 +23,19 @@ class TutorialModel(AbstractBaseModel):
         blank=True,
     )
 
+    @classmethod
+    def _create_fake(cls):
+        return cls.objects.create(
+            name="Test",
+            desc="Test",
+            image="image.jpg",
+            file="file.zip",
+            video="video.mp4",
+            tags=[],
+            position=1,
+            source="http://example.com",
+        )
+
     def __str__(self):
         return self.name
 
