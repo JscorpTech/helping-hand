@@ -17,6 +17,7 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT")
 
 
 DATABASES = {
