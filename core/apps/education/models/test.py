@@ -82,10 +82,10 @@ class ResultModel(AbstractBaseModel):
         return self.user.full_name
 
     @classmethod
-    def _create_face(self):
+    def _create_fake(self):
         return self.objects.create(
             user=get_user_model()._create_fake(),
-            tutorial=TutorialModel._create_face(),
+            tutorial=TutorialModel._create_fake(),
             score=10,
         )
 

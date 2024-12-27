@@ -13,6 +13,9 @@ class TutorialModel(AbstractBaseModel):
     test = models.ForeignKey(
         "TestModel", verbose_name=_("test"), on_delete=models.CASCADE, related_name="tutorials", blank=True, null=True
     )
+    task = models.ForeignKey(
+        "TaskModel", verbose_name=_("task"), on_delete=models.CASCADE, related_name="tutorials", blank=True, null=True
+    )
     tags = models.JSONField(_("tags"), blank=True, null=True, default=[])
     position = models.PositiveIntegerField(_("position"), default=0)
     source = models.URLField(_("source"), blank=True, null=True)

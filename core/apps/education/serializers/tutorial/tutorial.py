@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import TutorialModel, ResultModel
+from ...models import TutorialModel, ResultModel, TaskResultModel
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
@@ -11,7 +11,10 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
         if request:
             user = request.user
             if user.is_authenticated:
-                return obj.users.filter(id=user.id).exists()
+                return (
+                    ResultModel.objects.filter(user=user, tutorial=obj).exists()
+                    and TaskResultModel.objects.filter(user=user, tutorial=obj).exists()
+                )
         return False
 
     class Meta:
@@ -36,6 +39,15 @@ class ScoreSerializer(serializers.Serializer):
 
 class RetrieveTutorialSerializer(BaseTutorialSerializer):
     test_score = serializers.SerializerMethodField()
+    task_passed = serializers.SerializerMethodField()
+
+    def get_task_passed(self, obj) -> bool:
+        request = self.context.get("request")
+        if request:
+            user = request.user
+            if user.is_authenticated:
+                return TaskResultModel.objects.filter(tutorial=obj, user=user).exists()
+        return False
 
     def get_test_score(self, obj) -> ScoreSerializer:
         request = self.context.get("request")

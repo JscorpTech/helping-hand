@@ -8,7 +8,7 @@ from ..models import GuideModel
 class GuideTest(TestCase):
 
     def _create_data(self):
-        return GuideModel._create_face()
+        return GuideModel._create_fake()
 
     def setUp(self):
         self.client = APIClient()
