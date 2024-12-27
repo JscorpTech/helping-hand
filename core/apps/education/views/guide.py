@@ -32,6 +32,7 @@ class GuideView(BaseViewSetMixin, ReadOnlyModelViewSet):
 
     @action(methods=["GET"], detail=False, url_path="files", url_name="files")
     def files(self, request, *args, **kwargs):
+        
         return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
