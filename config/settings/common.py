@@ -17,7 +17,9 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
-SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT")
+
+if env.bool("PROTOCOL_HTTPS", False):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 DATABASES = {
