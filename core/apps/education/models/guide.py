@@ -17,7 +17,7 @@ class GuideModel(AbstractBaseModel):
         return self.name
 
     @classmethod
-    def _create_face(cls):
+    def _create_fake(cls):
         return cls.objects.create(
             name="Test",  # name of the guide
             desc="test",  # description of the guide

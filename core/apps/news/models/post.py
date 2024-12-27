@@ -9,7 +9,7 @@ class PostModel(AbstractBaseModel):
     image = models.ImageField(_("image"), upload_to="news/")
 
     @classmethod
-    def _create_face(self):
+    def _create_fake(self):
         return self.objects.create(
             title="Test",
             content="Test",

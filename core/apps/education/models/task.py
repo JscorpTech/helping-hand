@@ -15,7 +15,7 @@ class TaskModel(AbstractBaseModel):
         return self.name
 
     @classmethod
-    def _create_face(self):
+    def _create_fake(self):
         return self.objects.create(
             name="Test Task",
             desc="Test task for testing",
@@ -46,10 +46,10 @@ class TaskResultModel(AbstractBaseModel):
         return self.task.name
 
     @classmethod
-    def _create_face(self):
+    def _create_fake(self):
         return self.objects.create(
             user=get_user_model()._create_fake(),
-            task=TaskModel._create_face(),
+            task=TaskModel._create_fake(),
         )
 
     class Meta:

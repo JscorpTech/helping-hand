@@ -8,7 +8,7 @@ from ..models import PostModel
 class PostTest(TestCase):
 
     def _create_data(self):
-        return PostModel._create_face()
+        return PostModel._create_fake()
 
     def setUp(self):
         self.client = APIClient()

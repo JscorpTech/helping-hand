@@ -70,6 +70,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 perms.extend([IsAuthenticated, IsModeratorPermission])
             case "completed":
                 perms.extend([IsAuthenticated])
+            case "test_answer" | "task_answer":
+                perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
