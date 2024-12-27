@@ -59,7 +59,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 return CreateGroupSerializer
             case "get_messages":
                 return ListMessageSerializer
-            case "send_message":
+            case "send_message" | "update_message":
                 return CreateMessageSerializer
             case _:
                 return ListGroupSerializer
@@ -153,6 +153,8 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     )
     @action(methods=["POST"], detail=True, url_path="send-message")
     def send_message(self, request, pk):
+        if not GroupModel.objects.filter(id=pk).exists():
+            raise NotFound(_("Group not found"))
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
         ser.save(group_id=pk, user_id=request.user.id)

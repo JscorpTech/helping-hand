@@ -26,13 +26,14 @@ class GuideView(BaseViewSetMixin, ReadOnlyModelViewSet):
             case _:
                 return GuideModel.objects.all()
 
+    @extend_schema(responses={200: ListGuideSerializer(many=True)})
     @action(methods=["GET"], detail=False, url_path="videos", url_name="videos")
     def videos(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
+    @extend_schema(responses={200: ListGuideSerializer(many=True)})
     @action(methods=["GET"], detail=False, url_path="files", url_name="files")
     def files(self, request, *args, **kwargs):
-        
         return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
