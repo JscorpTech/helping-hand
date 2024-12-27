@@ -59,7 +59,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 return CreateGroupSerializer
             case "get_messages":
                 return ListMessageSerializer
-            case "send_message":
+            case "send_message" | "update_message":
                 return CreateMessageSerializer
             case _:
                 return ListGroupSerializer
