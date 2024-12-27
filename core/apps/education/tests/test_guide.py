@@ -15,6 +15,8 @@ class GuideTest(TestCase):
         self.instance = self._create_data()
         self.urls = {
             "list": reverse("guide-list"),
+            "videos": reverse("guide-videos"),
+            "files": reverse("guide-files"),
             "retrieve": reverse("guide-detail", kwargs={"pk": self.instance.pk}),
             "retrieve-not-found": reverse("guide-detail", kwargs={"pk": 1000}),
         }
@@ -33,6 +35,16 @@ class GuideTest(TestCase):
 
     def test_list(self):
         response = self.client.get(self.urls["list"])
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 200)
+
+    def test_videos(self):
+        response = self.client.get(self.urls["videos"])
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 200)
+
+    def test_files(self):
+        response = self.client.get(self.urls["files"])
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
 
