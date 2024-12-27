@@ -67,7 +67,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         questions = test.questions.all()
 
         if len(data) != len(questions):
-            raise ValidationError({"detail": _("Test javoblar soni noto'g'ri.")})
+            raise ValidationError({"question": [_("Test javoblar soni noto'g'ri.")]})
 
         success = 0
         answers = []
@@ -79,12 +79,12 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
                 # Tekshirish: Ko'p variantli savollar uchun cheklov
                 if not question.is_many and len(variants) > 1:
-                    raise ValidationError({"detail": _("Variantlar soni 1 ta bo'lishi kerak.")})
+                    raise ValidationError({"variant": [_("Variantlar soni 1 ta bo'lishi kerak.")]})
 
                 # Tekshirish: Variantlarning to'g'riligi
                 variant_ids = [variant.id for variant in variants]
                 if question.variants.filter(id__in=variant_ids).count() != len(variants):
-                    raise ValidationError({"detail": _("Variantlar noto'g'ri tekshirilishi kerak.")})
+                    raise ValidationError({"variant": [_("Variantlar noto'g'ri tekshirilishi kerak.")]})
 
                 # Javobni yaratish yoki yangilash
                 answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
