@@ -8,10 +8,19 @@ class FileSerializer(serializers.Serializer):
     extension = serializers.SerializerMethodField()
 
     def get_url(self, obj):
-        return self.context["request"].build_absolute_uri(obj.url)
+        try:
+            return self.context["request"].build_absolute_uri(obj.url)
+        except Exception:
+            return None
 
     def get_size(self, obj):
-        return FileUtils.get_file_size(obj.size)
+        try:
+            return FileUtils.get_file_size(obj.size)
+        except Exception:
+            return None
 
     def get_extension(self, obj):
-        return FileUtils.get_extension(obj.name)
+        try:
+            return FileUtils.get_extension(obj.name)
+        except Exception:
+            return None
