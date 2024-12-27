@@ -9,6 +9,7 @@ class TaskModel(AbstractBaseModel):
     desc = models.TextField(_("description"), blank=True, null=True)
     image = models.ImageField(_("banner"), upload_to="tasks/")
     file = models.FileField(_("file"), upload_to="tasks/", blank=True, null=True)
+    is_file_answer = models.BooleanField(_("is answer file"), default=False)
 
     def __str__(self):
         return self.name
@@ -40,7 +41,6 @@ class TaskResultModel(AbstractBaseModel):
     )
     answer = models.TextField(_("answer"), blank=True, null=True)
     file = models.FileField(_("file"), upload_to="taskresults/", blank=True, null=True)
-    is_file_answer = models.BooleanField(_("is answer file"), default=False)
 
     def __str__(self):
         return self.task.name

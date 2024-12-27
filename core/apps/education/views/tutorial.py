@@ -178,12 +178,19 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     @action(methods=["POST"], detail=True, url_path="task-answer", url_name="task-answer")
     def task_answer(self, request, pk):
         """Task javobini tekshirish"""
+        try:
+            tutorial = TutorialModel.objects.get(pk=pk)
+        except TutorialModel.DoesNotExist:
+            raise NotFound("Tutorial not found")
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
+        if tutorial.task.is_file_answer and "file" not in data:
+            raise ValidationError({"file": ["Fayil yuborish majburiy"]})
+
         task = self.get_queryset()
-        task_result, __ = TaskResultModel.objects.get_or_create(
+        task_result, __ = TaskResultModel.objects.update_or_create(
             user=request.user,
             task=task,
             tutorial_id=pk,
