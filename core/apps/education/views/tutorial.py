@@ -5,7 +5,7 @@ from django_core.mixins import BaseViewSetMixin
 from django_core.paginations import CustomPagination
 from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiResponse
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -14,8 +14,9 @@ from django.db import transaction
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
-from ..models import AnswerModel, TutorialModel, ResultModel
+from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
+from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
 
 
@@ -38,8 +39,41 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                     .get(pk=self.kwargs.get("pk"))
                     .test
                 )
+            case "task" | "task_answer":
+                return TutorialModel.objects.select_related("task").get(pk=self.kwargs.get("pk")).task
             case _:
                 return TutorialModel.objects.prefetch_related("users").order_by("position").all()
+
+    def get_serializer_class(self) -> Any:
+        match self.action:
+            case "list" | "completed":
+                return ListTutorialSerializer
+            case "retrieve":
+                return RetrieveTutorialSerializer
+            case "create" | "update" | "partial_update":
+                return CreateTutorialSerializer
+            case "test":
+                return RetrieveTestSerializer
+            case "test_answer":
+                return AnswerSerializer
+            case "task":
+                return RetrieveTaskSerializer
+            case "task_answer":
+                return TaskAnswerSerializer
+            case _:
+                return ListTutorialSerializer
+
+    def get_permissions(self) -> Any:
+        perms = []
+        match self.action:
+            case "create" | "update" | "partial_update" | "destroy":
+                perms.extend([IsAuthenticated, IsModeratorPermission])
+            case "completed":
+                perms.extend([IsAuthenticated])
+            case _:
+                perms.extend([AllowAny])
+        self.permission_classes = perms
+        return super().get_permissions()
 
     @extend_schema(
         request=AnswerSerializer,
@@ -117,7 +151,10 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     @action(methods=["GET"], detail=True, url_path="test", url_name="test")
     def test(self, request, pk=None):
         """Video darsga test"""
-        return Response(self.get_serializer(self.get_queryset()).data)
+        try:
+            return Response(self.get_serializer(self.get_queryset()).data)
+        except TutorialModel.DoesNotExist:
+            raise NotFound(_("Tutorial not found"))
 
     @extend_schema(
         responses={200: ListTutorialSerializer(many=True)},
@@ -130,29 +167,29 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         queryset = paginator.paginate_queryset(queryset, request)
         return paginator.get_paginated_response(self.get_serializer(queryset, many=True).data)
 
-    def get_serializer_class(self) -> Any:
-        match self.action:
-            case "list" | "completed":
-                return ListTutorialSerializer
-            case "retrieve":
-                return RetrieveTutorialSerializer
-            case "create" | "update" | "partial_update":
-                return CreateTutorialSerializer
-            case "test":
-                return RetrieveTestSerializer
-            case "test_answer":
-                return AnswerSerializer
-            case _:
-                return ListTutorialSerializer
+    @action(methods=["GET"], detail=True, url_path="task", url_name="task")
+    def task(self, request, pk):
+        """Video darsga task"""
+        try:
+            return Response(self.get_serializer(self.get_queryset()).data)
+        except TutorialModel.DoesNotExist:
+            raise NotFound(_("Tutorial not found"))
 
-    def get_permissions(self) -> Any:
-        perms = []
-        match self.action:
-            case "create" | "update" | "partial_update" | "destroy":
-                perms.extend([IsAuthenticated, IsModeratorPermission])
-            case "completed":
-                perms.extend([IsAuthenticated])
-            case _:
-                perms.extend([AllowAny])
-        self.permission_classes = perms
-        return super().get_permissions()
+    @action(methods=["POST"], detail=True, url_path="task-answer", url_name="task-answer")
+    def task_answer(self, request, pk):
+        """Task javobini tekshirish"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        task = self.get_queryset()
+        task_result, __ = TaskResultModel.objects.get_or_create(
+            user=request.user,
+            task=task,
+            tutorial_id=pk,
+            defaults={"answer": data.get("answer", None)},
+        )
+        if "file" in data:
+            task_result.file.save(data["file"].name, data["file"])
+
+        return Response({"detail": _("Task javobi qabul qilindi.")})
