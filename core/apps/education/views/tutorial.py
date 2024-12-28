@@ -186,3 +186,9 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             task_result.file.save(data["file"].name, data["file"])
 
         return Response({"detail": _("Task javobi qabul qilindi.")})
+
+    @action(methods=["GET"], detail=False, url_name="is-full-completed", url_path="is-full-completed")
+    def is_full_completed(self, request):
+        completed = TutorialModel.objects.filter(users__in=[request.user]).count()
+        total = TutorialModel.objects.count()
+        return Response({"detail": total == completed})
