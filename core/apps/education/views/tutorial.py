@@ -197,6 +197,11 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
         return Response({"detail": _("Task javobi qabul qilindi.")})
 
+    @extend_schema(
+        responses=OpenApiResponse(
+            response={"type": "object", "properties": {"detail": {"type": "boolean", "example": False}}}
+        )
+    )
     @action(methods=["GET"], detail=False, url_name="is-full-completed", url_path="is-full-completed")
     def is_full_completed(self, request):
         """Barcha kurslarni yagunlaganini tekshirish uchun"""
