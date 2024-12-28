@@ -40,6 +40,7 @@ class VariantModel(AbstractBaseModel):
         "QuestionModel", verbose_name=_("question"), on_delete=models.CASCADE, related_name="variants"
     )
     variant = models.CharField(_("variant"), max_length=255)
+    bal = models.IntegerField()
     is_true = models.BooleanField(_("is true"), default=False)
 
     def __str__(self):
@@ -77,6 +78,7 @@ class ResultModel(AbstractBaseModel):
     )
     score = models.PositiveIntegerField(_("score"), default=0)
     total = models.PositiveIntegerField(_("total"), default=0)
+    bal = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.full_name

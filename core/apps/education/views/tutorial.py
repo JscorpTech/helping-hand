@@ -106,6 +106,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             raise ValidationError({"question": [_("Test javoblar soni noto'g'ri.")]})
 
         success = 0
+        bal = 0
         answers = []
 
         with transaction.atomic():
@@ -132,6 +133,9 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
                 if correct_count == selected_correct:
                     success += 1
+                for variant in variants:
+                    if variant.is_true:
+                        bal += variant.bal
 
                 answers.append(answer)
 
@@ -139,7 +143,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             ResultModel.objects.update_or_create(
                 user=request.user,
                 tutorial_id=pk,
-                defaults={"score": success, "total": len(questions)},
+                defaults={"score": success, "total": len(questions), "bal": bal},
             )
 
             return Response(
@@ -147,6 +151,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                     "detail": _("Test javoblari qabul qilindi."),
                     "success": success,
                     "total": len(questions),
+                    "bal": bal
                 }
             )
 
