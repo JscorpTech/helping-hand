@@ -7,7 +7,6 @@ from django.contrib.auth import get_user_model
 class TaskModel(AbstractBaseModel):
     name = models.CharField(_("name"), max_length=255)
     desc = models.TextField(_("description"), blank=True, null=True)
-    image = models.ImageField(_("banner"), upload_to="tasks/")
     file = models.FileField(_("file"), upload_to="tasks/", blank=True, null=True)
     is_file_answer = models.BooleanField(_("is answer file"), default=False)
 
