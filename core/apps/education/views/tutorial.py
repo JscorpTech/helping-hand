@@ -79,9 +79,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         match self.action:
             case "create" | "update" | "partial_update" | "destroy":
                 perms.extend([IsAuthenticated, IsModeratorPermission])
-            case "completed":
-                perms.extend([IsAuthenticated])
-            case "test_answer" | "task_answer":
+            case "test_answer" | "task_answer" | "is_full_completed" | "completed":
                 perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
