@@ -19,7 +19,13 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TutorialModel
-        exclude = ["created_at", "updated_at", "test", "users"]
+        exclude = [
+            "created_at",
+            "updated_at",
+            "test",
+            "users",
+            "task",
+        ]
 
 
 class ListTutorialSerializer(BaseTutorialSerializer):
