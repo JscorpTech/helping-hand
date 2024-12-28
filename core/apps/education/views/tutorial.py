@@ -18,6 +18,7 @@ from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
+from ..services import TestService
 
 
 @extend_schema(
@@ -106,32 +107,19 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             raise ValidationError({"question": [_("Test javoblar soni noto'g'ri.")]})
 
         success = 0
+        bal = 0
         answers = []
 
         with transaction.atomic():
             for item in data:
                 question = item["question"]
                 variants = item["variant"]
-
-                # Tekshirish: Ko'p variantli savollar uchun cheklov
-                if not question.is_many and len(variants) > 1:
-                    raise ValidationError({"variant": [_("Variantlar soni 1 ta bo'lishi kerak.")]})
-
-                # Tekshirish: Variantlarning to'g'riligi
-                variant_ids = [variant.id for variant in variants]
-                if question.variants.filter(id__in=variant_ids).count() != len(variants):
-                    raise ValidationError({"variant": [_("Variantlar noto'g'ri tekshirilishi kerak.")]})
-
-                # Javobni yaratish yoki yangilash
+                TestService.check_answer_validity(question, variants)
                 answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
                 answer.variant.set(variants)
-
-                # To'g'ri javoblarni tekshirish
-                correct_count = question.variants.filter(is_true=True).count()
-                selected_correct = sum(1 for variant in variants if variant.is_true)
-
-                if correct_count == selected_correct:
-                    success += 1
+                s, b = TestService.calculate_score_and_balance(question, variants)
+                success += s
+                bal += b
 
                 answers.append(answer)
 
@@ -139,15 +127,11 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             ResultModel.objects.update_or_create(
                 user=request.user,
                 tutorial_id=pk,
-                defaults={"score": success, "total": len(questions)},
+                defaults={"score": success, "total": len(questions), "bal": bal},
             )
 
             return Response(
-                {
-                    "detail": _("Test javoblari qabul qilindi."),
-                    "success": success,
-                    "total": len(questions),
-                }
+                {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
             )
 
     @action(methods=["GET"], detail=True, url_path="test", url_name="test")
