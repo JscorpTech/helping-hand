@@ -21,17 +21,19 @@ from ..services import TestService
 from ..serializers.test import AnswerSerializer
 
 
-@extend_schema(tags=["exam"])
+@extend_schema(tags=["exam"], summary="Imtixon")
 class ExamView(BaseViewSetMixin, GenericViewSet):
     queryset = ExamModel.objects.all()
 
     @action(methods=["GET"], detail=False, url_name="exam", url_path="exam")
     def exam(self, request):
+        """Imtixon uchun testlarni olish"""
         return Response(self.get_serializer(ExamModel.get_exam()).data)
 
     @extend_schema(request=AnswerSerializer)
     @action(methods=["POST"], detail=False, url_name="exam-answer", url_path="exam-answer")
     def exam_answer(self, request):
+        """Imtixon javoblarini yuborish"""
         exam = ExamModel.get_exam()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
