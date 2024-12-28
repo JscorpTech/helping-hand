@@ -41,6 +41,7 @@ class TutorialTest(TestCase):
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "test": reverse("tutorial-test", kwargs={"pk": self.tutorial.pk}),
             "completed": reverse("tutorial-completed"),
+            "full-completed": reverse("tutorial-is-full-completed"),
         }
 
     def test_test_answer_success(self):
@@ -150,5 +151,11 @@ class TutorialTest(TestCase):
     def test_test_completed(self):
         self.client.force_authenticate(user=get_user_model()._create_fake())
         response = self.client.get(self.urls["completed"])
+        self.assertEqual(response.json()["status"], True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_test_full_completed(self):
+        self.client.force_authenticate(user=get_user_model()._create_fake())
+        response = self.client.get(self.urls["full-completed"])
         self.assertEqual(response.json()["status"], True)
         self.assertEqual(response.status_code, 200)
