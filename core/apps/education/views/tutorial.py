@@ -199,6 +199,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
     @action(methods=["GET"], detail=False, url_name="is-full-completed", url_path="is-full-completed")
     def is_full_completed(self, request):
+        """Barcha kurslarni yagunlaganini tekshirish uchun"""
         completed = TutorialModel.objects.filter(users__in=[request.user]).count()
         total = TutorialModel.objects.count()
         return Response({"detail": total == completed})
