@@ -13,6 +13,14 @@ class TestModel(AbstractBaseModel):
     def __str__(self):
         return self.topic
 
+    @classmethod
+    def _create_fake(self):
+        return self.objects.create(
+            topic="Test",
+            desc="Test",
+            time=0,
+        )
+
     class Meta:
         db_table = "test"
         verbose_name = _("TestModel")
