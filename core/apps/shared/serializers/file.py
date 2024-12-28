@@ -11,7 +11,7 @@ class FileSerializer(serializers.Serializer):
     def get_name(self, obj) -> str:
         try:
             return obj.file.name.split("/")[-1]
-        except AttributeError:
+        except Exception:
             return None
 
     def get_url(self, obj) -> str:

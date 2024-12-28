@@ -182,8 +182,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
         if tutorial.task.is_file_answer and "file" not in data:
             raise ValidationError({"file": ["Fayil yuborish majburiy"]})
-
-        task = self.get_queryset()
+        task = self.get_object()
         task_result, __ = TaskResultModel.objects.update_or_create(
             user=request.user,
             task=task,
