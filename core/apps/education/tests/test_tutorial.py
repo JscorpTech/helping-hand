@@ -17,8 +17,8 @@ class TutorialTest(TestCase):
     def _create_tutorial(self):
         test = TestModel.objects.create(topic="Test", desc="Test", time=100)
         self.question = QuestionModel.objects.create(test=test, question="Test")
-        VariantModel.objects.create(question=self.question, variant="Test 2")
-        VariantModel.objects.create(question=self.question, variant="Test", is_true=True)
+        VariantModel.objects.create(question=self.question, variant="Test 2", bal=10)
+        VariantModel.objects.create(question=self.question, variant="Test", is_true=True, bal=10)
 
         return TutorialModel.objects.create(
             name="Test", desc="Test", image="image.jpg", file="file.zip", video="video.mp4", test=test

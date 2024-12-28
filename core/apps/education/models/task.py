@@ -18,7 +18,6 @@ class TaskModel(AbstractBaseModel):
         return self.objects.create(
             name="Test Task",
             desc="Test task for testing",
-            image="image.jpg",
         )
 
     class Meta:
