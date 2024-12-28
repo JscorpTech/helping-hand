@@ -24,7 +24,7 @@ class TestService:
         return success, bal
 
     @staticmethod
-    def check_answer_validity(self, question, variants):
+    def check_answer_validity(question, variants):
         # Tekshirish: Ko'p variantli savollar uchun cheklov
         if not question.is_many and len(variants) > 1:
             raise ValidationError({"variant": [_("Variantlar soni 1 ta bo'lishi kerak.")]})
