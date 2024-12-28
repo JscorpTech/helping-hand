@@ -31,6 +31,16 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [SearchFilter]
     search_fields = ["name", "desc", "tags"]
 
+    def get_object(self):
+        match self.action:
+            case "task" | "task_answer":
+                obj = self.get_queryset().get(pk=self.kwargs.get("pk"))
+                if obj.task is None:
+                    raise NotFound("Task mavjud emas")
+                return obj.task
+            case _:
+                return super().get_object()
+
     def get_queryset(self):
         match self.action:
             case "test" | "test_answer":
@@ -41,7 +51,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                     .test
                 )
             case "task" | "task_answer":
-                return TutorialModel.objects.select_related("task").get(pk=self.kwargs.get("pk")).task
+                return TutorialModel.objects.select_related("task")
             case _:
                 return TutorialModel.objects.prefetch_related("users").order_by("position").all()
 
@@ -157,7 +167,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     def task(self, request, pk):
         """Video darsga task"""
         try:
-            return Response(self.get_serializer(self.get_queryset()).data)
+            return Response(self.get_serializer(self.get_object()).data)
         except TutorialModel.DoesNotExist:
             raise NotFound(_("Tutorial not found"))
 

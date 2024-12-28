@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ...models import TaskModel
+from core.apps.shared.serializers import FileSerializer
 
 
 class BaseTaskSerializer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class ListTaskSerializer(BaseTaskSerializer):
 
 
 class RetrieveTaskSerializer(BaseTaskSerializer):
+    file = FileSerializer()
     class Meta(BaseTaskSerializer.Meta): ...
 
 
