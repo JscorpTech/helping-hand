@@ -12,6 +12,7 @@ class BasePostSerializer(serializers.ModelSerializer):
             "content",
             "image",
             "views",
+            "news_type",
             "created_at"
         ]
 
@@ -23,6 +24,7 @@ class ListPostSerializer(BasePostSerializer):
             "title",
             "image",
             "views",
+            "news_type",
             "created_at"
         ]
 

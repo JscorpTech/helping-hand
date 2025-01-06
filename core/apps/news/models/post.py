@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
+from ..choices import NewsTypeChoice
 
 
 class PostModel(AbstractBaseModel):
@@ -9,6 +10,9 @@ class PostModel(AbstractBaseModel):
     image = models.ImageField(_("image"), upload_to="news/")
     is_top = models.BooleanField(_("is top"), default=False)
     views = models.BigIntegerField(_("views"), default=0)
+    news_type = models.CharField(
+        _("type"), choices=NewsTypeChoice.choices, max_length=255, default=NewsTypeChoice.BUSINESS
+    )
 
     @classmethod
     def _create_fake(self):
