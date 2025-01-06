@@ -9,3 +9,4 @@ from .rest_framework import *  # noqa
 from .spectacular import *  # noqa
 from .storage import *  # noqa
 from .unfold import *  # noqa
+from .oauth import *  # noqa

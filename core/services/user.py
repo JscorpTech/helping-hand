@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from django_core import exceptions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt import tokens
+from core.apps.accounts.choices import AuthProviderChoice
 
 from core.services import sms
 
@@ -19,9 +20,12 @@ class UserService(sms.SmsService):
             "access": str(refresh.access_token),
         }
 
-    def create_user(self, phone, first_name, last_name, password):
-        get_user_model().objects.update_or_create(
+    def create_user(self, phone, first_name, last_name, password, provider=None):
+        if provider is None:
+            provider = AuthProviderChoice.PHONE
+        return get_user_model().objects.update_or_create(
             phone=phone,
+            auth_provider=provider,
             defaults={
                 "phone": phone,
                 "first_name": first_name,

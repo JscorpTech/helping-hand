@@ -47,3 +47,7 @@ websockets
 channels-redis
 daphne
 pytest-asyncio
+
+
+# !NOTE: on-oauth
+google-auth

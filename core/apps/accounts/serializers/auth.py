@@ -8,6 +8,10 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255)
 
 
+class GoogleSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(max_length=255)
 
