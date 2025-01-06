@@ -13,6 +13,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from ..choices import AuthProviderChoice
 
 from core.services import SmsService, UserService
 
@@ -27,6 +31,7 @@ from ..serializers import (
     SetPasswordSerializer,
     UserSerializer,
     UserUpdateSerializer,
+    GoogleSerializer,
 )
 
 
@@ -43,8 +48,39 @@ class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
                 return ConfirmSerializer
             case "resend":
                 return ResendSerializer
+            case "google":
+                return GoogleSerializer
             case _:
                 return RegisterSerializer
+
+    @action(methods=["POST"], detail=False, url_name="google", url_path="google")
+    def google(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            idinfo = id_token.verify_oauth2_token(
+                serializer.validated_data["token"],
+                requests.Request(),
+            )
+            if "accounts.google.com" not in idinfo["iss"]:
+                raise PermissionDenied(_("Invalid token"))
+            user = get_user_model().objects.filter(email=idinfo["email"]).first()
+            if not user:
+                user, __ = self.create_user(
+                    idinfo["email"],
+                    first_name=idinfo["given_name"],
+                    last_name=idinfo["family_name"],
+                    password=uuid.uuid4().hex,
+                    provider=AuthProviderChoice.GOOGLE,
+                )
+        except Exception as e:
+            raise PermissionDenied(str(e))
+        return Response({
+            "email": idinfo["email"],
+            "first_name": idinfo["given_name"],
+            "last_name": idinfo["family_name"],
+            "token": self.get_token(user)
+        })
 
     @action(methods=["POST"], detail=False, url_path="register")
     def register(self, request):
