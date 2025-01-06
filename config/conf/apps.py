@@ -4,7 +4,6 @@ APPS = [
     "channels",
     "cacheops",
     "rosetta",
-    "social_django",
     "django_ckeditor_5",
     "drf_spectacular",
     "rest_framework",
