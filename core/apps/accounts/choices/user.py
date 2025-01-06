@@ -27,3 +27,12 @@ class RoleChoice(models.TextChoices):
             (RoleChoice.PSIXOLOG.value, RoleChoice.PSIXOLOG.label),
             (RoleChoice.BUSINESS.value, RoleChoice.BUSINESS.label),
         ]
+
+
+class AuthProviderChoice(models.TextChoices):
+    """
+    User Role Choice
+    """
+
+    PHONE = "phone", _("Phone")
+    GOOGLE = "google", _("Google")
