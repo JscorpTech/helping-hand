@@ -11,18 +11,20 @@ class BasePostSerializer(serializers.ModelSerializer):
             "title",
             "content",
             "image",
-            "created_at",
-            "updated_at"
+            "views",
+            "created_at"
         ]
 
 
 class ListPostSerializer(BasePostSerializer):
-    content = serializers.SerializerMethodField()
-
-    def get_content(self, obj):
-        return "%s" % obj.content[:100]
-
-    class Meta(BasePostSerializer.Meta): ...
+    class Meta(BasePostSerializer.Meta):
+        fields = [
+            "id",
+            "title",
+            "image",
+            "views",
+            "created_at"
+        ]
 
 
 class RetrievePostSerializer(BasePostSerializer):
