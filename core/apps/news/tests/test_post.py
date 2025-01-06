@@ -15,6 +15,7 @@ class PostTest(TestCase):
         self.instance = self._create_data()
         self.urls = {
             "list": reverse("post-list"),
+            "top": reverse("post-top-list"),
             "retrieve": reverse("post-detail", kwargs={"pk": self.instance.pk}),
             "retrieve-not-found": reverse("post-detail", kwargs={"pk": 1000}),
         }
@@ -45,3 +46,8 @@ class PostTest(TestCase):
         response = self.client.get(self.urls["retrieve-not-found"])
         self.assertFalse(response.json()["status"])
         self.assertEqual(response.status_code, 404)
+
+    def test_top_list(self):
+        response = self.client.get(self.urls["top"])
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 200)
