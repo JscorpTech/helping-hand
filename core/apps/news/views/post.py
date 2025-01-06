@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_core.paginations import CustomPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
@@ -16,6 +17,8 @@ from ..serializers.post import CreatePostSerializer, ListPostSerializer, Retriev
 
 @extend_schema(tags=["post"])
 class PostView(BaseViewSetMixin, ModelViewSet):
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["news_type"]
 
     def get_queryset(self):
         query = PostModel.objects.order_by("-created_at")
@@ -60,5 +63,7 @@ class PostView(BaseViewSetMixin, ModelViewSet):
     def top_list(self, request):
         pagination = CustomPagination()
         return pagination.get_paginated_response(
-            self.get_serializer(pagination.paginate_queryset(self.get_queryset(), request), many=True).data
+            self.get_serializer(
+                pagination.paginate_queryset(self.filter_queryset(self.get_queryset()), request), many=True
+            ).data
         )
