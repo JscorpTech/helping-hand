@@ -7,6 +7,8 @@ class PostModel(AbstractBaseModel):
     title = models.CharField(_("title"), max_length=255)
     content = models.TextField(_("content"))
     image = models.ImageField(_("image"), upload_to="news/")
+    is_top = models.BooleanField(_("is top"), default=False)
+    views = models.BigIntegerField(_("views"), default=0)
 
     @classmethod
     def _create_fake(self):
