@@ -214,6 +214,26 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         total = TutorialModel.objects.count()
         return Response({"detail": total == completed})
 
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {"type": "integer", "example": 1},
+                            "status": {
+                                "type": "string",
+                                "example": "NOT_STARTED",
+                                "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"],
+                            },
+                        },
+                    },
+                }
+            )
+        }
+    )
     @action(methods=["GET"], detail=False, url_name="progress", url_path="progress")
     def progress(self, request):
         query = self.get_queryset()
