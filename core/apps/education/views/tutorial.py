@@ -14,10 +14,16 @@ from django.db import transaction
 
 from core.apps.accounts.permissions import IsModeratorPermission
 
+from ..choices import ProgressChoices
 from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
-from ..serializers.tutorial import CreateTutorialSerializer, ListTutorialSerializer, RetrieveTutorialSerializer
+from ..serializers.tutorial import (
+    CreateTutorialSerializer,
+    ListTutorialSerializer,
+    RetrieveTutorialSerializer,
+    ListProgressSerializer,
+)
 from ..services import TestService
 
 
@@ -71,6 +77,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return RetrieveTaskSerializer
             case "task_answer":
                 return TaskAnswerSerializer
+            case "progress":
+                return ListProgressSerializer
             case _:
                 return ListTutorialSerializer
 
@@ -205,3 +213,20 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         completed = TutorialModel.objects.filter(users__in=[request.user]).count()
         total = TutorialModel.objects.count()
         return Response({"detail": total == completed})
+
+    @action(methods=["GET"], detail=False, url_name="progress", url_path="progress")
+    def progress(self, request):
+        query = self.get_queryset()
+        data = []
+        previous_passed = False
+        for item in query.all():
+            is_passed = item.users.filter(id=request.user.id).exists()
+            if is_passed:
+                status = ProgressChoices.COMPLETED
+            elif previous_passed:
+                status = ProgressChoices.IN_PROGRESS
+            else:
+                status = ProgressChoices.NOT_STARTED
+            data.append({"name": item.name, "status": status})
+            previous_passed = is_passed
+        return Response(self.get_serializer(data, many=True).data)
