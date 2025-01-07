@@ -6,5 +6,5 @@ class BaseProgressSerializer(serializers.Serializer): ...
 
 
 class ListProgressSerializer(BaseProgressSerializer):
-    name = serializers.CharField()
+    id = serializers.IntegerField()
     status = serializers.ChoiceField(choices=ProgressChoices.choices)
