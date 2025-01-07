@@ -247,6 +247,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 status = ProgressChoices.IN_PROGRESS
             else:
                 status = ProgressChoices.NOT_STARTED
-            data.append({"id": item.id, "status": status})
+            data.append({"id": item.id, "name": "%s-dars" % item.position, "status": status})
             previous_passed = is_passed
         return Response(self.get_serializer(data, many=True).data)
