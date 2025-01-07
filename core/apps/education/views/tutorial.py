@@ -238,7 +238,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     def progress(self, request):
         query = self.get_queryset()
         data = []
-        previous_passed = False
+        previous_passed = True
         for item in query.all():
             is_passed = item.users.filter(id=request.user.id).exists()
             if is_passed:
@@ -247,6 +247,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 status = ProgressChoices.IN_PROGRESS
             else:
                 status = ProgressChoices.NOT_STARTED
-            data.append({"id": item.id, "name": "%s-dars" % item.position, "status": status})
+            data.append({"id": item.id, "name": _("%s-dars") % item.position, "status": status})
             previous_passed = is_passed
         return Response(self.get_serializer(data, many=True).data)
