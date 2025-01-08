@@ -6,9 +6,14 @@ from ...models import BannerModel
 class BaseBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = BannerModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            "id",
+            "title",
+            "subtitle",
+            "color_right",
+            "color_left",
+            "image",
+            "link",
         ]
 
 
