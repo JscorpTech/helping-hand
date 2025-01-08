@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
+from django.contrib.postgres.fields import ArrayField
 
 
 class TutorialModel(AbstractBaseModel):
@@ -16,7 +17,7 @@ class TutorialModel(AbstractBaseModel):
     task = models.ForeignKey(
         "TaskModel", verbose_name=_("task"), on_delete=models.CASCADE, related_name="tutorials", blank=True, null=True
     )
-    tags = models.JSONField(_("tags"), blank=True, null=True, default=[])
+    tags = ArrayField(verbose_name=_("tags"), blank=True, null=True, base_field=models.CharField(max_length=255))
     position = models.PositiveIntegerField(_("position"), default=0)
     source = models.URLField(_("source"), blank=True, null=True)
     users = models.ManyToManyField(

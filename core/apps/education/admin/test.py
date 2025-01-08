@@ -2,6 +2,8 @@ from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 
 from ..models import AnswerModel, QuestionModel, ResultModel, TestModel, VariantModel
+from unfold.contrib.forms.widgets import WysiwygWidget
+from django.db.models import TextField
 
 
 class VariantInline(TabularInline):
@@ -43,6 +45,10 @@ class QuestionAdmin(ModelAdmin):
     )
     search_fields = ["question"]
     inlines = [VariantInline]
+
+    formfield_overrides = {
+        TextField: {"widget": WysiwygWidget},
+    }
 
 
 @admin.register(AnswerModel)
