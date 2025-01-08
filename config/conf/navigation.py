@@ -13,6 +13,17 @@ PAGES = [
         ],
     },
     {
+        "title": _("Asosiy"),
+        "separator": True,  # Top border
+        "items": [
+            {
+                "title": _("Banner"),
+                "icon": "image",
+                "link": reverse_lazy("admin:shared_bannermodel_changelist"),
+            },
+        ],
+    },
+    {
         "title": _("Auth"),
         "separator": True,  # Top border
         "items": [
