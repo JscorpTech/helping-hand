@@ -5,6 +5,16 @@ from django.contrib.auth import get_user_model
 
 
 class BaseGroupSerializer(serializers.ModelSerializer):
+    last_message = serializers.SerializerMethodField()
+
+    def get_last_message(self, obj):
+        from .message import ListMessageSerializer
+
+        try:
+            return ListMessageSerializer(obj.messages.last()).data
+        except Exception:
+            return None
+
     class Meta:
         model = GroupModel
         exclude = [
