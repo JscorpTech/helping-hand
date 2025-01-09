@@ -13,6 +13,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from ..models import GroupModel, MessageModel
@@ -23,6 +24,7 @@ from ..serializers.chat import (
     ListMessageSerializer,
     RetrieveGroupSerializer,
     WsMessageSerializer,
+    WsGroupSerializer,
 )
 
 
@@ -55,7 +57,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 return ListGroupSerializer
             case "retrieve":
                 return RetrieveGroupSerializer
-            case "create":
+            case "create" | "create_group":
                 return CreateGroupSerializer
             case "get_messages":
                 return ListMessageSerializer
@@ -67,12 +69,38 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
-            case "send_message" | "update_message" | "delete_message":
+            case "send_message" | "update_message" | "delete_message" | "create_group":
                 perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
+
+    @action(methods=["POST"], detail=False, url_name="create-group", url_path="create-group")
+    def create_group(self, request):
+        ser = self.get_serializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        user = ser.validated_data.get("user")
+        group = GroupModel.objects.create(
+            name="%s-%s" % (request.user.full_name, user.full_name),
+            chat_type=ser.validated_data.get("chat_type"),
+        )
+        group.users.add(request.user, user)
+        self._send_ws_message(user.username, {"action": "create_group", "data": WsGroupSerializer(group).data})
+        try:
+            async_to_sync(get_channel_layer().group_add)(
+                f"group_{group.id}",
+                cache.get("channel_%s" % user.username),
+            )
+        except Exception as e:
+            print(e)
+        return Response(
+            {
+                "detail": _("Group created successfully"),
+                "group_id": group.id,
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
     @extend_schema(
         responses={

@@ -23,6 +23,12 @@ class Changer {
             this.inputs[item] = document.querySelector(`#id_${item}`).closest(".form-row");
         })
     }
+    /**
+     * Show elements from showItems and hide elements from hideItems.
+     *
+     * @param {string[]} showItems - array of elements to show
+     * @param {string[]} hideItems - array of elements to hide
+     */
     toggleDisplay(showItems, hideItems) {
         showItems.forEach(item => {
             this.inputs[item].style.display = "block";

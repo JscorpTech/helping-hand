@@ -3,12 +3,14 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models import Q
-
+from django.core.cache import cache
 from ..models import GroupModel
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        if self.scope["user"].is_authenticated:
+            cache.set("channel_%s" % self.scope["user"].username, self.channel_name, 60 * 60 * 24)
         await self._add_groups(await self._get_user_groups())
         await self.accept()
 
@@ -24,10 +26,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({"status": False, "data": {"error": str(e)}}))
 
     async def chat_message(self, event):
-        await self.send(text_data=json.dumps({"status": event.get("status", True), "data": {
-            "result": event.get("data", None),
-            "action": event.get("action", None)
-        }}))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "status": event.get("status", True),
+                    "data": {"result": event.get("data", None), "action": event.get("action", None)},
+                }
+            )
+        )
 
     def _get_data(self, text_data) -> dict:
         try:
