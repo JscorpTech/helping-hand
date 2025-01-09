@@ -44,7 +44,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         )
 
     def get_queryset(self):
-        queryset = GroupModel.objects.order_by("created_at")
+        queryset = GroupModel.objects.order_by("-created_at")
         if self.request.user.is_authenticated:
             queryset = queryset.filter(models.Q(users__in=[self.request.user]) | models.Q(is_public=True))
         else:
@@ -75,6 +75,9 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     @action(methods=["POST"], detail=False, url_name="create-group", url_path="create-group")
     def create_group(self, request):

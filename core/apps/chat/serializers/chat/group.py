@@ -9,13 +9,19 @@ class BaseGroupSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
 
     def get_name(self, obj):
-        return obj.chat_name(self.context["request"].user, obj)
+        try:
+            return obj.chat_name(self.context["request"].user, obj)
+        except:
+            return None
 
     def get_last_message(self, obj):
         from .message import ListMessageSerializer
 
         try:
-            return ListMessageSerializer(obj.messages.last()).data
+            messages = obj.messages
+            if messages.exists():
+                return ListMessageSerializer(messages.last()).data
+            return None
         except Exception:
             return None
 
@@ -26,6 +32,9 @@ class BaseGroupSerializer(serializers.ModelSerializer):
             "updated_at",
             "users",
         ]
+        extra_kwargs = {
+            "name": {"read_only": True},
+        }
 
 
 class WsGroupSerializer(BaseGroupSerializer):
