@@ -83,7 +83,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         user = ser.validated_data.get("user")
         group = GroupModel.objects.create(
             name="%s-%s" % (request.user.full_name, user.full_name),
-            chat_type=ser.validated_data.get("chat_type"),
+            chat_type=user.role,
         )
         group.users.add(request.user, user)
         self._send_ws_message(user.username, {"action": "create_group", "data": WsGroupSerializer(group).data})
