@@ -10,10 +10,7 @@ class BaseMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MessageModel
-        exclude = [
-            "created_at",
-            "updated_at",
-        ]
+        exclude = []
 
 
 class ListMessageSerializer(BaseMessageSerializer):

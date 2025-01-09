@@ -40,7 +40,9 @@ class MessageModel(AbstractBaseModel):
     file_type = models.CharField(
         verbose_name=_("file type"), max_length=50, null=True, blank=True, choices=FileTypeChoice.choices
     )
-    group = models.ForeignKey(verbose_name=_("group"), to="GroupModel", on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        verbose_name=_("group"), to="GroupModel", on_delete=models.CASCADE, related_name="messages"
+    )
     user = models.ForeignKey(verbose_name=_("user"), to=get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self):
