@@ -10,10 +10,12 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from core.apps.accounts.serializers import UserSerializer
 
 from core.apps.accounts.choices import RoleChoice
 
 from ..filters import ModeratorFilter
+from django_core.paginations import CustomPagination
 from ..serializers.chat import ListUserSerializer
 
 
@@ -24,7 +26,7 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
     def get_serializer_class(self) -> Any:
         match self.action:
             case "retrieve" | "list":
-                return ListUserSerializer
+                return UserSerializer
             case _:
                 return ListUserSerializer
 
@@ -46,16 +48,19 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
                 enum=RoleChoice.moderator_roles(),
             ),
         ],
-        responses={200: ListUserSerializer(many=True)},
+        responses={200: UserSerializer(many=True)},
     )
     @method_decorator(cache_page(60))
     def list(self, request):
         users = get_user_model().objects.filter(role__in=RoleChoice.moderator_roles())
+        paginator = CustomPagination()
         django_filter = ModeratorFilter(request.GET, queryset=users)
         if not django_filter.is_valid():
             raise ValidationError({"detail": django_filter.errors})
-        return Response(self.get_serializer(django_filter.qs, many=True).data)
+        queryset = paginator.paginate_queryset(django_filter.qs, request)
+        return paginator.get_paginated_response(self.get_serializer(queryset, many=True).data)
 
+    @extend_schema(responses={200: UserSerializer()})
     @method_decorator(cache_page(60))
     def retrieve(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
