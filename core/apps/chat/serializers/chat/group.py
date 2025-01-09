@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ...models import GroupModel
+from django.contrib.auth import get_user_model
 
 
 class BaseGroupSerializer(serializers.ModelSerializer):
@@ -32,4 +33,12 @@ class RetrieveGroupSerializer(BaseGroupSerializer):
 
 
 class CreateGroupSerializer(BaseGroupSerializer):
-    class Meta(BaseGroupSerializer.Meta): ...
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(),
+    )
+
+    class Meta(BaseGroupSerializer.Meta):
+        exclude = None
+        fields = [
+            "user",
+        ]
