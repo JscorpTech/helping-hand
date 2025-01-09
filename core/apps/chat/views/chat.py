@@ -44,12 +44,12 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         )
 
     def get_queryset(self):
-        queryset = GroupModel.objects.all()
+        queryset = GroupModel.objects.order_by("created_at")
         if self.request.user.is_authenticated:
             queryset = queryset.filter(models.Q(users__in=[self.request.user]) | models.Q(is_public=True))
         else:
             queryset = queryset.filter(is_public=True)
-        return queryset
+        return queryset.all()
 
     def get_serializer_class(self) -> Any:
         match self.action:

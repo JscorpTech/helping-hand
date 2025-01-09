@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
+from django.utils.functional import cached_property
 
 from ..choices import ChatTypeChoice, FileTypeChoice
 
@@ -17,12 +18,25 @@ class GroupModel(AbstractBaseModel):
         return self.name
 
     @classmethod
+    def chat_name(self, user, group):
+        if group.is_public:
+            return group.name
+        users = group.users.exclude(id=user.id)
+        if users.exists():
+            return users.first().full_name
+        return group.name
+
+    @classmethod
     def _create_fake(self):
         return self.objects.create(
             name="Test",
             is_public=True,
             chat_type=ChatTypeChoice.LAWYER,
         )
+
+    @cached_property
+    def members(self):
+        return self.users.all()
 
     class Meta:
         db_table = "group"

@@ -6,6 +6,10 @@ from django.contrib.auth import get_user_model
 
 class BaseGroupSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        return obj.chat_name(self.context["request"].user, obj)
 
     def get_last_message(self, obj):
         from .message import ListMessageSerializer
