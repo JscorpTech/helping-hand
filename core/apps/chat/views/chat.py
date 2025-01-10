@@ -15,6 +15,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from django.core.files.storage import default_storage
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -87,6 +88,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         group = GroupModel.objects.create(
             name="%s-%s" % (request.user.full_name, user.full_name),
             chat_type=user.role,
+            image=ser.validated_data.get("image", None),
         )
         group.users.add(request.user, user)
         self._send_ws_message(user.username, {"action": "create_group", "data": WsGroupSerializer(group).data})

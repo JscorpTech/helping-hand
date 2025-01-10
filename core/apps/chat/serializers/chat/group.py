@@ -59,9 +59,11 @@ class CreateGroupSerializer(BaseGroupSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all(),
     )
+    image = serializers.ImageField(required=False)
 
     class Meta(BaseGroupSerializer.Meta):
         exclude = None
         fields = [
             "user",
+            "image"
         ]
