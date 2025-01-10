@@ -15,7 +15,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from django.core.files.storage import default_storage
+from rest_framework.filters import SearchFilter
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -31,8 +31,9 @@ from ..serializers.chat import (
 
 @extend_schema(tags=["group"])
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ["chat_type", "is_public"]
+    search_fields = ["name"]
 
     def _send_ws_message(self, group, data):
         # Send message to group
