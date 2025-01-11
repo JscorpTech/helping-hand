@@ -86,6 +86,19 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
         user = ser.validated_data.get("user")
+        group = GroupModel.objects.filter(
+            users__in=[request.user, user],
+            is_public=False,
+        )
+        if group.exists():
+            return Response(
+                {
+                    "detail": _("You already have a group with this user"),
+                    "group_id": group.first().id,
+                    "is_new": False,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         group = GroupModel.objects.create(
             name="%s-%s" % (request.user.full_name, user.full_name),
             chat_type=user.role,
@@ -104,6 +117,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             {
                 "detail": _("Group created successfully"),
                 "group_id": group.id,
+                "is_new": True,
             },
             status=status.HTTP_201_CREATED,
         )
