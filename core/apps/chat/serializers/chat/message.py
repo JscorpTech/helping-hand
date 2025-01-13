@@ -12,7 +12,7 @@ class BaseMessageSerializer(serializers.ModelSerializer):
 
     def get_file(self, obj) -> Union[FileSerializer, None]:
         if obj.file:
-            return FileSerializer(obj.file).data
+            return FileSerializer(obj.file, context=self.context).data
         return None
 
     class Meta:
