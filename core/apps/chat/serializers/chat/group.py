@@ -14,6 +14,12 @@ class BaseGroupSerializer(serializers.ModelSerializer):
         except:
             return None
 
+    def get_image(self, obj):
+        try:
+            return obj.chat_image(self.context["request"].user, obj)
+        except:
+            return None
+
     def get_last_message(self, obj):
         from .message import ListMessageSerializer
 
@@ -48,10 +54,14 @@ class WsGroupSerializer(BaseGroupSerializer):
 
 
 class ListGroupSerializer(BaseGroupSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta(BaseGroupSerializer.Meta): ...
 
 
 class RetrieveGroupSerializer(BaseGroupSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta(BaseGroupSerializer.Meta): ...
 
 
@@ -63,7 +73,4 @@ class CreateGroupSerializer(BaseGroupSerializer):
 
     class Meta(BaseGroupSerializer.Meta):
         exclude = None
-        fields = [
-            "user",
-            "image"
-        ]
+        fields = ["user", "image"]

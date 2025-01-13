@@ -27,6 +27,15 @@ class GroupModel(AbstractBaseModel):
         return group.name
 
     @classmethod
+    def chat_image(self, user, group):
+        if group.is_public:
+            return group.name
+        users = group.users.exclude(id=user.id)
+        if users.exists():
+            return users.first().avatar
+        return group.name
+
+    @classmethod
     def _create_fake(self):
         return self.objects.create(
             name="Test",
