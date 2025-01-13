@@ -41,11 +41,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    level = serializers.CharField(required=False)
+    experience = serializers.CharField(required=False)
+
     class Meta:
         model = get_user_model()
         fields = [
             "first_name",
             "last_name",
             "avatar",
+            "level",
+            "experience",
             "bio",
         ]

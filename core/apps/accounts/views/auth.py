@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from ..choices import AuthProviderChoice
+from ..choices import AuthProviderChoice, RoleChoice
 
 from core.services import SmsService, UserService
 
@@ -210,7 +210,17 @@ class MeView(BaseViewSetMixin, GenericViewSet, UserService):
 
     @action(methods=["PATCH", "PUT"], detail=False, url_path="user-update")
     def user_update(self, request):
-        ser = self.get_serializer(instance=request.user, data=request.data, partial=True)
+        data = request.data
+        level = data.pop("level", None)
+        experience = data.pop("experience", None)
+        if request.user.role in RoleChoice.moderator_roles() and hasattr(request.user, "moderator"):
+            moderator = request.user.moderator
+            if level is not None:
+                moderator.level = level
+            if experience is not None:
+                moderator.experience = experience
+            moderator.save()
+        ser = self.get_serializer(instance=request.user, data=data, partial=True)
         ser.is_valid(raise_exception=True)
         ser.save()
         return Response({"detail": _("Malumotlar yangilandi")})
