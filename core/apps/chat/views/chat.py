@@ -78,9 +78,6 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         self.permission_classes = perms
         return super().get_permissions()
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
     @action(methods=["POST"], detail=False, url_name="create-group", url_path="create-group")
     def create_group(self, request):
         ser = self.get_serializer(data=request.data)

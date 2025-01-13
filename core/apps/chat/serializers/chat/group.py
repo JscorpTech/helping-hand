@@ -15,10 +15,7 @@ class BaseGroupSerializer(serializers.ModelSerializer):
             return None
 
     def get_image(self, obj):
-        try:
-            return obj.chat_image(self.context["request"].user, obj)
-        except:
-            return None
+        return obj.chat_image(self.context["request"].user, obj, self.context['request'])
 
     def get_last_message(self, obj):
         from .message import ListMessageSerializer

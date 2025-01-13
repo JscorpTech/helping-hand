@@ -5,6 +5,7 @@ from django_core.models import AbstractBaseModel
 from django.utils.functional import cached_property
 
 from ..choices import ChatTypeChoice, FileTypeChoice
+from typing import Union
 
 
 class GroupModel(AbstractBaseModel):
@@ -26,14 +27,24 @@ class GroupModel(AbstractBaseModel):
             return users.first().full_name
         return group.name
 
-    @classmethod
-    def chat_image(self, user, group):
+    def _chat_image(user, group) -> Union[str, None]:
         if group.is_public:
-            return group.name
+            return group.image
         users = group.users.exclude(id=user.id)
         if users.exists():
             return users.first().avatar
-        return group.name
+        return group.image
+
+    @classmethod
+    def chat_image(self, user, group, request):
+        try:
+            image = self._chat_image(user, group)
+        except Exception as e:
+            print(e)
+            return None
+        if not image:
+            return None
+        return request.build_absolute_uri(image.url)
 
     @classmethod
     def _create_fake(self):

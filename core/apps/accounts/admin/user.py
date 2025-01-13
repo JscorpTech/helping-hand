@@ -21,7 +21,7 @@ class CustomUserAdmin(djadmin.UserAdmin, ModelAdmin):
     autocomplete_fields = ["groups", "user_permissions"]
     fieldsets = ((None, {"fields": ("phone",)}),) + (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email", "avatar")}),
         (
             _("Permissions"),
             {
