@@ -4,10 +4,16 @@ from ...models import MessageModel
 from ..user import ListUserSerializer
 from .group import WsGroupSerializer
 from core.apps.shared.serializers import FileSerializer
+from typing import Union
 
 
 class BaseMessageSerializer(serializers.ModelSerializer):
     user = ListUserSerializer()
+
+    def get_file(self, obj) -> Union[FileSerializer, None]:
+        if obj.file:
+            return FileSerializer(obj.file).data
+        return None
 
     class Meta:
         model = MessageModel
@@ -15,7 +21,7 @@ class BaseMessageSerializer(serializers.ModelSerializer):
 
 
 class ListMessageSerializer(BaseMessageSerializer):
-    file = FileSerializer()
+    file = serializers.SerializerMethodField()
 
     class Meta(BaseMessageSerializer.Meta):
         exclude = BaseMessageSerializer.Meta.exclude + [
@@ -24,7 +30,7 @@ class ListMessageSerializer(BaseMessageSerializer):
 
 
 class WsMessageSerializer(BaseMessageSerializer):
-    file = FileSerializer()
+    file = serializers.SerializerMethodField()
     group = WsGroupSerializer()
 
     class Meta(BaseMessageSerializer.Meta):
@@ -41,7 +47,7 @@ class WsMessageSerializer(BaseMessageSerializer):
 
 
 class RetrieveMessageSerializer(BaseMessageSerializer):
-    file = FileSerializer()
+    file = serializers.SerializerMethodField()
     class Meta(BaseMessageSerializer.Meta): ...
 
 
