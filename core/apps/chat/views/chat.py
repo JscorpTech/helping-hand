@@ -223,3 +223,24 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
         return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Message marked as read successfully"},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
+    @action(methods=["POST"], detail=True, url_path="read-message/(?P<message_id>[0-9]+)")
+    def read_message(self, request, pk, message_id):
+        message = MessageModel.objects.filter(id=message_id, group_id=pk)
+        if not message.exists():
+            raise NotFound(_("Message not found"))
+        message.update(is_read=True)
+        return Response({"detail": _("Message marked as read successfully"), "message_id": int(message_id)})

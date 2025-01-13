@@ -23,6 +23,13 @@ from ..serializers.chat import ListUserSerializer
 class ModeratorView(BaseViewSetMixin, GenericViewSet):
     pagination_class = None
 
+    def get_serializer_context(self):
+        data = super().get_serializer_context()
+        match self.action:
+            case "retrieve" | "list":
+                data["type"] = "moderator"
+        return data
+
     def get_serializer_class(self) -> Any:
         match self.action:
             case "retrieve" | "list":

@@ -82,6 +82,7 @@ class GroupModel(AbstractBaseModel):
 class MessageModel(AbstractBaseModel):
     text = models.CharField(verbose_name=_("text"), max_length=500, null=True, blank=True)
     file = models.FileField(verbose_name=_("file"), upload_to="message/", null=True, blank=True)
+    is_read = models.BooleanField(verbose_name=_("is read"), default=False)
     file_type = models.CharField(
         verbose_name=_("file type"), max_length=50, null=True, blank=True, choices=FileTypeChoice.choices
     )
