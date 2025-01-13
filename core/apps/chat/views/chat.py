@@ -94,7 +94,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                     "group_id": group.first().id,
                     "is_new": False,
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_200_OK,
             )
         group = GroupModel.objects.create(
             name="%s-%s" % (request.user.full_name, user.full_name),
