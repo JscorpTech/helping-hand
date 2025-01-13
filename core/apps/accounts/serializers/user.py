@@ -16,14 +16,17 @@ class UserSerializer(serializers.ModelSerializer):
             else:
                 data["level"] = None
                 data["experience"] = None
-            if self.context.get("type") == "moderator" and self.context.get("request").user.is_authenticated:
-                chat = GroupModel.objects.filter(users__in=[instance, self.context["request"].user], is_public=False)
-                data["chat"] = chat.first().id if chat.exists() else None
-            else:
-                data["chat"] = None
         if data["auth_provider"] == AuthProviderChoice.GOOGLE:
             data["email"] = data["phone"]
             data["phone"] = None
+
+        if self.context.get("type") == "moderator" and self.context.get("request").user.is_authenticated:
+            chat = GroupModel.objects.filter(
+                users__in=[instance, self.context["request"].user], is_public=False, chat_type=instance.role
+            )
+            data["chat"] = chat.first().id if chat.exists() else None
+        else:
+            data["chat"] = None
         return data
 
     class Meta:
