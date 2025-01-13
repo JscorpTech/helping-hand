@@ -64,6 +64,4 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
     @method_decorator(cache_page(60))
     def retrieve(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
-        if user.role in [RoleChoice.USER]:
-            raise NotFound("No User matches the given query.")
         return Response(self.get_serializer(user).data)
