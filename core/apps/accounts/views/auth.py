@@ -74,12 +74,14 @@ class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
                 )
         except Exception as e:
             raise PermissionDenied(str(e))
-        return Response({
-            "email": idinfo["email"],
-            "first_name": idinfo["given_name"],
-            "last_name": idinfo["family_name"],
-            "token": self.get_token(user)
-        })
+        return Response(
+            {
+                "email": idinfo["email"],
+                "first_name": idinfo["given_name"],
+                "last_name": idinfo["family_name"],
+                "token": self.get_token(user),
+            }
+        )
 
     @action(methods=["POST"], detail=False, url_path="register")
     def register(self, request):
@@ -210,7 +212,7 @@ class MeView(BaseViewSetMixin, GenericViewSet, UserService):
 
     @action(methods=["PATCH", "PUT"], detail=False, url_path="user-update")
     def user_update(self, request):
-        data = request.data
+        data = request.data.copy()
         level = data.pop("level", None)
         experience = data.pop("experience", None)
         if request.user.role in RoleChoice.moderator_roles() and hasattr(request.user, "moderator"):
