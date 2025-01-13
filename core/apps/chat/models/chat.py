@@ -19,28 +19,39 @@ class GroupModel(AbstractBaseModel):
         return self.name
 
     @classmethod
+    def get_user(self, user, group):
+        obj_type, obj = group.user(user, group)
+        if obj_type == "group":
+            return None
+        return obj
+
+    @classmethod
     def chat_name(self, user, group):
-        if group.is_public:
+        obj_type, obj = group.user(user, group)
+        if obj_type == "group":
             return group.name
+        return obj.full_name
+
+    @classmethod
+    def user(self, user, group) -> list:
+        if group.is_public:
+            return "group", group
         users = group.users.exclude(id=user.id)
         if users.exists():
-            return users.first().full_name
-        return group.name
+            return "user", users.first()
+        return "group", group
 
     def _chat_image(user, group) -> Union[str, None]:
-        if group.is_public:
+        obj_type, obj = group.user(user, group)
+        if obj_type == "group":
             return group.image
-        users = group.users.exclude(id=user.id)
-        if users.exists():
-            return users.first().avatar
-        return group.image
+        return obj.avatar
 
     @classmethod
     def chat_image(self, user, group, request):
         try:
             image = self._chat_image(user, group)
-        except Exception as e:
-            print(e)
+        except:
             return None
         if not image:
             return None

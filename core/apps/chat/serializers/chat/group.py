@@ -8,6 +8,13 @@ class BaseGroupSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
+    def get_user(self, obj):
+        from ..user import ListUserSerializer
+        obj = obj.get_user(self.context["request"].user, obj)
+        if obj is None:
+            return None
+        return ListUserSerializer(obj, context=self.context).data
+
     def get_name(self, obj):
         try:
             return obj.chat_name(self.context["request"].user, obj)
@@ -52,11 +59,13 @@ class WsGroupSerializer(BaseGroupSerializer):
 
 class ListGroupSerializer(BaseGroupSerializer):
     image = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
 
     class Meta(BaseGroupSerializer.Meta): ...
 
 
 class RetrieveGroupSerializer(BaseGroupSerializer):
+    user = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
 
     class Meta(BaseGroupSerializer.Meta): ...
