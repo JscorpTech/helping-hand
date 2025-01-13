@@ -86,6 +86,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         group = GroupModel.objects.filter(
             users__in=[request.user, user],
             is_public=False,
+            chat_type=user.role,
         )
         if group.exists():
             return Response(
