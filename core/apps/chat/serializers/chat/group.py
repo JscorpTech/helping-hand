@@ -10,7 +10,7 @@ class BaseGroupSerializer(serializers.ModelSerializer):
 
     def get_new_message_count(self, obj):
         try:
-            return obj.messages.filter(is_read=False).count()
+            return obj.messages.filter(is_read=False).exclude(user__in=[self.context["request"].user]).count()
         except Exception:
             return 0
 

@@ -244,3 +244,22 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             raise NotFound(_("Message not found"))
         message.update(is_read=True)
         return Response({"detail": _("Message marked as read successfully"), "message_id": int(message_id)})
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "All messages marked as read successfully"},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
+    @action(methods=["POST"], detail=True, url_path="read-all-messages")
+    def read_all_messages(self, request, pk):
+        messages = MessageModel.objects.filter(group_id=pk).exclude(user_id=request.user.id)
+        messages.update(is_read=True)
+        return Response({"detail": _("All messages marked as read successfully")})
