@@ -71,7 +71,14 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
-            case "send_message" | "update_message" | "delete_message" | "create_group":
+            case (
+                "send_message"
+                | "update_message"
+                | "delete_message"
+                | "create_group"
+                | "read_all_messages"
+                | "read_message"
+            ):
                 perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
