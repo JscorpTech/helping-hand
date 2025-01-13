@@ -8,8 +8,15 @@ class BaseGroupSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
+    def get_new_message_count(self, obj):
+        try:
+            return obj.messages.filter(is_read=False).count()
+        except Exception:
+            return 0
+
     def get_user(self, obj):
         from ..user import ListUserSerializer
+
         obj = obj.get_user(self.context["request"].user, obj)
         if obj is None:
             return None
@@ -22,7 +29,7 @@ class BaseGroupSerializer(serializers.ModelSerializer):
             return None
 
     def get_image(self, obj):
-        return obj.chat_image(self.context["request"].user, obj, self.context['request'])
+        return obj.chat_image(self.context["request"].user, obj, self.context["request"])
 
     def get_last_message(self, obj):
         from .message import ListMessageSerializer
@@ -60,6 +67,7 @@ class WsGroupSerializer(BaseGroupSerializer):
 class ListGroupSerializer(BaseGroupSerializer):
     image = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
+    new_message_count = serializers.SerializerMethodField()
 
     class Meta(BaseGroupSerializer.Meta): ...
 
@@ -67,6 +75,7 @@ class ListGroupSerializer(BaseGroupSerializer):
 class RetrieveGroupSerializer(BaseGroupSerializer):
     user = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    new_message_count = serializers.SerializerMethodField()
 
     class Meta(BaseGroupSerializer.Meta): ...
 
