@@ -6,27 +6,12 @@ from ...models import PostModel
 class BasePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostModel
-        fields = [
-            "id",
-            "title",
-            "content",
-            "image",
-            "views",
-            "news_type",
-            "created_at"
-        ]
+        fields = ["id", "title", "content", "image", "views", "news_type", "created_at"]
 
 
 class ListPostSerializer(BasePostSerializer):
     class Meta(BasePostSerializer.Meta):
-        fields = [
-            "id",
-            "title",
-            "image",
-            "views",
-            "news_type",
-            "created_at"
-        ]
+        fields = ["id", "title", "image", "views", "news_type", "created_at"]
 
 
 class RetrievePostSerializer(BasePostSerializer):
@@ -34,4 +19,14 @@ class RetrievePostSerializer(BasePostSerializer):
 
 
 class CreatePostSerializer(BasePostSerializer):
-    class Meta(BasePostSerializer.Meta): ...
+    class Meta(BasePostSerializer.Meta):
+        exclude = None
+        fields = [
+            "id",
+            "title",
+            "content",
+            "image",
+            "views",
+            "news_type",
+            "is_top",
+        ]
