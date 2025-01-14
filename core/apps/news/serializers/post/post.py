@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ...models import PostModel
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
 class BasePostSerializer(serializers.ModelSerializer):
@@ -18,15 +19,13 @@ class RetrievePostSerializer(BasePostSerializer):
     class Meta(BasePostSerializer.Meta): ...
 
 
-class CreatePostSerializer(BasePostSerializer):
+class CreatePostSerializer(AbstractTranslatedSerializer, BasePostSerializer):
     class Meta(BasePostSerializer.Meta):
-        exclude = None
         fields = [
-            "id",
+            "image",
+            "news_type",
+        ]
+        translated_fields = [
             "title",
             "content",
-            "image",
-            "views",
-            "news_type",
-            "is_top",
         ]

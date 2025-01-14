@@ -16,7 +16,6 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
-from django.db.models import Q
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (

@@ -36,6 +36,7 @@ class TutorialTest(TestCase):
         self.urls = {
             "list": reverse("tutorial-list"),
             "create": reverse("tutorial-list"),
+            "create-test": reverse("tutorial-create-test", kwargs={"pk": self.tutorial.pk}),
             "test-answer": reverse("tutorial-test-answer", kwargs={"pk": self.tutorial.pk}),
             "update": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
@@ -84,6 +85,22 @@ class TutorialTest(TestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertFalse(response.json()["status"])
+
+    def test_create_test(self):
+        user = get_user_model()._create_fake()
+        user.role = RoleChoice.LAWYER
+        user.save()
+        self.client.force_authenticate(user=user)
+        data = {
+            "topic": "Test topic",
+            "time": 100,
+            "questions": [
+                {"question": "Test", "variants": [{"is_true": True, "variant": 1, "bal": 10}]},
+            ],
+        }
+        response = self.client.post(self.urls["create-test"], json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(response.json()["status"])
 
     def test_create(self):
         user = get_user_model()._create_fake()

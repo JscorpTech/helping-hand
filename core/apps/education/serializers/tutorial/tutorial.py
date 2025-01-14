@@ -69,12 +69,17 @@ class RetrieveTutorialSerializer(BaseTutorialSerializer):
 
 
 class CreateTutorialSerializer(BaseTutorialSerializer):
+
     class Meta(BaseTutorialSerializer.Meta):
         exclude = None
         fields = [
             "id",
-            "name",
-            "desc",
+            "name_uz",
+            "name_kaa",
+            "name_kril",
+            "desc_uz",
+            "desc_kaa",
+            "desc_kril",
             "image",
             "file",
             "video",

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ...models import QuestionModel
-from ..test.variant import ListVariantSerializer
+from ..test.variant import ListVariantSerializer, CreateVariantSerializer
 
 
 class BaseQuestionSerializer(serializers.ModelSerializer):
@@ -25,4 +25,6 @@ class RetrieveQuestionSerializer(BaseQuestionSerializer):
 
 
 class CreateQuestionSerializer(BaseQuestionSerializer):
+    variants = CreateVariantSerializer(many=True)
+
     class Meta(BaseQuestionSerializer.Meta): ...
