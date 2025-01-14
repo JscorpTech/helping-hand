@@ -10,6 +10,14 @@ class ModeratorFilter(filters.FilterSet):
         choices=RoleChoice.moderator_tuple(),
     )
 
+    search = filters.CharFilter(
+        method="filter_by_name",
+        label="Search by first or last name",
+    )
+
+    def filter_by_name(self, queryset, name, value):
+        return queryset.filter(filters.Q(first_name__icontains=value) | filters.Q(last_name__icontains=value))
+
     class Meta:
         model = get_user_model()
         fields = ("role",)

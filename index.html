@@ -1,26 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sign-In Test</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .certificate-container {
+      width: 800px;
+      aspect-ratio: 1.414;
+      background-color: #ffffff;
+      position: relative;
+      padding: 16px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .background-corner {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #1B365D;
+      transform: rotate(-10deg);
+    }
+    .background-corner.top-right {
+      top: 0;
+      right: 0;
+      transform: rotate(-10deg) translateX(8px) translateY(-4px);
+    }
+    .background-corner.bottom-left {
+      bottom: 0;
+      left: 0;
+      transform: rotate(-10deg) translateX(-8px) translateY(4px);
+    }
+    .gold-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #C5A572;
+      margin: 4px;
+    }
+    .corner-decor {
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      border-color: #C5A572;
+    }
+    .corner-decor.top-left {
+      top: 2px;
+      left: 2px;
+      border-top: 2px solid #C5A572;
+      border-left: 2px solid #C5A572;
+    }
+    .corner-decor.top-right {
+      top: 2px;
+      right: 2px;
+      border-top: 2px solid #C5A572;
+      border-right: 2px solid #C5A572;
+    }
+    .corner-decor.bottom-left {
+      bottom: 2px;
+      left: 2px;
+      border-bottom: 2px solid #C5A572;
+      border-left: 2px solid #C5A572;
+    }
+    .corner-decor.bottom-right {
+      bottom: 2px;
+      right: 2px;
+      border-bottom: 2px solid #C5A572;
+      border-right: 2px solid #C5A572;
+    }
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      margin-top: 32px;
+    }
+    .heading {
+      font-size: 40px;
+      color: #1B365D;
+      font-family: 'serif';
+      letter-spacing: 2px;
+    }
+    .subheading {
+      font-size: 24px;
+      color: #C5A572;
+      font-style: italic;
+      font-family: 'serif';
+    }
+    .recipient-name {
+      font-size: 36px;
+      color: #1B365D;
+      font-family: 'serif';
+      font-style: italic;
+    }
+    .description {
+      color: #1B365D;
+      font-size: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .seal {
+      margin-top: 32px;
+    }
+    .seal .circle {
+      width: 96px;
+      height: 96px;
+      background-color: #1B365D;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 4px solid #C5A572;
+    }
+    .seal .circle span {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding: 0 48px;
+    }
+    .signature {
+      text-align: center;
+    }
+    .signature-name {
+      font-size: 24px;
+      color: #1B365D;
+      font-family: 'serif';
+    }
+    .signature-title {
+      font-size: 14px;
+      color: #1B365D;
+    }
+  </style>
 </head>
-
 <body>
-    <h1>Google Sign-In Test</h1>
-    <div id="g_id_onload" data-client_id="681469380585-0krqsqkg9smn38tst61d2489mf5nqj86.apps.googleusercontent.com"
-        data-callback="onSignIn">
-    </div>
-    <div class="g_id_signin" data-type="standard"></div>
 
-    <script>
-        function onSignIn(response) {
-            console.log("Google Sign-In Successful");
-            const idToken = response.credential;
-            console.log('Google ID Token:', idToken);
-        }
-    </script>
+  <div class="certificate-container">
+    <!-- Background corners -->
+    <div class="background-corner top-right"></div>
+    <div class="background-corner bottom-left"></div>
+
+    <!-- Gold border -->
+    <div class="gold-border"></div>
+
+    <!-- Corner decorations -->
+    <div class="corner-decor top-left"></div>
+    <div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div>
+    <div class="corner-decor bottom-right"></div>
+
+    <!-- Content -->
+    <div class="content">
+      <h1 class="heading">SERTIFIKAT</h1>
+      <p class="subheading">Penghargaan</p>
+
+      <div class="space-y-4 mt-8">
+        <p class="text-[#1B365D] text-xl">Dengan Bangga Diberikan Kepada :</p>
+        <h2 class="recipient-name">Marceline Anderson</h2>
+      </div>
+
+      <p class="description">
+        Atas kinerja yang luar biasa selama program magang yang berlangsung selama 3 bulan.
+      </p>
+
+      <!-- Seal -->
+      <div class="seal">
+        <div class="circle">
+          <span>2024</span>
+        </div>
+      </div>
+
+      <!-- Signatures -->
+      <div class="signatures">
+        <div class="signature">
+          <p class="signature-name">Harper Russo</p>
+          <p class="signature-title">Manajer</p>
+        </div>
+        <div class="signature">
+          <p class="signature-name">Olivia Wilson</p>
+          <p class="signature-title">CEO Borcelle</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
