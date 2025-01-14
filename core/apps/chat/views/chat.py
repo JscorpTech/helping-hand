@@ -92,7 +92,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser.is_valid(raise_exception=True)
         user = ser.validated_data.get("user")
         group = GroupModel.objects.filter(
-            Q(users=user) & Q(users=request.user),
+            users__in=[request.user, user],
             is_public=False,
             chat_type=user.role,
         )
