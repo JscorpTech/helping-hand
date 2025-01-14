@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from django_core.paginations import CustomPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
-from core.apps.accounts.permissions import IsModeratorPermission
+from core.apps.accounts.permissions import AdminPermission
 
 from ..models import PostModel
 from ..serializers.post import CreatePostSerializer, ListPostSerializer, RetrievePostSerializer
@@ -45,7 +45,7 @@ class PostView(BaseViewSetMixin, ModelViewSet):
         perms = []
         match self.action:
             case "create" | "update" | "partial_update" | "destroy":
-                perms.extend([IsModeratorPermission])
+                perms.extend([AdminPermission])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
