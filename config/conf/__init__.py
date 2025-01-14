@@ -10,3 +10,4 @@ from .spectacular import *  # noqa
 from .storage import *  # noqa
 from .unfold import *  # noqa
 from .oauth import *  # noqa
+from .lang import *  # noqa

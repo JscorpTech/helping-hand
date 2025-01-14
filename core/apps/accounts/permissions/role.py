@@ -4,6 +4,20 @@ from rest_framework import permissions
 from ..choices import RoleChoice
 
 
+class AdminPermission(permissions.BasePermission):
+
+    def __init__(self) -> None: ...
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    def has_permission(self, request, view):
+        return request.user.role in [
+            RoleChoice.ADMIN,
+            RoleChoice.SUPERUSER,
+        ]
+
+
 class PsixologPermission(permissions.BasePermission):
 
     def __init__(self) -> None: ...

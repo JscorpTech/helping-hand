@@ -47,7 +47,7 @@ class User(auth_models.AbstractUser):
 
 class ModeratorModel(AbstractBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="moderator")
-    experience = models.PositiveIntegerField(default=0)
+    experience = models.CharField(default=0)
     level = models.CharField(default=1)
 
     def __str__(self) -> str:

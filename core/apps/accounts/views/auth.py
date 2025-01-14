@@ -213,8 +213,8 @@ class MeView(BaseViewSetMixin, GenericViewSet, UserService):
     @action(methods=["PATCH", "PUT"], detail=False, url_path="user-update")
     def user_update(self, request):
         data = request.data.copy()
-        level = data.pop("level", None)
-        experience = data.pop("experience", None)
+        level = request.POST.get("level")
+        experience = request.POST.get("experience")
         if request.user.role in RoleChoice.moderator_roles() and hasattr(request.user, "moderator"):
             moderator = request.user.moderator
             if level is not None:

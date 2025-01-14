@@ -136,14 +136,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_ROOT = os.path.join(BASE_DIR, "resources/staticfiles")
 VITE_APP_DIR = os.path.join(BASE_DIR, "resources/static/vite")
 
-LANGUAGES = (
-    ("ru", _("Russia")),
-    ("en", _("English")),
+LANGUAGES = [
     ("uz", _("Uzbek")),
-)
+    ("kaa", _("Kara-Kalpak")),
+    ("kril", _("Kyril")),
+]
+
 LOCALE_PATHS = [os.path.join(BASE_DIR, "resources/locale")]
 
-MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
+MODELTRANSLATION_LANGUAGES = ["uz", "kaa", "kril"]
 MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
 LANGUAGE_CODE = "uz"
 

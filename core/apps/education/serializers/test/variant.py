@@ -6,12 +6,7 @@ from ...models import VariantModel
 class BaseVariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = VariantModel
-        exclude = [
-            "created_at",
-            "updated_at",
-            "question",
-            "is_true"
-        ]
+        exclude = ["created_at", "updated_at", "question", "is_true"]
 
 
 class ListVariantSerializer(BaseVariantSerializer):
@@ -23,4 +18,11 @@ class RetrieveVariantSerializer(BaseVariantSerializer):
 
 
 class CreateVariantSerializer(BaseVariantSerializer):
-    class Meta(BaseVariantSerializer.Meta): ...
+    class Meta(BaseVariantSerializer.Meta):
+        exclude = None
+        fields = [
+            "id",
+            "is_true",
+            "variant",
+            "bal",
+        ]

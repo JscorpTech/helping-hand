@@ -27,9 +27,9 @@ UNFOLD = {
     "EXTENSIONS": {
         "modeltranslation": {
             "flags": {
-                "en": "🇬🇧",
+                "kaa": "🇺🇿",
                 "uz": "🇺🇿",
-                "ru": "🇷🇺",
+                "kril": "🇺🇿",
             },
         },
     },

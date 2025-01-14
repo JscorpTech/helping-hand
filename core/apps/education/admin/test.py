@@ -34,6 +34,8 @@ class VariantAdmin(ModelAdmin):
     list_display = (
         "id",
         "__str__",
+        "is_true",
+        "question"
     )
 
 

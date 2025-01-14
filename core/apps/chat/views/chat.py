@@ -110,7 +110,10 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             image=ser.validated_data.get("image", None),
         )
         group.users.add(request.user, user)
-        self._send_ws_message(user.username, {"action": "create_group", "data": WsGroupSerializer(group).data})
+        self._send_ws_message(
+            user.username,
+            {"action": "create_group", "data": WsGroupSerializer(group, context={"request": request}).data},
+        )
         try:
             async_to_sync(get_channel_layer().group_add)(
                 f"group_{group.id}",

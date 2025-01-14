@@ -1,0 +1,682 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-14 19:33+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: config/conf/navigation.py:9
+msgid "Bosh sahifa"
+msgstr ""
+
+#: config/conf/navigation.py:16
+msgid "Asosiy"
+msgstr ""
+
+#: config/conf/navigation.py:20
+msgid "Banner"
+msgstr ""
+
+#: config/conf/navigation.py:27
+msgid "Auth"
+msgstr ""
+
+#: config/conf/navigation.py:31
+msgid "Foydalanuvchilar"
+msgstr ""
+
+#: config/conf/navigation.py:42
+msgid "Guruh"
+msgstr ""
+
+#: config/conf/navigation.py:47
+msgid "Xabar"
+msgstr ""
+
+#: config/conf/navigation.py:58
+msgid "Yo'riqnomalar"
+msgstr ""
+
+#: config/conf/navigation.py:63
+msgid "Imtihonlar"
+msgstr ""
+
+#: config/conf/navigation.py:68
+msgid "O'quv qo'llanmalar"
+msgstr ""
+
+#: config/conf/navigation.py:73
+msgid "Savollar"
+msgstr ""
+
+#: config/conf/navigation.py:78
+msgid "Javoblar"
+msgstr ""
+
+#: config/conf/navigation.py:83
+msgid "Variantlar"
+msgstr ""
+
+#: config/conf/navigation.py:90
+msgid "Yangiliklar"
+msgstr ""
+
+#: config/conf/navigation.py:94
+msgid "Postlar"
+msgstr ""
+
+#: config/conf/navigation.py:101
+msgid "SOS"
+msgstr ""
+
+#: config/conf/navigation.py:105
+msgid "Lokatsiyalar"
+msgstr ""
+
+#: config/conf/navigation.py:110
+msgid "Foydalanuvchi so'rovlar"
+msgstr ""
+
+#: config/settings/common.py:140
+msgid "Kara-Kalpak"
+msgstr ""
+
+#: config/settings/common.py:141
+msgid "Kyril"
+msgstr ""
+
+#: config/settings/common.py:142
+msgid "Uzbek"
+msgstr ""
+
+#: core/apps/accounts/admin/user.py:24
+msgid "Personal info"
+msgstr ""
+
+#: core/apps/accounts/admin/user.py:26
+msgid "Permissions"
+msgstr ""
+
+#: core/apps/accounts/admin/user.py:38
+msgid "Important dates"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:10
+msgid "Superuser"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:11
+msgid "Admin"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:12
+msgid "User"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:13 core/apps/chat/choices/chat.py:7
+#: core/apps/education/choices/tutorial.py:6 core/apps/news/choices/news.py:6
+msgid "Psixolog"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:14 core/apps/chat/choices/chat.py:6
+#: core/apps/education/choices/tutorial.py:7 core/apps/news/choices/news.py:7
+msgid "Lawyer"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:15 core/apps/chat/choices/chat.py:8
+#: core/apps/education/choices/tutorial.py:8 core/apps/news/choices/news.py:8
+msgid "Business"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:37
+msgid "Phone"
+msgstr ""
+
+#: core/apps/accounts/choices/user.py:38
+msgid "Google"
+msgstr ""
+
+#: core/apps/accounts/models/user.py:58
+msgid "ModeratorModel"
+msgstr ""
+
+#: core/apps/accounts/models/user.py:59
+msgid "ModeratorModels"
+msgstr ""
+
+#: core/apps/accounts/permissions/role.py:55
+msgid "You are not a moderator"
+msgstr ""
+
+#: core/apps/accounts/serializers/auth.py:21
+msgid "Phone number already registered."
+msgstr ""
+
+#: core/apps/accounts/serializers/auth.py:46
+#: core/apps/accounts/serializers/auth.py:57
+msgid "User does not exist"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:65 core/apps/accounts/views/auth.py:189
+msgid "Invalid token"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:96 core/apps/accounts/views/auth.py:128
+#: core/apps/accounts/views/auth.py:152
+#, python-format
+msgid "Sms %(phone)s raqamiga yuborildi"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:112
+msgid "Tasdiqlash ko'di qabul qilindi"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:193
+msgid "password updated"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:228
+msgid "Malumotlar yangilandi"
+msgstr ""
+
+#: core/apps/accounts/views/auth.py:255
+msgid "invalida password"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:12
+msgid "Image"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:13
+msgid "File"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:14
+msgid "Video"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:15
+msgid "Audio"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:16
+msgid "Text"
+msgstr ""
+
+#: core/apps/chat/choices/chat.py:17
+msgid "Other"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:11 core/apps/education/models/exam.py:10
+#: core/apps/education/models/guide.py:9 core/apps/education/models/task.py:8
+#: core/apps/education/models/tutorial.py:9 core/apps/shared/models/banner.py:7
+msgid "name"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:12
+msgid "is:public"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:13 core/apps/news/models/post.py:10
+#: core/apps/shared/models/banner.py:11
+msgid "image"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:14
+msgid "chat type"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:15 core/apps/education/models/tutorial.py:24
+msgid "users"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:55
+msgid "GroupModel"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:56
+msgid "GroupModels"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:64
+msgid "text"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:65 core/apps/education/models/exam.py:40
+#: core/apps/education/models/guide.py:12 core/apps/education/models/task.py:10
+#: core/apps/education/models/task.py:41 core/apps/education/models/test.py:33
+#: core/apps/education/models/tutorial.py:12
+msgid "file"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:66
+msgid "is read"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:68
+msgid "file type"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:71
+msgid "group"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:73 core/apps/education/models/exam.py:39
+#: core/apps/education/models/exam.py:61 core/apps/education/models/task.py:32
+#: core/apps/education/models/test.py:64 core/apps/education/models/test.py:83
+#: core/apps/sos/models/position.py:9 core/apps/sos/models/sos.py:10
+msgid "user"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:80
+msgid "MessageModel"
+msgstr ""
+
+#: core/apps/chat/models/chat.py:81
+msgid "MessageModels"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:101
+msgid "You already have a group with this user"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:126
+msgid "Group created successfully"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:151 core/apps/chat/views/chat.py:186
+#: core/apps/chat/views/chat.py:254
+msgid "Message not found"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:166
+msgid "Message updated successfully"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:195
+msgid "Message deleted successfully"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:213
+msgid "Group not found"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:225
+msgid "Message sent successfully"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:256
+msgid "Message marked as read successfully"
+msgstr ""
+
+#: core/apps/chat/views/chat.py:276
+msgid "All messages marked as read successfully"
+msgstr ""
+
+#: core/apps/education/choices/progress.py:6
+msgid "Not started"
+msgstr ""
+
+#: core/apps/education/choices/progress.py:7
+msgid "In progress"
+msgstr ""
+
+#: core/apps/education/choices/progress.py:8
+msgid "Completed"
+msgstr ""
+
+#: core/apps/education/models/exam.py:11
+msgid "is active"
+msgstr ""
+
+#: core/apps/education/models/exam.py:12 core/apps/education/models/test.py:31
+#: core/apps/education/models/tutorial.py:15
+msgid "test"
+msgstr ""
+
+#: core/apps/education/models/exam.py:21
+msgid "Imtihon uchun savollar topilmadi iltimos admin bilan bog'laning"
+msgstr ""
+
+#: core/apps/education/models/exam.py:34
+msgid "ExamModel"
+msgstr ""
+
+#: core/apps/education/models/exam.py:35
+msgid "ExamModels"
+msgstr ""
+
+#: core/apps/education/models/exam.py:41 core/apps/education/models/exam.py:62
+msgid "exam"
+msgstr ""
+
+#: core/apps/education/models/exam.py:56
+msgid "SertificateModel"
+msgstr ""
+
+#: core/apps/education/models/exam.py:57
+msgid "SertificateModels"
+msgstr ""
+
+#: core/apps/education/models/exam.py:82
+msgid "ExamresultModel"
+msgstr ""
+
+#: core/apps/education/models/exam.py:83
+msgid "ExamresultModels"
+msgstr ""
+
+#: core/apps/education/models/guide.py:10 core/apps/education/models/task.py:9
+#: core/apps/education/models/test.py:10
+#: core/apps/education/models/tutorial.py:10
+msgid "description"
+msgstr ""
+
+#: core/apps/education/models/guide.py:11
+#: core/apps/education/models/tutorial.py:11
+msgid "banner"
+msgstr ""
+
+#: core/apps/education/models/guide.py:13
+#: core/apps/education/models/tutorial.py:13
+msgid "video"
+msgstr ""
+
+#: core/apps/education/models/guide.py:14 core/apps/news/models/post.py:14
+msgid "type"
+msgstr ""
+
+#: core/apps/education/models/guide.py:31
+msgid "GuideModel"
+msgstr ""
+
+#: core/apps/education/models/guide.py:32
+msgid "GuideModels"
+msgstr ""
+
+#: core/apps/education/models/task.py:11
+msgid "is answer file"
+msgstr ""
+
+#: core/apps/education/models/task.py:25
+msgid "TaskModel"
+msgstr ""
+
+#: core/apps/education/models/task.py:26
+msgid "TaskModels"
+msgstr ""
+
+#: core/apps/education/models/task.py:36
+#: core/apps/education/models/tutorial.py:18
+msgid "task"
+msgstr ""
+
+#: core/apps/education/models/task.py:38 core/apps/education/models/test.py:69
+#: core/apps/education/models/test.py:85
+msgid "tutorial"
+msgstr ""
+
+#: core/apps/education/models/task.py:40
+msgid "answer"
+msgstr ""
+
+#: core/apps/education/models/task.py:55
+msgid "TaskresultModel"
+msgstr ""
+
+#: core/apps/education/models/task.py:56
+msgid "TaskresultModels"
+msgstr ""
+
+#: core/apps/education/models/test.py:9
+msgid "topic"
+msgstr ""
+
+#: core/apps/education/models/test.py:11
+msgid "time"
+msgstr ""
+
+#: core/apps/education/models/test.py:26
+msgid "TestModel"
+msgstr ""
+
+#: core/apps/education/models/test.py:27
+msgid "TestModels"
+msgstr ""
+
+#: core/apps/education/models/test.py:32 core/apps/education/models/test.py:48
+#: core/apps/education/models/test.py:66
+msgid "question"
+msgstr ""
+
+#: core/apps/education/models/test.py:34
+msgid "is any"
+msgstr ""
+
+#: core/apps/education/models/test.py:35
+msgid "is many"
+msgstr ""
+
+#: core/apps/education/models/test.py:42
+msgid "QuestionModel"
+msgstr ""
+
+#: core/apps/education/models/test.py:43
+msgid "QuestionModels"
+msgstr ""
+
+#: core/apps/education/models/test.py:50 core/apps/education/models/test.py:71
+msgid "variant"
+msgstr ""
+
+#: core/apps/education/models/test.py:52
+msgid "is true"
+msgstr ""
+
+#: core/apps/education/models/test.py:59
+msgid "VariantModel"
+msgstr ""
+
+#: core/apps/education/models/test.py:60
+msgid "VariantModels"
+msgstr ""
+
+#: core/apps/education/models/test.py:78
+msgid "AnswerModel"
+msgstr ""
+
+#: core/apps/education/models/test.py:79
+msgid "AnswerModels"
+msgstr ""
+
+#: core/apps/education/models/test.py:87
+msgid "score"
+msgstr ""
+
+#: core/apps/education/models/test.py:88
+msgid "total"
+msgstr ""
+
+#: core/apps/education/models/test.py:104
+msgid "ResultModel"
+msgstr ""
+
+#: core/apps/education/models/test.py:105
+msgid "ResultModels"
+msgstr ""
+
+#: core/apps/education/models/tutorial.py:20
+msgid "tags"
+msgstr ""
+
+#: core/apps/education/models/tutorial.py:21
+msgid "position"
+msgstr ""
+
+#: core/apps/education/models/tutorial.py:22
+msgid "source"
+msgstr ""
+
+#: core/apps/education/models/tutorial.py:48
+msgid "TutorialModel"
+msgstr ""
+
+#: core/apps/education/models/tutorial.py:49
+msgid "TutorialModels"
+msgstr ""
+
+#: core/apps/education/services/test.py:28
+msgid "Variantlar soni 1 ta bo'lishi kerak."
+msgstr ""
+
+#: core/apps/education/services/test.py:33
+msgid "Variantlar noto'g'ri tekshirilishi kerak."
+msgstr ""
+
+#: core/apps/education/views/exam.py:45
+#: core/apps/education/views/tutorial.py:134
+msgid "Test javoblar soni noto'g'ri."
+msgstr ""
+
+#: core/apps/education/views/exam.py:56
+#: core/apps/education/views/tutorial.py:161
+msgid "Test javoblari qabul qilindi."
+msgstr ""
+
+#: core/apps/education/views/tutorial.py:106
+msgid "Test yaratildi."
+msgstr ""
+
+#: core/apps/education/views/tutorial.py:170
+#: core/apps/education/views/tutorial.py:189
+msgid "Tutorial not found"
+msgstr ""
+
+#: core/apps/education/views/tutorial.py:214
+msgid "Task javobi qabul qilindi."
+msgstr ""
+
+#: core/apps/education/views/tutorial.py:261
+#, python-format
+msgid "%s-dars"
+msgstr ""
+
+#: core/apps/news/models/post.py:8
+msgid "title"
+msgstr ""
+
+#: core/apps/news/models/post.py:9
+msgid "content"
+msgstr ""
+
+#: core/apps/news/models/post.py:11
+msgid "is top"
+msgstr ""
+
+#: core/apps/news/models/post.py:12
+msgid "views"
+msgstr ""
+
+#: core/apps/news/models/post.py:30
+msgid "PostModel"
+msgstr ""
+
+#: core/apps/news/models/post.py:31
+msgid "PostModels"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:8
+msgid "subtitle"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:9
+msgid "color right"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:10
+msgid "color left"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:12
+msgid "link"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:29
+msgid "BannerModel"
+msgstr ""
+
+#: core/apps/shared/models/banner.py:30
+msgid "BannerModels"
+msgstr ""
+
+#: core/apps/sos/choices/sos.py:9
+msgid "Xafli hudud"
+msgstr ""
+
+#: core/apps/sos/choices/sos.py:10
+msgid "Xafsiz hudud"
+msgstr ""
+
+#: core/apps/sos/models/position.py:8
+msgid "location"
+msgstr ""
+
+#: core/apps/sos/models/position.py:16
+msgid "PositionModel"
+msgstr ""
+
+#: core/apps/sos/models/position.py:17
+msgid "PositionModels"
+msgstr ""
+
+#: core/apps/sos/models/sos.py:11
+msgid "area"
+msgstr ""
+
+#: core/apps/sos/models/sos.py:18
+msgid "UserrequestModel"
+msgstr ""
+
+#: core/apps/sos/models/sos.py:19
+msgid "UserrequestModels"
+msgstr ""
+
+#: core/apps/sos/views/position.py:68
+msgid "Joylashuv saqlandi"
+msgstr ""
+
+#: core/services/user.py:42
+msgid "Qayta sms yuborish uchun kuting: {}"
+msgstr ""
+
+#: core/services/user.py:45
+msgid "Serverda xatolik yuz berdi"
+msgstr ""
+
+#: resources/templates/admin/index.html:13
+msgid "Django site admin"
+msgstr ""
+
+#: resources/templates/admin/index.html:19
+msgid "Django administration"
+msgstr ""
+
+#: resources/templates/user/home.html:21
+msgid "Django"
+msgstr ""
+
+#: resources/templates/user/home.html:22
+msgid "Assalomu aleykum"
+msgstr ""
