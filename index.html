@@ -1,26 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sign-In Test</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-
-<body>
-    <h1>Google Sign-In Test</h1>
-    <div id="g_id_onload" data-client_id="681469380585-0krqsqkg9smn38tst61d2489mf5nqj86.apps.googleusercontent.com"
-        data-callback="onSignIn">
-    </div>
-    <div class="g_id_signin" data-type="standard"></div>
-
-    <script>
-        function onSignIn(response) {
-            console.log("Google Sign-In Successful");
-            const idToken = response.credential;
-            console.log('Google ID Token:', idToken);
+    <title>Sertifikat</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&display=swap');
+        
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            font-family: 'Playfair Display', serif;
+            padding: 20px;
         }
-    </script>
+
+        .certificate {
+            width: 800px;
+            aspect-ratio: 1.414/1;
+            background: white;
+            position: relative;
+            padding: 64px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .corner {
+            position: absolute;
+            width: 128px;
+            height: 128px;
+            background: #1B365D;
+        }
+
+        .corner-top {
+            top: 0;
+            right: 0;
+            transform: rotate(-10deg) translate(32px, -16px);
+        }
+
+        .corner-bottom {
+            bottom: 0;
+            left: 0;
+            transform: rotate(-10deg) translate(-32px, 16px);
+        }
+
+        .border {
+            border: 2px solid #C5A572;
+            height: calc(100% - 32px);
+            width: calc(100% - 32px);
+            position: absolute;
+            inset: 16px;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1B365D;
+            font-size: 48px;
+            letter-spacing: 0.05em;
+            margin: 0 0 24px;
+        }
+
+        .subtitle {
+            color: #C5A572;
+            font-style: italic;
+            font-size: 24px;
+            margin: 0 0 48px;
+        }
+
+        .recipient {
+            margin: 32px 0;
+        }
+
+        .recipient-label {
+            color: #1B365D;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .recipient-name {
+            color: #1B365D;
+            font-size: 36px;
+            font-style: italic;
+            margin: 0;
+        }
+
+        .description {
+            color: #1B365D;
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        .seal {
+            width: 96px;
+            height: 96px;
+            background: #1B365D;
+            border: 4px solid #C5A572;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 48px auto;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 48px;
+            margin-top: 48px;
+        }
+
+        .signature {
+            text-align: center;
+        }
+
+        .signature-name {
+            color: #1B365D;
+            font-size: 20px;
+            margin: 0 0 4px;
+        }
+
+        .signature-title {
+            color: #1B365D;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 64px;
+            height: 64px;
+        }
+
+        .top-left {
+            top: 8px;
+            left: 8px;
+            border-left: 2px solid #C5A572;
+            border-top: 2px solid #C5A572;
+        }
+
+        .top-right {
+            top: 8px;
+            right: 8px;
+            border-right: 2px solid #C5A572;
+            border-top: 2px solid #C5A572;
+        }
+
+        .bottom-left {
+            bottom: 8px;
+            left: 8px;
+            border-left: 2px solid #C5A572;
+            border-bottom: 2px solid #C5A572;
+        }
+
+        .bottom-right {
+            bottom: 8px;
+            right: 8px;
+            border-right: 2px solid #C5A572;
+            border-bottom: 2px solid #C5A572;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <!-- Background corners -->
+        <div class="corner corner-top"></div>
+        <div class="corner corner-bottom"></div>
+        
+        <!-- Gold border -->
+        <div class="border"></div>
+        
+        <!-- Corner decorations -->
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+
+        <!-- Content -->
+        <div class="content">
+            <h1>SERTIFIKAT</h1>
+            <p class="subtitle">Penghargaan</p>
+            
+            <div class="recipient">
+                <p class="recipient-label">Dengan Bangga Diberikan Kepada :</p>
+                <h2 class="recipient-name">Marceline Anderson</h2>
+            </div>
+            
+            <p class="description">
+                Atas kinerja yang luar biasa selama program magang yang berlangsung selama 3 bulan.
+            </p>
+
+            <!-- Seal -->
+            <div class="seal">2024</div>
+
+            <!-- Signatures -->
+            <div class="signatures">
+                <div class="signature">
+                    <p class="signature-name">Harper Russo</p>
+                    <p class="signature-title">Manajer</p>
+                </div>
+                <div class="signature">
+                    <p class="signature-name">Olivia Wilson</p>
+                    <p class="signature-title">CEO Borcelle</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

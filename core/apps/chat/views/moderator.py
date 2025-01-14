@@ -54,6 +54,12 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
                 required=False,
                 enum=RoleChoice.moderator_roles(),
             ),
+            OpenApiParameter(
+                name="search",
+                type=str,
+                description="Search by first or last name",
+                required=False,
+            ),
         ],
         responses={200: UserSerializer(many=True)},
     )
