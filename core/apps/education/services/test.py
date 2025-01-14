@@ -6,7 +6,6 @@ class TestService:
 
     def __init__(self): ...
 
-    @staticmethod
     def calculate_score_and_balance(question, variants):
         success = 0
         bal = 0
@@ -23,7 +22,6 @@ class TestService:
 
         return success, bal
 
-    @staticmethod
     def check_answer_validity(question, variants):
         # Tekshirish: Ko'p variantli savollar uchun cheklov
         if not question.is_many and len(variants) > 1:
@@ -33,3 +31,22 @@ class TestService:
         variant_ids = [variant.id for variant in variants]
         if question.variants.filter(id__in=variant_ids).count() != len(variants):
             raise ValidationError({"variant": [_("Variantlar noto'g'ri tekshirilishi kerak.")]})
+
+    def proccess_answers(self, answers) -> tuple:
+        success = 0
+        bal = 0
+
+        for answer in answers:
+            if "question" not in answer or "variant" not in answer:
+                raise ValueError("Each answer must contain 'question' and 'variant' keys.")
+
+            question = answer["question"]
+            variants = answer["variant"]
+
+            # calculate_score_and_balance natijasini bir marta chaqiramiz
+            score, balance = self.calculate_score_and_balance(question, variants)
+
+            success += score
+            bal += balance
+
+        return success, bal

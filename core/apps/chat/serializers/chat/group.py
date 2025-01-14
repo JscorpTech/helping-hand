@@ -8,28 +8,22 @@ class BaseGroupSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
-    def get_new_message_count(self, obj):
-        try:
-            return obj.messages.filter(is_read=False).exclude(user__in=[self.context["request"].user]).count()
-        except Exception:
-            return 0
+    def get_new_message_count(self, obj) -> int:
+        return obj.new_message_count(self.context["request"].user)
 
     def get_user(self, obj):
         from ..user import ListUserSerializer
 
-        obj = obj.get_user(self.context["request"].user, obj)
-        if obj is None:
+        obj = obj.get_chat_details(self.context["request"].user)
+        if obj["type"] == "group":
             return None
-        return ListUserSerializer(obj, context=self.context).data
+        return ListUserSerializer(get_user_model().objects.get(id=obj["id"]), context=self.context).data
 
     def get_name(self, obj):
-        try:
-            return obj.chat_name(self.context["request"].user, obj)
-        except:
-            return None
+        return obj.get_chat_details(self.context["request"].user)['name']
 
     def get_image(self, obj):
-        return obj.chat_image(self.context["request"].user, obj, self.context["request"])
+        return obj.chat_image(self.context["request"].user, self.context["request"])
 
     def get_last_message(self, obj):
         from .message import ListMessageSerializer
