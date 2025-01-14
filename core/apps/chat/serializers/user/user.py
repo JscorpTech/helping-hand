@@ -9,7 +9,8 @@ class BaseUserSerializer(serializers.ModelSerializer):
             "id",
             "first_name",
             "last_name",
-            "role"
+            "role",
+            "avatar",
         ]
 
 

@@ -8,7 +8,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from django.db import transaction
 from ..models import ExamModel, SertificateModel, ExamResultModel
 from ..serializers.exam import (
     CreateSertificateSerializer,
@@ -45,26 +44,17 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
         if len(data) != len(questions):
             raise ValidationError({"question": [_("Test javoblar soni noto'g'ri.")]})
 
-        success = 0
-        bal = 0
-        with transaction.atomic():
-            for item in data:
-                question = item["question"]
-                variants = item["variant"]
-                TestService.check_answer_validity(question, variants)
-                s, b = TestService.calculate_score_and_balance(question, variants)
-                success += s
-                bal += b
+        success, bal = TestService().proccess_answers(data)
 
-            ExamResultModel.objects.update_or_create(
-                user=request.user,
-                exam=exam,
-                defaults={"score": success, "total": len(questions), "bal": bal},
-            )
+        ExamResultModel.objects.update_or_create(
+            user=request.user,
+            exam=exam,
+            defaults={"score": success, "total": len(questions), "bal": bal},
+        )
 
-            return Response(
-                {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
-            )
+        return Response(
+            {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
+        )
 
     def get_serializer_class(self) -> Any:
         match self.action:

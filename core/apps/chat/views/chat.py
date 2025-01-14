@@ -15,6 +15,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.filters import SearchFilter
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -30,8 +31,9 @@ from ..serializers.chat import (
 
 @extend_schema(tags=["group"])
 class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ["chat_type", "is_public"]
+    search_fields = ["name"]
 
     def _send_ws_message(self, group, data):
         # Send message to group
@@ -44,12 +46,12 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         )
 
     def get_queryset(self):
-        queryset = GroupModel.objects.all()
+        queryset = GroupModel.objects.order_by("-created_at")
         if self.request.user.is_authenticated:
             queryset = queryset.filter(models.Q(users__in=[self.request.user]) | models.Q(is_public=True))
         else:
             queryset = queryset.filter(is_public=True)
-        return queryset
+        return queryset.all()
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -69,7 +71,14 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
-            case "send_message" | "update_message" | "delete_message" | "create_group":
+            case (
+                "send_message"
+                | "update_message"
+                | "delete_message"
+                | "create_group"
+                | "read_all_messages"
+                | "read_message"
+            ):
                 perms.extend([IsAuthenticated])
             case _:
                 perms.extend([AllowAny])
@@ -81,9 +90,24 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
         user = ser.validated_data.get("user")
+        group = GroupModel.objects.filter(
+            users__in=[request.user, user],
+            is_public=False,
+            chat_type=user.role,
+        )
+        if group.exists():
+            return Response(
+                {
+                    "detail": _("You already have a group with this user"),
+                    "group_id": group.first().id,
+                    "is_new": False,
+                },
+                status=status.HTTP_200_OK,
+            )
         group = GroupModel.objects.create(
             name="%s-%s" % (request.user.full_name, user.full_name),
-            chat_type=ser.validated_data.get("chat_type"),
+            chat_type=user.role,
+            image=ser.validated_data.get("image", None),
         )
         group.users.add(request.user, user)
         self._send_ws_message(user.username, {"action": "create_group", "data": WsGroupSerializer(group).data})
@@ -98,6 +122,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             {
                 "detail": _("Group created successfully"),
                 "group_id": group.id,
+                "is_new": True,
             },
             status=status.HTTP_201_CREATED,
         )
@@ -205,3 +230,43 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             MessageModel.objects.order_by("-created_at").filter(group_id=pk), request
         )
         return paginator.get_paginated_response(self.get_serializer(reversed(queryset), many=True).data)
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Message marked as read successfully"},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
+    @action(methods=["POST"], detail=True, url_path="read-message/(?P<message_id>[0-9]+)")
+    def read_message(self, request, pk, message_id):
+        message = MessageModel.objects.filter(id=message_id, group_id=pk)
+        if not message.exists():
+            raise NotFound(_("Message not found"))
+        message.update(is_read=True)
+        return Response({"detail": _("Message marked as read successfully"), "message_id": int(message_id)})
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "All messages marked as read successfully"},
+                    },
+                },
+                description="Successful response with additional metadata",
+            )
+        }
+    )
+    @action(methods=["POST"], detail=True, url_path="read-all-messages")
+    def read_all_messages(self, request, pk):
+        messages = MessageModel.objects.filter(group_id=pk).exclude(user_id=request.user.id)
+        messages.update(is_read=True)
+        return Response({"detail": _("All messages marked as read successfully")})

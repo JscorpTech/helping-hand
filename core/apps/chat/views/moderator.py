@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -22,6 +22,13 @@ from ..serializers.chat import ListUserSerializer
 @extend_schema(tags=["moderator"])
 class ModeratorView(BaseViewSetMixin, GenericViewSet):
     pagination_class = None
+
+    def get_serializer_context(self):
+        data = super().get_serializer_context()
+        match self.action:
+            case "retrieve" | "list":
+                data["type"] = "moderator"
+        return data
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -64,6 +71,4 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
     @method_decorator(cache_page(60))
     def retrieve(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
-        if user.role in [RoleChoice.USER]:
-            raise NotFound("No User matches the given query.")
         return Response(self.get_serializer(user).data)
