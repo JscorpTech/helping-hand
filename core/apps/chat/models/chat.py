@@ -44,7 +44,7 @@ class GroupModel(AbstractBaseModel):
 
     def new_message_count(self, user) -> int:
         """Yeni xabarlar sonini qaytaradi."""
-        return self.messages.filter(is_read=False).exclude(user_id=user.id).count()
+        return self.messages.filter(is_read=False).exclude(user__in=[user]).count()
 
     @cached_property
     def members(self):
