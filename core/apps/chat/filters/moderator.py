@@ -21,4 +21,7 @@ class ModeratorFilter(filters.FilterSet):
 
     class Meta:
         model = get_user_model()
-        fields = ("role",)
+        fields = (
+            "role",
+            "search",
+        )

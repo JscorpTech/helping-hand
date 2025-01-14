@@ -215,7 +215,9 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             f"group_{pk}",
             {
                 "action": "send_message",
-                "data": WsMessageSerializer(ser.instance).data,
+                "data": WsMessageSerializer(ser.instance, context={
+                    "request": request
+                }).data,
             },
         )
         return Response(
