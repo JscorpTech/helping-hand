@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
+from django.db.models import Q
 
 from ..models import GroupModel, MessageModel
 from ..serializers.chat import (
@@ -91,7 +92,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         ser.is_valid(raise_exception=True)
         user = ser.validated_data.get("user")
         group = GroupModel.objects.filter(
-            users__in=[request.user, user],
+            Q(users=user) & Q(users=request.user),
             is_public=False,
             chat_type=user.role,
         )

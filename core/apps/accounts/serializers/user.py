@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from core.apps.chat.models import GroupModel
 from ..choices import RoleChoice
+from django.db.models import Q
 from core.apps.accounts.choices import AuthProviderChoice
 
 
@@ -22,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         if self.context.get("type") == "moderator" and self.context.get("request").user.is_authenticated:
             chat = GroupModel.objects.filter(
-                users__in=[instance, self.context["request"].user], is_public=False, chat_type=instance.role
+                Q(self.context["request"].user) & Q(users=instance), is_public=False, chat_type=instance.role
             )
             data["chat"] = chat.first().id if chat.exists() else None
         else:
