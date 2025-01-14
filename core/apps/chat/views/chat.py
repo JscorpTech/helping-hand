@@ -215,9 +215,7 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
             f"group_{pk}",
             {
                 "action": "send_message",
-                "data": WsMessageSerializer(ser.instance, context={
-                    "request": request
-                }).data,
+                "data": WsMessageSerializer(ser.instance, context={"request": request}).data,
             },
         )
         return Response(
@@ -269,6 +267,8 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
     )
     @action(methods=["POST"], detail=True, url_path="read-all-messages")
     def read_all_messages(self, request, pk):
-        messages = MessageModel.objects.filter(group_id=pk).exclude(user_id=request.user.id)
+        messages = MessageModel.objects.filter(group_id=pk, is_read=False).exclude(user__in=[request.user])
         messages.update(is_read=True)
-        return Response({"detail": _("All messages marked as read successfully")})
+        return Response(
+            {"detail": _("All messages marked as read successfully"), "messages": messages.values_list("id", flat=True)}
+        )
