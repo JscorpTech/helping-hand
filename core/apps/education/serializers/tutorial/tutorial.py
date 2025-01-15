@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ...models import TutorialModel, ResultModel, TaskResultModel
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
@@ -19,12 +20,16 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TutorialModel
-        exclude = [
-            "created_at",
-            "updated_at",
-            "test",
-            "users",
-            "task",
+        fields = [
+            "id",
+            "name",
+            "desc",
+            "image",
+            "file",
+            "video",
+            "tags",
+            "position",
+            "source",
         ]
 
 
@@ -32,7 +37,7 @@ class ListTutorialSerializer(BaseTutorialSerializer):
     desc = serializers.SerializerMethodField()
 
     def get_desc(self, obj):
-        return obj.desc[:200]
+        return obj.desc[:200] if obj.desc else ""
 
     class Meta(BaseTutorialSerializer.Meta): ...
 
@@ -68,18 +73,16 @@ class RetrieveTutorialSerializer(BaseTutorialSerializer):
     class Meta(BaseTutorialSerializer.Meta): ...
 
 
-class CreateTutorialSerializer(BaseTutorialSerializer):
+class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSerializer):
 
     class Meta(BaseTutorialSerializer.Meta):
         exclude = None
+        translated_fields = [
+            "name",
+            "desc",
+        ]
         fields = [
             "id",
-            "name_uz",
-            "name_kaa",
-            "name_kril",
-            "desc_uz",
-            "desc_kaa",
-            "desc_kril",
             "image",
             "file",
             "video",
