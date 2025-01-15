@@ -5,6 +5,7 @@ from ..choices import RoleChoice
 
 
 class AdminPermission(permissions.BasePermission):
+    message = _("You are not an admin")
 
     def __init__(self) -> None: ...
 

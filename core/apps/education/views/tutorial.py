@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django.db import transaction
 
-from core.apps.accounts.permissions import IsModeratorPermission
+from core.apps.accounts.permissions import AdminPermission
 
 from ..choices import ProgressChoices
 from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
@@ -87,8 +87,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
-            case "create" | "update" | "partial_update" | "destroy":
-                perms.extend([IsAuthenticated, IsModeratorPermission])
+            case "create" | "update" | "partial_update" | "destroy" "create_test":
+                perms.extend([IsAuthenticated, AdminPermission])
             case "test_answer" | "task_answer" | "is_full_completed" | "completed":
                 perms.extend([IsAuthenticated])
             case _:
