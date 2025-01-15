@@ -6,6 +6,10 @@ from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
     is_completed = serializers.SerializerMethodField()
+    test_count = serializers.SerializerMethodField()
+
+    def get_test_count(self, obj) -> int:
+        return obj.test.questions.count() if obj.test else 0
 
     def get_is_completed(self, obj) -> bool:
         request = self.context.get("request")
@@ -30,6 +34,7 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
             "tags",
             "position",
             "source",
+            "test_count"
         ]
 
 
