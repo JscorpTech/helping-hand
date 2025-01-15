@@ -106,7 +106,7 @@ class TutorialTest(TestCase):
         user = get_user_model()._create_fake()
         with open(settings.BASE_DIR / "resources/assets/test.png", "rb") as file:
             image = SimpleUploadedFile("image.jpg", file.read(), content_type="image/jpeg")
-        user.role = RoleChoice.LAWYER
+        user.role = RoleChoice.ADMIN
         user.save()
         self.client.force_authenticate(user=user)
         data = {
@@ -124,7 +124,7 @@ class TutorialTest(TestCase):
 
     def test_update(self):
         user = get_user_model()._create_fake()
-        user.role = RoleChoice.LAWYER
+        user.role = RoleChoice.ADMIN
         user.save()
         self.client.force_authenticate(user=user)
         data = {
