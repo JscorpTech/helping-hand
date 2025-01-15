@@ -58,7 +58,7 @@ class PostView(BaseViewSetMixin, ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        instance.views += instance.views
+        instance.views += 1
         instance.save()
         return Response(serializer.data)
 
