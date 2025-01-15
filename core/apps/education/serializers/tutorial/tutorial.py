@@ -70,7 +70,11 @@ class RetrieveTutorialSerializer(BaseTutorialSerializer):
                     return ScoreSerializer({"success": result.score, "total": result.total, "passed": True}).data
         return ScoreSerializer({"success": 0, "total": 0}).data
 
-    class Meta(BaseTutorialSerializer.Meta): ...
+    class Meta(BaseTutorialSerializer.Meta):
+        fields = BaseTutorialSerializer.Meta.fields + [
+            "test_score",
+            "task_passed",
+        ]
 
 
 class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSerializer):
