@@ -31,7 +31,7 @@ class BaseGroupSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if not self.context["request"].user.is_authenticated:
-            return self.context.request.build_absolute_uri(obj.image.url)
+            return self.context['request'].build_absolute_uri(obj.image.url)
         return obj.chat_image(self.context["request"].user, self.context["request"])
 
     def get_last_message(self, obj):
