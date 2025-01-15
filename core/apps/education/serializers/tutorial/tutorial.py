@@ -35,7 +35,7 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
             "position",
             "source",
             "test_count",
-            "created_at"
+            "updated_at"
         ]
 
 
