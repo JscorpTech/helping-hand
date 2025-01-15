@@ -14,6 +14,12 @@ class RoleChoice(models.TextChoices):
     LAWYER = "lawyer", _("Lawyer")
     BUSINESS = "business", _("Business")
 
+    def admin_roles() -> list:
+        return [
+            RoleChoice.SUPERUSER,
+            RoleChoice.ADMIN,
+        ]
+
     def moderator_roles() -> list:
         return [
             RoleChoice.LAWYER,

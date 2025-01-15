@@ -1,10 +1,15 @@
 from rest_framework import serializers
 
 from ...models import TutorialModel, ResultModel, TaskResultModel
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):
     is_completed = serializers.SerializerMethodField()
+    test_count = serializers.SerializerMethodField()
+
+    def get_test_count(self, obj) -> int:
+        return obj.test.questions.count() if obj.test else 0
 
     def get_is_completed(self, obj) -> bool:
         request = self.context.get("request")
@@ -19,12 +24,17 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TutorialModel
-        exclude = [
-            "created_at",
-            "updated_at",
-            "test",
-            "users",
-            "task",
+        fields = [
+            "id",
+            "name",
+            "desc",
+            "image",
+            "file",
+            "video",
+            "tags",
+            "position",
+            "source",
+            "test_count"
         ]
 
 
@@ -32,7 +42,7 @@ class ListTutorialSerializer(BaseTutorialSerializer):
     desc = serializers.SerializerMethodField()
 
     def get_desc(self, obj):
-        return obj.desc[:200]
+        return obj.desc[:200] if obj.desc else ""
 
     class Meta(BaseTutorialSerializer.Meta): ...
 
@@ -65,21 +75,23 @@ class RetrieveTutorialSerializer(BaseTutorialSerializer):
                     return ScoreSerializer({"success": result.score, "total": result.total, "passed": True}).data
         return ScoreSerializer({"success": 0, "total": 0}).data
 
-    class Meta(BaseTutorialSerializer.Meta): ...
+    class Meta(BaseTutorialSerializer.Meta):
+        fields = BaseTutorialSerializer.Meta.fields + [
+            "test_score",
+            "task_passed",
+        ]
 
 
-class CreateTutorialSerializer(BaseTutorialSerializer):
+class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSerializer):
 
     class Meta(BaseTutorialSerializer.Meta):
         exclude = None
+        translated_fields = [
+            "name",
+            "desc",
+        ]
         fields = [
             "id",
-            "name_uz",
-            "name_kaa",
-            "name_kril",
-            "desc_uz",
-            "desc_kaa",
-            "desc_kril",
             "image",
             "file",
             "video",
