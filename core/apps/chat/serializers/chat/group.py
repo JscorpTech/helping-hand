@@ -9,20 +9,29 @@ class BaseGroupSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
 
     def get_new_message_count(self, obj) -> int:
+        if not self.context["request"].user.is_authenticated:
+            return 0
         return obj.new_message_count(self.context["request"].user)
 
     def get_user(self, obj):
         from ..user import ListUserSerializer
 
-        obj = obj.get_chat_details(self.context["request"].user)
+        user = self.context["request"].user
+        if not user.is_authenticated:
+            return None
+        obj = obj.get_chat_details(user)
         if obj["type"] == "group":
             return None
         return ListUserSerializer(get_user_model().objects.get(id=obj["id"]), context=self.context).data
 
     def get_name(self, obj):
-        return obj.get_chat_details(self.context["request"].user)['name']
+        if not self.context["request"].user.is_authenticated:
+            return obj.name
+        return obj.get_chat_details(self.context["request"].user)["name"]
 
     def get_image(self, obj):
+        if not self.context["request"].user.is_authenticated:
+            return self.context.request.build_absolute_uri(obj.image.url)
         return obj.chat_image(self.context["request"].user, self.context["request"])
 
     def get_last_message(self, obj):
