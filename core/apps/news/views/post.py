@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_core.paginations import CustomPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from core.apps.accounts.choices import RoleChoice
 
 from core.apps.accounts.permissions import AdminPermission
 
@@ -22,13 +23,13 @@ class PostView(BaseViewSetMixin, ModelViewSet):
 
     def get_queryset(self):
         query = PostModel.objects.order_by("-created_at")
-        match self.action:
-            case "top_list":
-                return query.filter(is_top=True)
-            case "list":
-                return query.filter(is_top=False)
-            case _:
+        if self.action in ["top_list"]:
+            return query.filter(is_top=True)
+        if self.action in ["list"]:
+            if self.request.user.is_authenticated and self.request.user.role in RoleChoice.admin_roles():
                 return query
+            return query.filter(is_top=False)
+        return query
 
     def get_serializer_class(self) -> Any:
         match self.action:
