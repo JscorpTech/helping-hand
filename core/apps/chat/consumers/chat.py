@@ -7,7 +7,6 @@ from django.core.cache import cache
 from ..services import ChatService
 from ..models import GroupModel
 from ..serializers import CallSerializer
-import logging
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

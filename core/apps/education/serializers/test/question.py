@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import QuestionModel
+from ...models import QuestionModel, VariantModel
 from ..test.variant import ListVariantSerializer, CreateVariantSerializer
 
 
@@ -26,5 +26,13 @@ class RetrieveQuestionSerializer(BaseQuestionSerializer):
 
 class CreateQuestionSerializer(BaseQuestionSerializer):
     variants = CreateVariantSerializer(many=True)
+
+    def update(self, instance, validated_data):
+        variants = validated_data.pop("variants")
+        question = super().update(instance, validated_data)
+        for variant in variants:
+            variant["question"] = question
+            VariantModel.objects.create(**variant)
+        return question
 
     class Meta(BaseQuestionSerializer.Meta): ...

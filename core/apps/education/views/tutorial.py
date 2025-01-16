@@ -16,7 +16,7 @@ from core.apps.accounts.permissions import AdminPermission
 
 from ..choices import ProgressChoices
 from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
-from ..serializers.test import AnswerSerializer, RetrieveTestSerializer, CreateTestSerializer
+from ..serializers.test import AnswerSerializer, RetrieveTestSerializer, CreateTestSerializer, CreateQuestionSerializer
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.tutorial import (
     CreateTutorialSerializer,
@@ -25,6 +25,7 @@ from ..serializers.tutorial import (
     ListProgressSerializer,
 )
 from ..services import TestService
+from ..models import QuestionModel
 
 
 @extend_schema(
@@ -44,6 +45,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 if obj.task is None:
                     raise NotFound("Task mavjud emas")
                 return obj.task
+            case "update_question":
+                return QuestionModel.objects.get(pk=self.kwargs.get("pk"))
             case _:
                 return super().get_object()
 
@@ -81,6 +84,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return ListProgressSerializer
             case "create_test":
                 return CreateTestSerializer
+            case "update_question":
+                return CreateQuestionSerializer
             case _:
                 return ListTutorialSerializer
 
@@ -96,7 +101,21 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         self.permission_classes = perms
         return super().get_permissions()
 
-    @extend_schema(summary="Create Test")
+    @extend_schema(
+        summary="Create Test",
+        request=CreateTestSerializer,
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string"},
+                        "test": {"type": "integer"},
+                    },
+                }
+            )
+        },
+    )
     @action(methods=["POST"], detail=True, url_path="create-test", url_name="create-test")
     def create_test(self, request, pk=None):
         tutorial = self.get_object()
@@ -104,6 +123,28 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response({"detail": _("Test yaratildi."), "test": data.id}, status=201)
+
+    @extend_schema(
+        summary="Update Test",
+        request=CreateQuestionSerializer,
+        responses={
+            200: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "detail": {"type": "string", "example": "Test yangilandi."},
+                        "test": {"type": "integer", "example": 10},
+                    },
+                }
+            )
+        },
+    )
+    @action(methods=["PUT", "PATCH"], detail=True, url_path="update-question", url_name="update-question")
+    def update_question(self, request, pk=None):
+        serializer = self.get_serializer(data=request.data, instance=self.get_object(), partial=True)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.save()
+        return Response({"detail": _("Test yangilandi."), "test": data.id}, status=200)
 
     @extend_schema(
         request=AnswerSerializer,

@@ -30,7 +30,6 @@ class TestModel(AbstractBaseModel):
 class QuestionModel(AbstractBaseModel):
     test = models.ForeignKey("TestModel", verbose_name=_("test"), on_delete=models.CASCADE, related_name="questions")
     question = models.TextField(_("question"))
-    file = models.FileField(_("file"), upload_to="questions/", blank=True, null=True)
     is_any = models.BooleanField(_("is any"), default=False)
     is_many = models.BooleanField(_("is many"), default=False)
 
