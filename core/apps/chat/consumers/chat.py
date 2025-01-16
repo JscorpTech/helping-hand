@@ -4,7 +4,10 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models import Q
 from django.core.cache import cache
+from ..services import ChatService
 from ..models import GroupModel
+from ..serializers import CallSerializer
+import logging
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -19,11 +22,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         try:
-            text_data_json = self._get_data(text_data)
-            message = text_data_json.get("data", None).get("message", None)
-            await self.send(text_data=json.dumps({"status": True, "data": {"message": message}}))
+            if self.scope["user"].is_anonymous:
+                return await self.send(text_data=json.dumps({"status": False, "detail": "Unauthorized"}))
+            data = self._get_data(text_data)
+            service = ChatService(context={"user": self.scope["user"]})
+            serializer = CallSerializer(data=data)
+            if not serializer.is_valid():
+                return await self.send(text_data=json.dumps({"status": False, "data": serializer.errors}))
+            response = service.process(serializer.validated_data)
+            await self.channel_layer.group_send(
+                response["group"], {"type": "chat_message", "status": True, "data": response["data"], "action": "call"}
+            )
         except Exception as e:
-            await self.send(text_data=json.dumps({"status": False, "data": {"error": str(e)}}))
+            await self.send(text_data=json.dumps({"status": False, "detail": str(e)}))
 
     async def chat_message(self, event):
         await self.send(

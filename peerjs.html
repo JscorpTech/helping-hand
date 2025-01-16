@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeerJS Video Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .connection {
+            margin-bottom: 15px;
+        }
+
+        .connection label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 30px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+
+        .message {
+            margin: 10px 0;
+        }
+
+        .message.system {
+            font-style: italic;
+            color: gray;
+        }
+
+        .message.incoming {
+            text-align: left;
+            color: #333;
+        }
+
+        .message.outgoing {
+            text-align: right;
+            color: #007bff;
+        }
+
+        .message-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <h1>PeerJS Video Chat</h1>
+        <div class="connection">
+            <label for="peer-id">Your ID:</label>
+            <input type="text" id="peer-id" readonly>
+        </div>
+        <div class="connection">
+            <label for="connect-id">Connect to ID:</label>
+            <input type="text" id="connect-id">
+            <button id="connect-btn">Connect</button>
+        </div>
+        <div class="video-container">
+            <video id="local-video" autoplay muted></video>
+            <video id="remote-video" autoplay></video>
+        </div>
+        <div id="chat-box" class="chat-box"></div>
+        <div class="message-box">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script>
+
+        const peer = new Peer({
+            host: "peerjs.felixits.uz",
+            port: 443,
+            secure: true,
+        }); // PeerJS serverga ulanish
+
+        const chatBox = document.getElementById("chat-box");
+        const peerIdInput = document.getElementById("peer-id");
+        const connectIdInput = document.getElementById("connect-id");
+        const connectBtn = document.getElementById("connect-btn");
+        const messageInput = document.getElementById("message-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        let conn;
+
+        // Display your peer ID when connected to the PeerJS server
+        peer.on("open", (id) => {
+            peerIdInput.value = id;
+        });
+
+        // Handle incoming connections
+        peer.on("connection", (connection) => {
+            conn = connection;
+            setupConnection();
+        });
+
+        // Handle "Connect" button click
+        connectBtn.addEventListener("click", () => {
+            const connectId = connectIdInput.value.trim();
+            if (connectId) {
+                conn = peer.connect(connectId);
+                setupConnection();
+            }
+        });
+
+        // Setup the connection
+        function setupConnection() {
+            conn.on("open", () => {
+                appendMessage("Connected to: " + conn.peer, "system");
+            });
+
+            conn.on("data", (data) => {
+                appendMessage("Friend: " + data, "incoming");
+            });
+
+            conn.on("close", () => {
+                appendMessage("Connection closed.", "system");
+            });
+        }
+
+        // Handle "Send" button click
+        sendBtn.addEventListener("click", sendMessage);
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && conn && conn.open) {
+                conn.send(message);
+                appendMessage("You: " + message, "outgoing");
+                messageInput.value = "";
+            }
+        }
+
+        // Append a message to the chat box
+        function appendMessage(message, type) {
+            const msgElem = document.createElement("div");
+            msgElem.className = `message ${type}`;
+            msgElem.textContent = message;
+            chatBox.appendChild(msgElem);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+    </script>
+</body>
+
+</html>
