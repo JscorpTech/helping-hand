@@ -132,8 +132,8 @@ class TutorialTest(TestCase):
         user.save()
         self.client.force_authenticate(user=user)
         data = {
-            "name": "Test 2",
-            "desc": "Test 2",
+            "name_uz": "Test 2",
+            "desc_uz": "Test 2",
             "test": self.tutorial.test.pk,
             "tags": '["salom", "qalaysan"]',
             "position": 1,

@@ -1,12 +1,16 @@
 from rest_framework import serializers
 
 from ...models import TaskModel
-from core.apps.shared.serializers import FileSerializer
+from core.apps.shared.serializers import FileSerializer, AbstractTranslatedSerializer
 
 
-class BaseTaskSerializer(serializers.ModelSerializer):
+class BaseTaskSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = TaskModel
+        translated_fields = [
+            "name",
+            "desc",
+        ]
         exclude = [
             "created_at",
             "updated_at",
@@ -19,11 +23,13 @@ class ListTaskSerializer(BaseTaskSerializer):
 
 class RetrieveTaskSerializer(BaseTaskSerializer):
     file = FileSerializer()
+
     class Meta(BaseTaskSerializer.Meta): ...
 
 
 class CreateTaskSerializer(BaseTaskSerializer):
-    class Meta(BaseTaskSerializer.Meta): ...
+    class Meta(BaseTaskSerializer.Meta):
+        translated = 2
 
 
 class TaskAnswerSerializer(serializers.Serializer):

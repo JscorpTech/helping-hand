@@ -1,18 +1,22 @@
-from rest_framework import serializers
-
 from ...models import QuestionModel, VariantModel
 from ..test.variant import ListVariantSerializer, CreateVariantSerializer
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
-class BaseQuestionSerializer(serializers.ModelSerializer):
+class BaseQuestionSerializer(AbstractTranslatedSerializer):
     variants = ListVariantSerializer(many=True)
 
     class Meta:
         model = QuestionModel
-        exclude = [
-            "created_at",
-            "updated_at",
-            "test",
+        translated_fields = [
+            "question",
+        ]
+        fields = [
+            "id",
+            "is_any",
+            "is_many",
+            "variants",
+            "question",
         ]
 
 
@@ -36,4 +40,12 @@ class CreateQuestionSerializer(BaseQuestionSerializer):
             VariantModel.objects.create(**variant)
         return question
 
-    class Meta(BaseQuestionSerializer.Meta): ...
+    class Meta(BaseQuestionSerializer.Meta):
+        fields = BaseQuestionSerializer.Meta.fields + ["variants"]
+        translated = 2
+        fields = [
+            "id",
+            "is_any",
+            "is_many",
+            "variants",
+        ]

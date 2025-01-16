@@ -2,32 +2,35 @@ from rest_framework import serializers
 
 from ...models import GuideModel
 from core.apps.shared.serializers import FileSerializer
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
-class BaseGuideSerializer(serializers.ModelSerializer):
+class BaseGuideSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = GuideModel
-        exclude = [
-            "created_at",
-            "updated_at",
-        ]
+        translated_fields = ["name", "desc"]
+        fields = ["id", "image", "file", "video", "guide_type", "updated_at"]
 
 
 class ListGuideSerializer(BaseGuideSerializer):
     desc = serializers.SerializerMethodField()
     file = FileSerializer()
 
-    def get_desc(self, obj):
-        return "%s..." % obj.desc[:200]
+    def get_desc(self, obj) -> str:
+        return "%s..." % obj.desc[:200] if obj.desc else None
 
-    class Meta(BaseGuideSerializer.Meta): ...
+    class Meta(BaseGuideSerializer.Meta):
+        translated_fields = []
+        fields = BaseGuideSerializer.Meta.fields + ["desc", "file"]
 
 
 class RetrieveGuideSerializer(BaseGuideSerializer):
     file = FileSerializer()
 
-    class Meta(BaseGuideSerializer.Meta): ...
+    class Meta(BaseGuideSerializer.Meta):
+        fields = BaseGuideSerializer.Meta.fields + ["file"]
 
 
 class CreateGuideSerializer(BaseGuideSerializer):
-    class Meta(BaseGuideSerializer.Meta): ...
+    class Meta(BaseGuideSerializer.Meta):
+        translated = 2

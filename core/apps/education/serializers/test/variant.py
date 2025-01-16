@@ -1,12 +1,18 @@
-from rest_framework import serializers
-
 from ...models import VariantModel
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
-class BaseVariantSerializer(serializers.ModelSerializer):
+class BaseVariantSerializer(AbstractTranslatedSerializer):
     class Meta:
+        translated_fields = [
+            "variant",
+        ]
         model = VariantModel
-        exclude = ["created_at", "updated_at", "question", "is_true"]
+        fields = [
+            "id",
+            "bal",
+            "variant"
+        ]
 
 
 class ListVariantSerializer(BaseVariantSerializer):
@@ -23,6 +29,6 @@ class CreateVariantSerializer(BaseVariantSerializer):
         fields = [
             "id",
             "is_true",
-            "variant",
             "bal",
         ]
+        translated = 2
