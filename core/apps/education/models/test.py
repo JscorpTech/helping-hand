@@ -30,7 +30,6 @@ class TestModel(AbstractBaseModel):
 class QuestionModel(AbstractBaseModel):
     test = models.ForeignKey("TestModel", verbose_name=_("test"), on_delete=models.CASCADE, related_name="questions")
     question = models.TextField(_("question"))
-    file = models.FileField(_("file"), upload_to="questions/", blank=True, null=True)
     is_any = models.BooleanField(_("is any"), default=False)
     is_many = models.BooleanField(_("is many"), default=False)
 
@@ -58,25 +57,6 @@ class VariantModel(AbstractBaseModel):
         db_table = "variant"
         verbose_name = _("VariantModel")
         verbose_name_plural = _("VariantModels")
-
-
-class AnswerModel(AbstractBaseModel):
-    user = models.ForeignKey(get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE, related_name="answers")
-    question = models.ForeignKey(
-        "QuestionModel", verbose_name=_("question"), on_delete=models.CASCADE, related_name="answers"
-    )
-    tutorial = models.ForeignKey(
-        "TutorialModel", verbose_name=_("tutorial"), on_delete=models.CASCADE, related_name="answers"
-    )
-    variant = models.ManyToManyField("VariantModel", verbose_name=_("variant"), related_name="answers")
-
-    def __str__(self):
-        return self.user.first_name
-
-    class Meta:
-        db_table = "answer"
-        verbose_name = _("AnswerModel")
-        verbose_name_plural = _("AnswerModels")
 
 
 class ResultModel(AbstractBaseModel):

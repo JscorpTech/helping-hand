@@ -75,11 +75,6 @@ PAGES = [
                 "link": reverse_lazy("admin:education_questionmodel_changelist"),
             },
             {
-                "title": _("Javoblar"),
-                "icon": "check_box",
-                "link": reverse_lazy("admin:education_answermodel_changelist"),
-            },
-            {
                 "title": _("Variantlar"),
                 "icon": "shuffle",
                 "link": reverse_lazy("admin:education_variantmodel_changelist"),
