@@ -1,9 +1,9 @@
 from modeltranslation.translator import TranslationOptions, register
 
-from ..models import GuideModel
+from ..models import TaskModel
 
 
-@register(GuideModel)
+@register(TaskModel)
 class GuideTranslation(TranslationOptions):
     fields = [
         "name",

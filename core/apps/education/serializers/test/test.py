@@ -3,9 +3,10 @@ from rest_framework import serializers
 from ...models import TestModel, QuestionModel, VariantModel
 from ...serializers.test.question import ListQuestionSerializer, CreateQuestionSerializer
 from django.db import transaction
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
-class BaseTestSerializer(serializers.ModelSerializer):
+class BaseTestSerializer(AbstractTranslatedSerializer):
     questions = ListQuestionSerializer(many=True)
     questions_count = serializers.SerializerMethodField()
 
@@ -14,9 +15,13 @@ class BaseTestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            "id",
+            "questions_count",
+            "questions",
+            "topic",
+            "desc",
+            "time",
         ]
 
 
@@ -48,12 +53,13 @@ class CreateTestSerializer(BaseTestSerializer):
         return test
 
     class Meta(BaseTestSerializer.Meta):
-        exclude = None
-        fields = [
-            "id",
+        translated_fields = [
             "topic",
             "desc",
+        ]
+        translated = 2
+        fields = [
+            "id",
             "time",
             "questions",
         ]
-
