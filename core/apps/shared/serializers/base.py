@@ -1,6 +1,6 @@
 from django.conf import settings
 from rest_framework import serializers
-import logging
+
 
 class AbstractTranslatedSerializer(serializers.ModelSerializer):
     """

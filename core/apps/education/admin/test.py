@@ -4,21 +4,22 @@ from unfold.admin import ModelAdmin, TabularInline
 from ..models import QuestionModel, ResultModel, TestModel, VariantModel
 from unfold.contrib.forms.widgets import WysiwygWidget
 from django.db.models import TextField
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 
 
-class VariantInline(TabularInline):
+class VariantInline(TabularInline, TranslationTabularInline):
     model = VariantModel
     extra = 1
     tab = True
 
 
-class QuestionInline(TabularInline):
+class QuestionInline(TabularInline, TranslationTabularInline):
     model = QuestionModel
     extra = 1
 
 
 @admin.register(TestModel)
-class TestAdmin(ModelAdmin):
+class TestAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = (
         "id",
         "__str__",
@@ -30,7 +31,7 @@ class TestAdmin(ModelAdmin):
 
 
 @admin.register(VariantModel)
-class VariantAdmin(ModelAdmin):
+class VariantAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = (
         "id",
         "__str__",
@@ -40,7 +41,7 @@ class VariantAdmin(ModelAdmin):
 
 
 @admin.register(QuestionModel)
-class QuestionAdmin(ModelAdmin):
+class QuestionAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = (
         "id",
         "__str__",
