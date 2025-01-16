@@ -103,7 +103,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         return super().get_permissions()
 
     @extend_schema(
-        summary="Create Test",
+        summary="Test yaratish",
         request=CreateTestSerializer,
         responses={
             200: OpenApiResponse(
@@ -119,6 +119,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     )
     @action(methods=["POST"], detail=True, url_path="create-test", url_name="create-test")
     def create_test(self, request, pk=None):
+        """Test yaratish uchun"""
         tutorial = self.get_object()
         serializer = self.get_serializer(data=request.data, context={"tutorial": tutorial})
         serializer.is_valid(raise_exception=True)
@@ -126,7 +127,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         return Response({"detail": _("Test yaratildi."), "test": data.id}, status=201)
 
     @extend_schema(
-        summary="Update Test",
+        summary="Savolni o'zgartirish",
         request=CreateQuestionSerializer,
         parameters=[
             OpenApiParameter(
@@ -150,12 +151,14 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     )
     @action(methods=["PUT", "PATCH"], detail=True, url_path="update-question", url_name="update-question")
     def update_question(self, request, pk=None):
+        """Savolni yangilash uchun"""
         serializer = self.get_serializer(data=request.data, instance=self.get_object(), partial=True)
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response({"detail": _("Test yangilandi."), "test": data.id}, status=200)
 
     @extend_schema(
+        summary="Test javoblarini tekshirish",
         request=AnswerSerializer,
         responses={
             200: OpenApiResponse(
@@ -172,7 +175,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     )
     @action(methods=["POST"], detail=True, url_path="test-answer", url_name="test-answer")
     def test_answer(self, request, pk=None):
-        """Test javoblarini tekshirish"""
+        """Test javoblarini tekshirish uchun"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
@@ -206,20 +209,25 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
             )
 
+    @extend_schema(
+        summary="Darslik uchun testni olish",
+        description="Darsga berilgan testni olish",
+    )
     @action(methods=["GET"], detail=True, url_path="test", url_name="test")
     def test(self, request, pk=None):
-        """Video darsga test"""
+        """Darslik uchun testni olish uchun"""
         try:
             return Response(self.get_serializer(self.get_queryset()).data)
         except TutorialModel.DoesNotExist:
             raise NotFound(_("Tutorial not found"))
 
     @extend_schema(
+        summary="Yakunganlan video darslarni ro'yhatini olish",
         responses={200: ListTutorialSerializer(many=True)},
     )
     @action(methods=["GET"], detail=False, url_path="completed", url_name="completed")
     def completed(self, request):
-        """Yakunlangan video darslar"""
+        """Yakunlangan video darslar ro'yhatini olish uchun"""
         queryset = self.get_queryset().filter(users__in=[request.user])
         paginator = CustomPagination()
         queryset = paginator.paginate_queryset(queryset, request)
@@ -227,7 +235,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
     @action(methods=["GET"], detail=True, url_path="task", url_name="task")
     def task(self, request, pk):
-        """Video darsga task"""
+        """Darslik uchun topshiriqni olish uchun"""
         try:
             return Response(self.get_serializer(self.get_object()).data)
         except TutorialModel.DoesNotExist:
@@ -235,7 +243,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
     @action(methods=["POST"], detail=True, url_path="task-answer", url_name="task-answer")
     def task_answer(self, request, pk):
-        """Task javobini tekshirish"""
+        """Topshiriq javoblarini tekshirish uchun"""
         try:
             tutorial = TutorialModel.objects.get(pk=pk)
         except TutorialModel.DoesNotExist:
@@ -265,7 +273,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     )
     @action(methods=["GET"], detail=False, url_name="is-full-completed", url_path="is-full-completed")
     def is_full_completed(self, request):
-        """Barcha kurslarni yagunlaganini tekshirish uchun"""
+        """Barcha kurslarni yakunlaganini tekshirish uchun"""
         completed = TutorialModel.objects.filter(users__in=[request.user]).count()
         total = TutorialModel.objects.count()
         return Response({"detail": total == completed})
@@ -292,6 +300,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     )
     @action(methods=["GET"], detail=False, url_name="progress", url_path="progress")
     def progress(self, request):
+        """Darsliklar progressini ko'rish uchun"""
         query = self.get_queryset()
         data = []
         previous_passed = True
@@ -306,3 +315,4 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             data.append({"id": item.id, "name": _("%s-dars") % item.position, "status": status})
             previous_passed = is_passed
         return Response(self.get_serializer(data, many=True).data)
+

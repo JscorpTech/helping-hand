@@ -1,6 +1,6 @@
 from django.conf import settings
 from rest_framework import serializers
-
+import logging
 
 class AbstractTranslatedSerializer(serializers.ModelSerializer):
     """
@@ -47,9 +47,10 @@ class AbstractTranslatedSerializer(serializers.ModelSerializer):
         :param data: The input data.
         :return: A validated dictionary of field values.
         """
-        internal_value = super().to_internal_value(data)
-
         translated_fields = getattr(self.Meta, "translated_fields", [])
+        for field in translated_fields:
+            data[field] = data.get(f"{field}_{settings.LANGUAGE_CODE}", None)
+        internal_value = super().to_internal_value(data)
         for field in translated_fields:
             for lang, _ in settings.LANGUAGES:
                 translated_field = f"{field}_{lang}"

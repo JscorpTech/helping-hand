@@ -48,4 +48,5 @@ class CreateQuestionSerializer(BaseQuestionSerializer):
             "is_any",
             "is_many",
             "variants",
+            "question",
         ]
