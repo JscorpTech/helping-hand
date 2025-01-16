@@ -9,7 +9,7 @@ class BaseGuideSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = GuideModel
         translated_fields = ["name", "desc"]
-        fields = ["id", "image", "file", "video", "guide_type", "updated_at"]
+        fields = ["id", "name", "desc", "image", "file", "video", "guide_type", "updated_at"]
 
 
 class ListGuideSerializer(BaseGuideSerializer):
@@ -21,7 +21,6 @@ class ListGuideSerializer(BaseGuideSerializer):
 
     class Meta(BaseGuideSerializer.Meta):
         translated_fields = []
-        fields = BaseGuideSerializer.Meta.fields + ["desc", "file"]
 
 
 class RetrieveGuideSerializer(BaseGuideSerializer):
@@ -34,3 +33,12 @@ class RetrieveGuideSerializer(BaseGuideSerializer):
 class CreateGuideSerializer(BaseGuideSerializer):
     class Meta(BaseGuideSerializer.Meta):
         translated = 2
+        fields = [
+            "id",
+            "image",
+            "desc",
+            "name",
+            "file",
+            "video",
+            "guide_type",
+        ]

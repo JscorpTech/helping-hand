@@ -61,5 +61,7 @@ class CreateTestSerializer(BaseTestSerializer):
         fields = [
             "id",
             "time",
+            "topic",
+            "desc",
             "questions",
         ]

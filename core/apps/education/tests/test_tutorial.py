@@ -94,15 +94,16 @@ class TutorialTest(TestCase):
         user.save()
         self.client.force_authenticate(user=user)
         data = {
-            "topic": "Test topic",
-            "time": 100,
+            "topic_uz": "Test topic",
+            "time_uz": 100,
             "questions": [
-                {"question": "Test", "variants": [{"is_true": True, "variant": 1, "bal": 10}]},
-                {"question": "Test", "variants": [{"is_true": True, "variant": 1, "bal": 10}]},
-                {"question": "Test", "variants": [{"is_true": True, "variant": 1, "bal": 10}]},
+                {"question_uz": "Test", "variants": [{"is_true": True, "variant_uz": 1, "bal": 10}]},
+                {"question_uz": "Test", "variants": [{"is_true": True, "variant_uz": 1, "bal": 10}]},
+                {"question_uz": "Test", "variants": [{"is_true": True, "variant_uz": 1, "bal": 10}]},
             ],
         }
-        response = self.client.post(self.urls["create-test"], json.dumps(data), content_type="application/json")
+        response = self.client.post(self.urls["create-test"], data, format="json")
+        logging.error(response.json())
         self.assertEqual(response.status_code, 201)
         self.assertTrue(response.json()["status"])
 
@@ -135,11 +136,11 @@ class TutorialTest(TestCase):
             "name_uz": "Test 2",
             "desc_uz": "Test 2",
             "test": self.tutorial.test.pk,
-            "tags": '["salom", "qalaysan"]',
+            "tags": ["salom", "qalaysan"],
             "position": 1,
             "source": "http://example.com",
         }
-        response = self.client.patch(self.urls["update"], data)
+        response = self.client.patch(self.urls["update"], data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["status"])
 
@@ -149,12 +150,12 @@ class TutorialTest(TestCase):
         user.save()
         self.client.force_authenticate(user=user)
         data = {
-            "question": "updated",
+            "question_uz": "updated",
             "is_many": True,
             "variants": [
-                {"is_true": True, "variant": 1, "bal": 10},
-                {"is_true": True, "variant": 2, "bal": 10},
-                {"is_true": True, "variant": 3, "bal": 10},
+                {"is_true": True, "variant_uz": 1, "bal": 10},
+                {"is_true": True, "variant_uz": 2, "bal": 10},
+                {"is_true": True, "variant_uz": 3, "bal": 10},
             ],
         }
         response = self.client.patch(self.urls["question-update"], data, format="json")

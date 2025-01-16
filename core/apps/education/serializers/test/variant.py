@@ -30,5 +30,6 @@ class CreateVariantSerializer(BaseVariantSerializer):
             "id",
             "is_true",
             "bal",
+            "variant"
         ]
         translated = 2
