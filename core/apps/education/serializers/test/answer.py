@@ -1,30 +1,14 @@
 from rest_framework import serializers
 
-from ...models import AnswerModel
+from ...models import QuestionModel, VariantModel
 
 
-class BaseAnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AnswerModel
-        exclude = [
-            "created_at",
-            "updated_at",
-        ]
-
-
-class ListAnswerSerializer(BaseAnswerSerializer):
-    class Meta(BaseAnswerSerializer.Meta): ...
-
-
-class RetrieveAnswerSerializer(BaseAnswerSerializer):
-    class Meta(BaseAnswerSerializer.Meta): ...
-
-
-class CreateAnswerSerializer(BaseAnswerSerializer):
+class CreateAnswerSerializer(serializers.Serializer):
     any = serializers.CharField(required=False)
+    question = serializers.PrimaryKeyRelatedField(queryset=QuestionModel.objects.all())
+    variant = serializers.ListField(child=serializers.PrimaryKeyRelatedField(queryset=VariantModel.objects.all()))
 
-    class Meta(BaseAnswerSerializer.Meta):
-        exclude = None
+    class Meta:
         fields = [
             "question",
             "variant",

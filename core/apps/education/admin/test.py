@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 
-from ..models import AnswerModel, QuestionModel, ResultModel, TestModel, VariantModel
+from ..models import QuestionModel, ResultModel, TestModel, VariantModel
 from unfold.contrib.forms.widgets import WysiwygWidget
 from django.db.models import TextField
 
@@ -51,14 +51,6 @@ class QuestionAdmin(ModelAdmin):
     formfield_overrides = {
         TextField: {"widget": WysiwygWidget},
     }
-
-
-@admin.register(AnswerModel)
-class AnswerAdmin(ModelAdmin):
-    list_display = (
-        "id",
-        "__str__",
-    )
 
 
 @admin.register(ResultModel)

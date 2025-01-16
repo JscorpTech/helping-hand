@@ -15,8 +15,9 @@ from django.db import transaction
 from core.apps.accounts.permissions import AdminPermission
 
 from ..choices import ProgressChoices
-from ..models import AnswerModel, TutorialModel, ResultModel, TaskResultModel
-from ..serializers.test import AnswerSerializer, RetrieveTestSerializer, CreateTestSerializer, CreateQuestionSerializer
+from ..models import TutorialModel, ResultModel, TaskResultModel
+from ..serializers.test.answer import AnswerSerializer
+from ..serializers.test import RetrieveTestSerializer, CreateTestSerializer, CreateQuestionSerializer
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.tutorial import (
     CreateTutorialSerializer,
@@ -74,8 +75,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return CreateTutorialSerializer
             case "test":
                 return RetrieveTestSerializer
-            case "test_answer":
-                return AnswerSerializer
             case "task":
                 return RetrieveTaskSerializer
             case "task_answer":
@@ -84,6 +83,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return ListProgressSerializer
             case "create_test":
                 return CreateTestSerializer
+            case "test_answer":
+                return AnswerSerializer
             case "update_question":
                 return CreateQuestionSerializer
             case _:
@@ -127,6 +128,14 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
     @extend_schema(
         summary="Update Test",
         request=CreateQuestionSerializer,
+        parameters=[
+            OpenApiParameter(
+                "id",
+                type=int,
+                description="Question id",
+                location=OpenApiParameter.PATH,
+            )
+        ],
         responses={
             200: OpenApiResponse(
                 response={
@@ -176,20 +185,15 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
 
         success = 0
         bal = 0
-        answers = []
 
         with transaction.atomic():
             for item in data:
                 question = item["question"]
                 variants = item["variant"]
                 TestService.check_answer_validity(question, variants)
-                answer, __ = AnswerModel.objects.get_or_create(user=request.user, question=question, tutorial_id=pk)
-                answer.variant.set(variants)
                 s, b = TestService.calculate_score_and_balance(question, variants)
                 success += s
                 bal += b
-
-                answers.append(answer)
 
             TutorialModel.objects.get(pk=pk).users.add(request.user)
             ResultModel.objects.update_or_create(

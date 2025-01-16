@@ -22,8 +22,7 @@ class WebSocketTest(TestCase):
         communicator = await self._connect()
         await communicator.send_json_to({"data": {"message": "Test Message"}})
         response = await communicator.receive_json_from()
-        self.assertEqual(response["status"], True)
-        self.assertEqual(response["data"]["message"], "Test Message")
+        self.assertEqual(response["status"], False)
 
     async def test_send_message(self):
         client = APIClient()

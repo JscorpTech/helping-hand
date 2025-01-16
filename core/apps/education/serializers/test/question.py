@@ -25,11 +25,12 @@ class RetrieveQuestionSerializer(BaseQuestionSerializer):
 
 
 class CreateQuestionSerializer(BaseQuestionSerializer):
-    variants = CreateVariantSerializer(many=True)
+    variants = CreateVariantSerializer(many=True, required=True)
 
     def update(self, instance, validated_data):
         variants = validated_data.pop("variants")
         question = super().update(instance, validated_data)
+        instance.variants.all().delete()
         for variant in variants:
             variant["question"] = question
             VariantModel.objects.create(**variant)
