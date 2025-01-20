@@ -1,19 +1,19 @@
 networks:
   helping_hand:
     driver: bridge
+  dokploy-network:
+    external: true
 
 volumes:
   pg_data: null
   rabbitmq: null
   pycache: null
 
-
 services:
   nginx:
     networks:
       - helping_hand
-    ports:
-      - ${PORT:-8001}:80
+      - dokploy-network
     volumes:
       - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
       - ./resources/:/usr/share/nginx/html/resources/
@@ -22,9 +22,15 @@ services:
       dockerfile: ./docker/Dockerfile.nginx
     depends_on:
       - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.test.rule=Host(`dokploy.jscorp.uz`)
+      - traefik.http.routers.test.entrypoints=web
+      - traefik.http.services.test.loadbalancer.server.port=80
   web:
     networks:
       - helping_hand
+      - dokploy-network
     build:
       context: .
       dockerfile: ./docker/Dockerfile.web
@@ -44,6 +50,7 @@ services:
       dockerfile: ./docker/Dockerfile.postgres
     networks:
       - helping_hand
+      - dokploy-network
     restart: always
     environment:
       POSTGRES_DB: django
@@ -54,11 +61,13 @@ services:
   redis:
     networks:
       - helping_hand
+      - dokploy-network
     restart: always
     image: redis
   rabbitmq:
     networks:
       - helping_hand
+      - dokploy-network
     restart: always
     image: rabbitmq:3-management
     environment:
