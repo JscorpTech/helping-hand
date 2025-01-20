@@ -32,6 +32,11 @@ PAGES = [
                 "icon": "person",
                 "link": reverse_lazy("admin:accounts_user_changelist"),
             },
+            {
+                "title": _("Moderatorlar"),
+                "icon": "person",
+                "link": reverse_lazy("admin:accounts_moderatormodel_changelist"),
+            },
         ],
     },
     {

@@ -5,8 +5,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from ..models import ExamModel, SertificateModel, ExamResultModel
@@ -16,7 +15,9 @@ from ..serializers.exam import (
     ListSertificateSerializer,
     RetrieveSertificateSerializer,
     RetrieveExamSerializer,
+    ListMeSertificateSerializer,
 )
+from core.apps.accounts.permissions import AdminPermission
 from ..services import TestService
 from ..serializers.test import AnswerSerializer
 
@@ -76,17 +77,17 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
 
 
 @extend_schema(tags=["sertificate"])
-class SertificateView(GenericViewSet):
+class SertificateView(BaseViewSetMixin, ModelViewSet):
     queryset = SertificateModel.objects.all()
 
-    def list(self, request):
-        return Response(self.get_serializer(self.get_object()).data)
-
-    def get_object(self):
-        return SertificateModel.objects.filter(user=self.request.user).first()
+    @action(methods=["GET"], detail=False, url_name="me", url_path="me")
+    def me(self, request):
+        return Response(self.get_serializer(SertificateModel.objects.filter(user=request.user).first()).data)
 
     def get_serializer_class(self) -> Any:
         match self.action:
+            case "me":
+                return ListMeSertificateSerializer
             case "list":
                 return ListSertificateSerializer
             case "retrieve":
@@ -99,6 +100,8 @@ class SertificateView(GenericViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
+            case "create":
+                perms.extend([IsAuthenticated, AdminPermission])
             case _:
                 perms.extend([AllowAny, IsAuthenticated])
         self.permission_classes = perms

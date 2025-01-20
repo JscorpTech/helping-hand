@@ -194,7 +194,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 question = item["question"]
                 variants = item["variant"]
                 TestService.check_answer_validity(question, variants)
-                s, b = TestService.calculate_score_and_balance(question, variants)
+                s, b = TestService().calculate_score_and_balance(question, variants)
                 success += s
                 bal += b
 

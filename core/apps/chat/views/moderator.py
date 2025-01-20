@@ -7,16 +7,19 @@ from django.views.decorators.cache import cache_page
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from core.apps.accounts.permissions import AdminPermission
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from core.apps.accounts.serializers import UserSerializer
+from core.apps.accounts.serializers import UserSerializer, CreateModeratorSerializer
 
 from core.apps.accounts.choices import RoleChoice
 
 from ..filters import ModeratorFilter
 from django_core.paginations import CustomPagination
 from ..serializers.chat import ListUserSerializer
+from rest_framework import status
+from django.utils.translation import gettext_lazy as _
 
 
 @extend_schema(tags=["moderator"])
@@ -32,6 +35,8 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
 
     def get_serializer_class(self) -> Any:
         match self.action:
+            case "create" | "update":
+                return CreateModeratorSerializer
             case "retrieve" | "list":
                 return UserSerializer
             case _:
@@ -40,10 +45,37 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
     def get_permissions(self) -> Any:
         perms = []
         match self.action:
+            case "create" | "update" | "partial_update" | "destroy":
+                perms.extend([IsAuthenticated, AdminPermission])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
+
+    @extend_schema(summary="Moderator yaratish Admin")
+    def create(self, request, *args, **kwargs):
+        """Moderator yaratish"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            self.get_serializer({"id": serializer.instance.id, **serializer.validated_data}).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    @extend_schema(summary="Moderator malumotlarini yangilash Admin")
+    def update(self, request, pk, *args, **kwargs):
+        """Moderator malumotlarini yangilash"""
+        serializer = self.get_serializer(instance=get_object_or_404(get_user_model(), pk=pk), data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(self.get_serializer(serializer.validated_data).data)
+
+    @extend_schema(summary="Moderatorni o'chirish Admin")
+    def destroy(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(get_user_model(), pk=pk)
+        user.delete()
+        return Response({"detail": _("Moderator o'chirildi")})
 
     @extend_schema(
         parameters=[

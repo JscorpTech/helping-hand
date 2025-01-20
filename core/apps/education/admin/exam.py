@@ -6,6 +6,7 @@ from ..choices import SertificateChoices
 from django.utils.translation import gettext_lazy as _
 from unfold.contrib.filters.admin import ChoicesDropdownFilter
 
+
 @admin.register(ExamModel)
 class ExamAdmin(ModelAdmin):
     list_display = (

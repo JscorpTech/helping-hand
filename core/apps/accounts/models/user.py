@@ -33,8 +33,8 @@ class User(auth_models.AbstractUser):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
-    def __str__(self):
-        return self.phone
+    def __str__(self) -> str:
+        return "%s" % self.full_name
 
     @classmethod
     def _create_fake(cls):
@@ -42,6 +42,14 @@ class User(auth_models.AbstractUser):
             phone="998998998",
             username="test",
             role=RoleChoice.USER,
+        )
+
+    @classmethod
+    def _create_fake_admin(cls):
+        return cls.objects.create(
+            phone="998998999",
+            username="test",
+            role=RoleChoice.ADMIN,
         )
 
 

@@ -14,7 +14,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.core.cache import cache
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
+from core.apps.accounts.permissions import AdminPermission
 from rest_framework.filters import SearchFilter
 
 from ..models import GroupModel, MessageModel
@@ -25,12 +26,13 @@ from ..serializers.chat import (
     ListMessageSerializer,
     RetrieveGroupSerializer,
     WsMessageSerializer,
+    CreatePublicGroupSerializer,
     WsGroupSerializer,
 )
 
 
 @extend_schema(tags=["group"])
-class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class GroupView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ["chat_type", "is_public"]
     search_fields = ["name"]
@@ -57,9 +59,11 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
         match self.action:
             case "list":
                 return ListGroupSerializer
+            case "create" | "update" | "partial_update":
+                return CreatePublicGroupSerializer
             case "retrieve":
                 return RetrieveGroupSerializer
-            case "create" | "create_group":
+            case "create_group":
                 return CreateGroupSerializer
             case "get_messages":
                 return ListMessageSerializer
@@ -80,10 +84,25 @@ class GroupView(BaseViewSetMixin, ReadOnlyModelViewSet):
                 | "read_message"
             ):
                 perms.extend([IsAuthenticated])
+            case "create" | "delete" | "delete_destroy":
+                perms.extend([IsAuthenticated, AdminPermission])
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
+
+    @extend_schema(summary="Yangi guruh yaratish Admin")
+    def create(self, request, *args, **kwargs):
+        """Yangi guruh yaratish"""
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(summary="Guruhni o'chirish admin")
+    def destroy(self, request, *args, **kwargs):
+        """Guruhni o'chirish"""
+        return super().destroy(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(is_public=True)
 
     @action(methods=["POST"], detail=False, url_name="create-group", url_path="create-group")
     def create_group(self, request):

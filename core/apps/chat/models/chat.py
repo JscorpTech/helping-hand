@@ -14,8 +14,8 @@ class GroupModel(AbstractBaseModel):
     chat_type = models.CharField(_("chat type"), choices=ChatTypeChoice.choices, null=True, blank=True)
     users = models.ManyToManyField(verbose_name=_("users"), to=get_user_model(), related_name="chats", blank=True)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return "%s (%s)" % (self.name, self.chat_type)
 
     def get_chat_details(self, user):
         """Foydalanuvchiga tegishli chat tafsilotlarini qaytaradi."""
