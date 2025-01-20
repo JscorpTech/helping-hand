@@ -55,6 +55,11 @@ PAGES = [
         "separator": True,  # Top border
         "items": [
             {
+                "title": _("Sertifikatlar"),
+                "icon": "verified_user",
+                "link": reverse_lazy("admin:education_sertificatemodel_changelist"),
+            },
+            {
                 "title": _("Yo'riqnomalar"),
                 "icon": "menu_book",
                 "link": reverse_lazy("admin:education_guidemodel_changelist"),

@@ -1,10 +1,16 @@
 from ...models import QuestionModel, VariantModel
 from ..test.variant import ListVariantSerializer, CreateVariantSerializer
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+from django.utils.html import strip_tags
 
 
 class BaseQuestionSerializer(AbstractTranslatedSerializer):
     variants = ListVariantSerializer(many=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["question"] = strip_tags(data["question"])
+        return data
 
     class Meta:
         model = QuestionModel

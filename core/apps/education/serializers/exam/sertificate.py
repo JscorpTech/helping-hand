@@ -9,6 +9,8 @@ class BaseSertificateSerializer(serializers.ModelSerializer):
         exclude = [
             "created_at",
             "updated_at",
+            "user",
+            "exam"
         ]
 
 
