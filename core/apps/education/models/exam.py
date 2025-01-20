@@ -4,6 +4,7 @@ from django_core.models import AbstractBaseModel
 from ..models.test import TestModel
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotFound
+from ..choices import SertificateChoices
 
 
 class ExamModel(AbstractBaseModel):
@@ -36,9 +37,21 @@ class ExamModel(AbstractBaseModel):
 
 
 class SertificateModel(AbstractBaseModel):
-    user = models.ForeignKey(to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE, related_name="sertificates"
+    )
+    status = models.CharField(
+        _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT
+    )
     file = models.FileField(_("file"), upload_to="sertificates/")
-    exam = models.ForeignKey("ExamModel", verbose_name=_("exam"), on_delete=models.SET_NULL, null=True, blank=False)
+    exam = models.ForeignKey(
+        "ExamModel",
+        verbose_name=_("exam"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
+        related_name="sertificates",
+    )
 
     def __str__(self):
         return self.user.full_name

@@ -4,8 +4,9 @@ from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from django.utils.translation import gettext_lazy as _
-from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from ..models import ExamModel, SertificateModel, ExamResultModel
@@ -37,7 +38,6 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-
         test = exam.test
         questions = test.questions.all()
 
@@ -51,6 +51,7 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
             exam=exam,
             defaults={"score": success, "total": len(questions), "bal": bal},
         )
+        SertificateModel.objects.get_or_create(user=request.user, exam=exam)
 
         return Response(
             {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
@@ -75,8 +76,14 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
 
 
 @extend_schema(tags=["sertificate"])
-class SertificateView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class SertificateView(GenericViewSet):
     queryset = SertificateModel.objects.all()
+
+    def list(self, request):
+        return Response(self.get_serializer(self.get_object()).data)
+
+    def get_object(self):
+        return SertificateModel.objects.filter(user=self.request.user).first()
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -93,6 +100,6 @@ class SertificateView(BaseViewSetMixin, ReadOnlyModelViewSet):
         perms = []
         match self.action:
             case _:
-                perms.extend([AllowAny])
+                perms.extend([AllowAny, IsAuthenticated])
         self.permission_classes = perms
         return super().get_permissions()

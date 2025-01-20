@@ -6,7 +6,7 @@ class TestService:
 
     def __init__(self): ...
 
-    def calculate_score_and_balance(question, variants):
+    def calculate_score_and_balance(self, question, variants):
         success = 0
         bal = 0
 
