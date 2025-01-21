@@ -34,6 +34,7 @@ class CreateModeratorSerializer(serializers.Serializer):
     level = serializers.CharField(max_length=255)
     experience = serializers.CharField(max_length=255)
     role = serializers.ChoiceField(choices=RoleChoice.choices)
+    avatar = serializers.ImageField(required=False, allow_null=True)
 
     def create(self, validated_data):
         user = get_user_model().objects.create_user(
@@ -44,9 +45,10 @@ class CreateModeratorSerializer(serializers.Serializer):
             validated_at=datetime.now(),
             role=validated_data["role"],
         )
-        ModeratorModel.objects.create(
-            experience=validated_data["experience"], level=validated_data["level"], user=user
-        )
+        if "avatar" in validated_data:
+            user.avatar = validated_data["avatar"]
+        user.save()
+        ModeratorModel.objects.create(experience=validated_data["experience"], level=validated_data["level"], user=user)
         return user
 
     def update(self, instance, validated_data):
@@ -57,6 +59,8 @@ class CreateModeratorSerializer(serializers.Serializer):
         user.phone = validated_data.get("phone", user.phone)
         if "password" in validated_data:
             user.set_password(validated_data["password"])
+        if "avatar" in validated_data:
+            user.avatar = validated_data["avatar"]
         user.save()
         if not hasattr(instance, "moderator"):
             return instance
