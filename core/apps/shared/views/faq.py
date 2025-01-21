@@ -23,7 +23,7 @@ class FaqView(BaseViewSetMixin, ModelViewSet):
             case "retreive":
                 return RetreiveFaqSerializer
             case _:
-                ListFaqSerializer
+                return ListFaqSerializer
 
     def get_permissions(self) -> Any:
         perms = []

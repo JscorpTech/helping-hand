@@ -5,6 +5,7 @@ from ...models import FaqModel
 
 class BaseFaqSerializer(serializers.ModelSerializer):
     class Meta:
+        model = FaqModel
         fields = [
             "question", 
             "answer", 

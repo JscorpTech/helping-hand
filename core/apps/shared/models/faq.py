@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
 
 class FaqModel(AbstractBaseModel):
-    question=models.TextField(_("question"),)
+    question=models.TextField(_("question"))
     answer=models.TextField(_("answer"))
     updated_date=models.DateTimeField(_("updated date"),auto_now=True)
     created_date=models.DateTimeField(_("created date"),auto_now_add=True)
