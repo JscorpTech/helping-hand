@@ -26,7 +26,6 @@ from ..serializers.tutorial import (
     ListProgressSerializer,
 )
 from ..services import TestService
-from ..models import QuestionModel
 
 
 @extend_schema(
@@ -46,8 +45,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 if obj.task is None:
                     raise NotFound("Task mavjud emas")
                 return obj.task
-            case "update_question":
-                return QuestionModel.objects.get(pk=self.kwargs.get("pk"))
             case _:
                 return super().get_object()
 
@@ -125,37 +122,6 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response({"detail": _("Test yaratildi."), "test": data.id}, status=201)
-
-    @extend_schema(
-        summary="Savolni o'zgartirish",
-        request=CreateQuestionSerializer,
-        parameters=[
-            OpenApiParameter(
-                "id",
-                type=int,
-                description="Question id",
-                location=OpenApiParameter.PATH,
-            )
-        ],
-        responses={
-            200: OpenApiResponse(
-                response={
-                    "type": "object",
-                    "properties": {
-                        "detail": {"type": "string", "example": "Test yangilandi."},
-                        "test": {"type": "integer", "example": 10},
-                    },
-                }
-            )
-        },
-    )
-    @action(methods=["PUT", "PATCH"], detail=True, url_path="update-question", url_name="update-question")
-    def update_question(self, request, pk=None):
-        """Savolni yangilash uchun"""
-        serializer = self.get_serializer(data=request.data, instance=self.get_object(), partial=True)
-        serializer.is_valid(raise_exception=True)
-        data = serializer.save()
-        return Response({"detail": _("Test yangilandi."), "test": data.id}, status=200)
 
     @extend_schema(
         summary="Test javoblarini tekshirish",
@@ -315,4 +281,3 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             data.append({"id": item.id, "name": _("%s-dars") % item.position, "status": status})
             previous_passed = is_passed
         return Response(self.get_serializer(data, many=True).data)
-
