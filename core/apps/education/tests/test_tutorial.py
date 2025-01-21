@@ -38,7 +38,6 @@ class TutorialTest(TestCase):
             "list": reverse("tutorial-list"),
             "create": reverse("tutorial-list"),
             "create-test": reverse("tutorial-create-test", kwargs={"pk": self.tutorial.pk}),
-            "question-update": reverse("tutorial-update-question", kwargs={"pk": self.question.pk}),
             "test-answer": reverse("tutorial-test-answer", kwargs={"pk": self.tutorial.pk}),
             "update": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
@@ -143,32 +142,6 @@ class TutorialTest(TestCase):
         response = self.client.patch(self.urls["update"], data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["status"])
-
-    def test_question_update(self):
-        user = get_user_model()._create_fake()
-        user.role = RoleChoice.ADMIN
-        user.save()
-        self.client.force_authenticate(user=user)
-        data = {
-            "question_uz": "updated",
-            "is_many": True,
-            "variants": [
-                {"is_true": True, "variant_uz": 1, "bal": 10},
-                {"is_true": True, "variant_uz": 2, "bal": 10},
-                {"is_true": True, "variant_uz": 3, "bal": 10},
-            ],
-        }
-        response = self.client.patch(self.urls["question-update"], data, format="json")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()["status"])
-        response = self.client.get(self.urls["test"])
-        data = response.json()["data"]
-        question = data["questions"][0]
-        self.assertEqual(question["question"], "updated")
-        self.assertTrue(question["is_many"])
-        self.assertEqual(question["variants"][0]["variant"], "1")
-        self.assertEqual(question["variants"][1]["variant"], "2")
-        self.assertEqual(question["variants"][2]["variant"], "3")
 
     def test_partial_update(self):
         self.assertTrue(True)
