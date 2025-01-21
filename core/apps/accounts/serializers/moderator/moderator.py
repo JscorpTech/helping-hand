@@ -44,9 +44,10 @@ class CreateModeratorSerializer(serializers.Serializer):
             validated_at=datetime.now(),
             role=validated_data["role"],
         )
-        return ModeratorModel.objects.create(
+        ModeratorModel.objects.create(
             experience=validated_data["experience"], level=validated_data["level"], user=user
         )
+        return user
 
     def update(self, instance, validated_data):
         user = instance

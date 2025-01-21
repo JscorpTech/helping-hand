@@ -35,7 +35,7 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
 
     def get_serializer_class(self) -> Any:
         match self.action:
-            case "create" | "update":
+            case "create" | "update" | "partial_update":
                 return CreateModeratorSerializer
             case "retrieve" | "list":
                 return UserSerializer
@@ -69,7 +69,7 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         serializer = self.get_serializer(instance=get_object_or_404(get_user_model(), pk=pk), data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(self.get_serializer(serializer.validated_data).data)
+        return Response(serializer.validated_data)
 
     @extend_schema(summary="Moderator malumotlarini yangilash Admin")
     def partial_update(self, request, pk, *args, **kwargs):
@@ -79,7 +79,7 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(self.get_serializer(serializer.validated_data).data)
+        return Response(serializer.validated_data)
 
     @extend_schema(summary="Moderatorni o'chirish Admin")
     def destroy(self, request, pk, *args, **kwargs):
@@ -105,9 +105,8 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         ],
         responses={200: UserSerializer(many=True)},
     )
-    @method_decorator(cache_page(60))
     def list(self, request):
-        users = get_user_model().objects.filter(role__in=RoleChoice.moderator_roles())
+        users = get_user_model().objects.order_by("-created_at").filter(role__in=RoleChoice.moderator_roles())
         paginator = CustomPagination()
         django_filter = ModeratorFilter(request.GET, queryset=users)
         if not django_filter.is_valid():
@@ -116,7 +115,6 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         return paginator.get_paginated_response(self.get_serializer(queryset, many=True).data)
 
     @extend_schema(responses={200: UserSerializer()})
-    @method_decorator(cache_page(60))
     def retrieve(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
         return Response(self.get_serializer(user).data)
