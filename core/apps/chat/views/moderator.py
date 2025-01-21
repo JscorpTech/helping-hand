@@ -71,6 +71,14 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         serializer.save()
         return Response(self.get_serializer(serializer.validated_data).data)
 
+    @extend_schema(summary="Moderator malumotlarini yangilash Admin")
+    def partial_update(self, request, pk, *args, **kwargs):
+        """Moderator malumotlarini yangilash"""
+        serializer = self.get_serializer(instance=get_object_or_404(get_user_model(), pk=pk), data=request.data, partail=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(self.get_serializer(serializer.validated_data).data)
+
     @extend_schema(summary="Moderatorni o'chirish Admin")
     def destroy(self, request, pk, *args, **kwargs):
         user = get_object_or_404(get_user_model(), pk=pk)
