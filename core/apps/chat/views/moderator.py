@@ -2,8 +2,6 @@ from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.exceptions import ValidationError
