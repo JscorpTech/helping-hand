@@ -14,7 +14,7 @@ from ..serializers.faq import CreateFaqSerializer, ListFaqSerializer, RetreiveFa
 class FaqView(BaseViewSetMixin, ModelViewSet):
     queryset = FaqModel.objects.all()
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> Any:
         match self.action:
             case "create":
                 return CreateFaqSerializer
