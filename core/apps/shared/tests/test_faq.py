@@ -22,7 +22,6 @@ class FaqTest(TestCase):
             "retrieve-not-found": reverse("faq-detail", kwargs={"pk": 1000}),
         }
 
-
     def test_create(self):
         response = self.client.post(
             self.urls["list"],
@@ -34,7 +33,6 @@ class FaqTest(TestCase):
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 201)
 
-
     def test_update(self):
         response = self.client.put(
             self.urls["retrieve"],
@@ -45,7 +43,6 @@ class FaqTest(TestCase):
         )
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
-
 
     def test_partial_update(self):
         response = self.client.patch(self.urls["retrieve"], {"question": "old question again"})
