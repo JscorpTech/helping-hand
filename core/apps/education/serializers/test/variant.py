@@ -16,7 +16,14 @@ class BaseVariantSerializer(AbstractTranslatedSerializer):
 
 
 class ListVariantSerializer(BaseVariantSerializer):
-    class Meta(BaseVariantSerializer.Meta): ...
+    class Meta(BaseVariantSerializer.Meta):
+        exclude=None
+        fields = [
+            "id",
+            "is_true",
+            "bal",
+            "variant"
+        ]
 
 
 class RetrieveVariantSerializer(BaseVariantSerializer):
