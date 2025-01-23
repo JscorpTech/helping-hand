@@ -49,7 +49,7 @@ class AbstractTranslatedSerializer(serializers.ModelSerializer):
         """
         translated_fields = getattr(self.Meta, "translated_fields", [])
         for field in translated_fields:
-            data[field] = data.get(f"{field}_{settings.LANGUAGE_CODE}", None)
+            data[field] = data.get(f"{field}_{settings.LANGUAGE_CODE}", data.get(field, None))
         internal_value = super().to_internal_value(data)
         for field in translated_fields:
             for lang, _ in settings.LANGUAGES:
