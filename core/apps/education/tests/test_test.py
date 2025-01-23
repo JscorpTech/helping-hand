@@ -58,16 +58,19 @@ class QuestionTest(TestCase):
     def test_question_add(self):
         user = get_user_model()._create_fake_admin()
         self.client.force_authenticate(user=user)
-        data = [{
-            "question_uz": "updated",
-            "is_many": True,
-            "test": self.test.id,
-            "variants": [
-                {"is_true": True, "variant_uz": 1, "bal": 10},
-                {"is_true": True, "variant_uz": 2, "bal": 10},
-                {"is_true": True, "variant_uz": 3, "bal": 10},
-            ],
-        },]
+        data = [
+            {
+                "question_uz": "updated",
+                "is_many": True,
+                "test_id": self.test.id,
+                "variants": [
+                    {"is_true": True, "variant_uz": 1, "bal": 10},
+                    {"is_true": True, "variant_uz": 2, "bal": 10},
+                    {"is_true": True, "variant_uz": 3, "bal": 10},
+                ],
+            },
+
+        ]
         response = self.client.patch(self.urls["update"], data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["status"])
