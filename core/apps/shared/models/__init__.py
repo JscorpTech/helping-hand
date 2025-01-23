@@ -1,2 +1,2 @@
 from .banner import *  # noqa
-from .faq import FaqModel
+from .faq import FaqCategoryModel,FaqModel

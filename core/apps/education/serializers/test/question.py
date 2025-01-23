@@ -83,4 +83,3 @@ class CreateQuestionBulkSerializer(serializers.ListSerializer):
     class Meta(BaseQuestionSerializer.Meta):
         fields = BaseQuestionSerializer.Meta.fields + ["variants"]
         translated = 2
-        fields = ["questions"]
