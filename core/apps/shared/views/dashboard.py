@@ -16,11 +16,11 @@ from core.apps.education.models import SertificateModel, SertificateChoices
 from ..serializers.dashboard import DashboardSerializer
 
 
-extend_schema(tags=["dashboard"])
 
 
+@extend_schema(tags=["dashboard"])
 class DashboardView(BaseViewSetMixin, GenericViewSet):
-
+    serializer_class=DashboardSerializer
     def list(self, request) -> Any:
 
         UserModel = get_user_model()

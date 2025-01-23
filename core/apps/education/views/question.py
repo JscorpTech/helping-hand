@@ -12,7 +12,7 @@ from ..models import QuestionModel
 from django.shortcuts import get_object_or_404
 
 
-from ..serializers.test import CreateQuestionSerializer, RetrieveQuestionSerializer, ListQuestionSerializer
+from ..serializers.test import CreateQuestionSerializer,CreateQuestionBulkSerializer, RetrieveQuestionSerializer, ListQuestionSerializer
 
 
 @extend_schema(tags=["question"])
@@ -25,13 +25,22 @@ class QuestionView(
         match self.action:
             case _:
                 return query
-
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get("pk"))
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "detail": "Question created"
+        }, status=201)
+
     def get_serializer_class(self) -> Any:
         match self.action:
-            case "create" | "update" | "partial_update":
+            case "create":
+                return CreateQuestionBulkSerializer
+            case "update" | "partial_update":
                 return CreateQuestionSerializer
             case "retrieve":
                 return RetrieveQuestionSerializer
