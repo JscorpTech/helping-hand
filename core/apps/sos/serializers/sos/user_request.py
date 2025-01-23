@@ -1,15 +1,15 @@
 from rest_framework import serializers
 
 from ...models import UserRequestModel
+from core.apps.accounts.serializers import UserSerializer
 
 
 class BaseUserRequestSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = UserRequestModel
-        exclude = [
-            "created_at",
-            "updated_at",
-        ]
+        exclude = []
 
 
 class ListUserRequestSerializer(BaseUserRequestSerializer):

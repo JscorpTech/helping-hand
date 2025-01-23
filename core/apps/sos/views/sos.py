@@ -2,7 +2,7 @@ from typing import Any
 
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
@@ -11,7 +11,7 @@ from ..serializers.sos import CreateUserRequestSerializer, ListUserRequestSerial
 
 
 @extend_schema(tags=["sos"])
-class UserRequestView(BaseViewSetMixin, CreateModelMixin, GenericViewSet):
+class UserRequestView(BaseViewSetMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
     """Xafli hudud — dangerous
     Xafsiz hudud — unsafe"""
 
