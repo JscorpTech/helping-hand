@@ -69,10 +69,9 @@ class QuestionTest(TestCase):
                     {"is_true": True, "variant_uz": 3, "bal": 10},
                 ],
             },
-
         ]
-        response = self.client.patch(self.urls["update"], data, format="json")
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.urls["add"], data, format="json")
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(response.json()["status"])
 
     def test_question_delete(self):

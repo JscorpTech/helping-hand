@@ -73,11 +73,7 @@ class FaqTest(TestCase):
         self.client = APIClient()
         self.instance = self._create_data()
         self.client.force_authenticate(get_user_model()._create_fake_admin())
-        self.urls = {
-            "list": reverse("faq-list"),
-            "retrieve": reverse("faq-detail", kwargs={"pk": self.instance.pk}),
-            "retrieve-not-found": reverse("faq-detail", kwargs={"pk": 1000}),
-        }
+   
 
     def test_create(self):
         response = self.client.post(

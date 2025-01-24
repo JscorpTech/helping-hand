@@ -1,11 +1,11 @@
-from rest_framework import serializers
-
 from ...models import BannerModel
+from ..base import AbstractTranslatedSerializer
 
 
-class BaseBannerSerializer(serializers.ModelSerializer):
+class BaseBannerSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = BannerModel
+        translated_fields = ["title", "subtitle"]
         fields = [
             "id",
             "title",
@@ -26,4 +26,5 @@ class RetrieveBannerSerializer(BaseBannerSerializer):
 
 
 class CreateBannerSerializer(BaseBannerSerializer):
-    class Meta(BaseBannerSerializer.Meta): ...
+    class Meta(BaseBannerSerializer.Meta):
+        translated = 2

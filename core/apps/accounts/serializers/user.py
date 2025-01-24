@@ -54,3 +54,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "experience",
             "bio",
         ]
+
+
+class UserListSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta): ...
+
+
+class UserRetrieveSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta): ...
+
+
+class UserCreateSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta): ...

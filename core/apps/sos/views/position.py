@@ -13,6 +13,9 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import PositionModel
 from ..permissions import PositionPermission
 from ..serializers.position import CreatePositionSerializer, ListPositionSerializer, RetrievePositionSerializer
+from channels.consumer import get_channel_layer
+from asgiref.sync import async_to_sync
+from rest_framework.decorators import action
 
 
 @extend_schema(tags=["sos"])
@@ -39,7 +42,7 @@ class PositionView(
     def get_permissions(self) -> Any:
         perms = [IsAuthenticated]
         match self.action:
-            case "retrieve":
+            case "retrieve" | "latest":
                 perms.extend([PositionPermission])
         self.permission_classes = perms
         return super().get_permissions()
@@ -48,6 +51,12 @@ class PositionView(
     def retrieve(self, reuqest, pk):
         positions = PositionModel.objects.filter(user_id=pk).order_by("-created_at")
         return Response(self.get_serializer(positions, many=True).data)
+
+    @extend_schema(responses={200: ListPositionSerializer})
+    @action(methods=["GET"], detail=True, url_path="latest", url_name="latest")
+    def latest(self, reuqest, pk):
+        positions = PositionModel.objects.filter(user_id=pk).order_by("-created_at").first()
+        return Response(self.get_serializer(positions).data)
 
     @extend_schema(
         responses={
@@ -63,6 +72,20 @@ class PositionView(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        location = Point(data.pop("long"), data.pop("lat"))
-        PositionModel.objects.create(location=location, user=request.user)
+        location = Point(data.get("long"), data.get("lat"))
+        position = PositionModel.objects.create(location=location, user=request.user)
+        async_to_sync(get_channel_layer().group_send)(
+            f"user_{request.user.id}",
+            {
+                "type": "position",
+                "status": True,
+                "data": {
+                    "id": position.id,
+                    "long": data["long"],
+                    "lat": data["lat"],
+                    "created_at": position.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f%z"),
+                    "updated_at": position.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f%z"),
+                },
+            },
+        )
         return Response({"detail": _("Joylashuv saqlandi")}, status=status.HTTP_201_CREATED)
