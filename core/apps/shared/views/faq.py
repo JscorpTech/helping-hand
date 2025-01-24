@@ -6,8 +6,43 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from core.apps.accounts.permissions import AdminPermission
 from rest_framework.viewsets import ModelViewSet
 
-from ..models import FaqModel
-from ..serializers.faq import CreateFaqSerializer, ListFaqSerializer, RetreiveFaqSerializer
+from ..models import FaqModel, FaqCategoryModel
+from ..serializers import (
+    CreateFaqSerializer,
+    ListFaqSerializer,
+    RetreiveFaqSerializer,
+    CreateFaqCategorySerializer,
+    ListFaqCategorySerializer,
+    RetreiveFaqCategorySerializer,
+    FaqsSerializer,
+)
+
+
+@extend_schema(tags=["faq-category"])
+class FaqCategoryView(BaseViewSetMixin, ModelViewSet):
+    queryset = FaqCategoryModel.objects.all()
+
+    def get_serializer_class(self) -> Any:
+        match self.action:
+            case "create":
+                return CreateFaqCategorySerializer
+            case "list":
+                return FaqsSerializer
+            case "retreive":
+                return RetreiveFaqCategorySerializer
+            case _:
+                return ListFaqCategorySerializer
+
+    def get_permissions(self) -> Any:
+        perms = []
+        match self.action:
+            case "create" | "update" | "partial_update" | "destroy":
+                perms.extend([IsAuthenticated, AdminPermission])
+            case _:
+                perms.extend([AllowAny])
+        self.permission_classes = perms
+        self.permission_classes = [AllowAny]
+        return super().get_permissions()
 
 
 @extend_schema(tags=["faq"])
@@ -33,4 +68,5 @@ class FaqView(BaseViewSetMixin, ModelViewSet):
             case _:
                 perms.extend([AllowAny])
         self.permission_classes = perms
+        self.permission_classes = [AllowAny]
         return super().get_permissions()
