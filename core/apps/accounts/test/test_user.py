@@ -1,30 +1,38 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APIClient
-from django.contrib.auth import get_user_model
 
-from ..models import FaqModel
-import logging  # noqa
+from core.apps.accounts.serializers import UserSerializer
+from core.apps.accounts.models import User, AuthProviderChoice
 
 
-class FaqTest(TestCase):
-
-    def _create_data(self):
-        return FaqModel._create_fake()
+class UserViewTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.instance = self._create_data()
         self.client.force_authenticate(get_user_model()._create_fake_admin())
-   
+        self.phone = "998999999999"
+        self.password = "password"
+        self.instance = get_user_model().objects.create_user(
+            phone=self.phone, first_name="John", last_name="Doe", password=self.password
+        )
+        self.urls = {
+            "list": reverse("users-list"),
+            "retrieve": reverse("users-detail", kwargs={"pk": self.instance.pk}),
+            "retrieve-not-found": reverse("users-detail", kwargs={"pk": 1000}),
+        }
 
     def test_create(self):
         response = self.client.post(
             self.urls["list"],
             {
-                "question": "question?",
-                "answer": "answer!!",
-            },
+                "phone": "998335190626",
+                "username": "user9090",
+                "bio": "biooooo",
+                "password":"password",
+                },
         )
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 201)
@@ -33,15 +41,17 @@ class FaqTest(TestCase):
         response = self.client.put(
             self.urls["retrieve"],
             {
-                "question": "new question",
-                "answer": "old answer",
-            },
+                "phone": "998335193726",
+                "username": "user99999",
+                "bio": "boiiiii",
+                "password":"qwerty",
+                },
         )
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
 
     def test_partial_update(self):
-        response = self.client.patch(self.urls["retrieve"], {"question": "old question again"})
+        response = self.client.patch(self.urls["retrieve"], {"phone": "999999999999"})
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
 
