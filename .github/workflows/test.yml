@@ -21,5 +21,5 @@ jobs:
       - name: Docker Compose testlarni ishga tushirish
         run: |
           docker-compose up --build -d  # Servislarni ishga tushirish
-          docker-compose exec web pytest  # Testlarni ishga tushirish
+          docker-compose exec -T web pytest  # Testlarni ishga tushirish
           docker-compose down  # Ishlashni tugatish
