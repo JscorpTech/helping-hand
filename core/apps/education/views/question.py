@@ -1,9 +1,7 @@
 from typing import Any
 
-from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiResponse
-from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
@@ -12,7 +10,12 @@ from ..models import QuestionModel
 from django.shortcuts import get_object_or_404
 
 
-from ..serializers.test import CreateQuestionSerializer,CreateQuestionBulkSerializer, RetrieveQuestionSerializer, ListQuestionSerializer
+from ..serializers.test import (
+    CreateQuestionSerializer,
+    CreateQuestionBulkSerializer,
+    RetrieveQuestionSerializer,
+    ListQuestionSerializer,
+)
 
 
 @extend_schema(tags=["question"])
@@ -25,6 +28,7 @@ class QuestionView(
         match self.action:
             case _:
                 return query
+
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs.get("pk"))
 
@@ -32,9 +36,7 @@ class QuestionView(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({
-            "detail": "Question created"
-        }, status=201)
+        return Response({"detail": "Question created"}, status=201)
 
     def get_serializer_class(self) -> Any:
         match self.action:

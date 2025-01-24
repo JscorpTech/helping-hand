@@ -58,7 +58,7 @@ class CreateQuestionSerializer(BaseQuestionSerializer):
         return question
 
     def validate(self, attrs):
-        if "action" in self.context and self.context['action'] == "add_question":
+        if "action" in self.context and self.context["action"] == "add_question":
             if not attrs.get("test_id"):
                 raise ValidationError({"tes_id": ["test is required"]})
         return attrs
@@ -69,17 +69,14 @@ class CreateQuestionSerializer(BaseQuestionSerializer):
         fields = ["id", "is_any", "is_many", "variants", "question", "test_id"]
 
 
-
 class CreateQuestionBulkSerializer(serializers.ListSerializer):
     child = CreateQuestionSerializer()
 
     def create(self, validated_data):
-        serializer = CreateQuestionSerializer(data=validated_data, context={
-            "action": "add_question"
-        }, many=True)
+        serializer = CreateQuestionSerializer(data=validated_data, context={"action": "add_question"}, many=True)
         serializer.is_valid(raise_exception=True)
         return serializer.save()
-    
+
     class Meta(BaseQuestionSerializer.Meta):
         fields = BaseQuestionSerializer.Meta.fields + ["variants"]
         translated = 2
