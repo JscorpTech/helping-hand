@@ -8,22 +8,13 @@ class BaseVariantSerializer(AbstractTranslatedSerializer):
             "variant",
         ]
         model = VariantModel
-        fields = [
-            "id",
-            "bal",
-            "variant"
-        ]
+        fields = ["id", "bal", "variant"]
 
 
 class ListVariantSerializer(BaseVariantSerializer):
     class Meta(BaseVariantSerializer.Meta):
-        exclude=None
-        fields = [
-            "id",
-            "is_true",
-            "bal",
-            "variant"
-        ]
+        exclude = None
+        fields = ["id", "is_true", "bal", "variant"]
 
 
 class RetrieveVariantSerializer(BaseVariantSerializer):
@@ -33,10 +24,5 @@ class RetrieveVariantSerializer(BaseVariantSerializer):
 class CreateVariantSerializer(BaseVariantSerializer):
     class Meta(BaseVariantSerializer.Meta):
         exclude = None
-        fields = [
-            "id",
-            "is_true",
-            "bal",
-            "variant"
-        ]
+        fields = ["id", "is_true", "bal", "variant"]
         translated = 2
