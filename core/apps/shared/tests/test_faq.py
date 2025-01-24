@@ -66,14 +66,18 @@ class FaqTest(TestCase):
 
     def _create_data(self):
         self.faq_category = FaqCategoryModel.objects.create(name="TEST")
-        print(self.faq_category.id,self.faq_category,"\n\n\n\n")
+        print(self.faq_category.id, self.faq_category, "\n\n\n\n")
         return FaqModel.objects.create(category=self.faq_category, question="test_q", answer="test_a")
 
     def setUp(self):
         self.client = APIClient()
         self.instance = self._create_data()
         self.client.force_authenticate(get_user_model()._create_fake_admin())
-   
+        self.urls = {
+            "list": reverse("faq-list"),
+            "retrieve": reverse("faq-detail", kwargs={"pk": self.instance.pk}),
+            "retrieve-not-found": reverse("faq-detail", kwargs={"pk": 1000}),
+        }
 
     def test_create(self):
         response = self.client.post(
@@ -91,7 +95,8 @@ class FaqTest(TestCase):
     def test_update(self):
         response = self.client.put(
             self.urls["retrieve"],
-            {   "category":self.faq_category.pk,
+            {
+                "category": self.faq_category.pk,
                 "question": "new question",
                 "answer": "old answer",
             },
