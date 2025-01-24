@@ -1,0 +1,25 @@
+name: Docker Compose Testlari
+
+on:
+  pull_request:
+    branches:
+      - main  # "main" ga yo'naltirilgan PR'lar uchun ishga tushadi
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Ishlash muhiti
+
+    steps:
+      - name: Kodni klonlash
+        uses: actions/checkout@v3
+
+      - name: Docker Compose-ni o'rnatish
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Docker Compose testlarni ishga tushirish
+        run: |
+          docker-compose up --build -d  # Servislarni ishga tushirish
+          docker-compose exec web pytest  # Testlarni ishga tushirish
+          docker-compose down  # Ishlashni tugatish
