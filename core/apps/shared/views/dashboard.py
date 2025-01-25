@@ -3,7 +3,6 @@ from typing import Any
 from drf_spectacular.utils import extend_schema
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from django_core.mixins import BaseViewSetMixin
@@ -16,11 +15,10 @@ from core.apps.education.models import SertificateModel, SertificateChoices
 from ..serializers.dashboard import DashboardSerializer
 
 
-
-
 @extend_schema(tags=["dashboard"])
 class DashboardView(BaseViewSetMixin, GenericViewSet):
-    serializer_class=DashboardSerializer
+    serializer_class = DashboardSerializer
+
     def list(self, request) -> Any:
 
         UserModel = get_user_model()
@@ -33,7 +31,9 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
         videos_count = TutorialModel.objects.filter(video__isnull=False).exclude(video__exact="").count()
 
         sertificated_users_count = SertificateModel.objects.filter(status__exact=SertificateChoices.ACTIVE).count()
-        i_sertificated_users_count = SertificateModel.objects.filter(status__exact=SertificateChoices.INACTIVE).count()
+        # isertificated_users_count = SertificateModel.objects.filter(
+        #     status__exact=SertificateChoices.INACTIVE
+        # ).count()
 
         endangered_users_count = "1"
 

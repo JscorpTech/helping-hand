@@ -1,3 +1,4 @@
 from .banner import *  # noqa
-from .faq import  *
-from .dashboard import *
+from .faq import * # noqa
+from .dashboard import *  # noqa
+from .notification import * # noqa
