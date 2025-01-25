@@ -72,7 +72,7 @@ class PositionView(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        location = Point(data.get("long"), data.get("lat"))
+        location = Point(data.get("lat"), data.get("long"))
         position = PositionModel.objects.create(location=location, user=request.user)
         async_to_sync(get_channel_layer().group_send)(
             f"user_{request.user.id}",
