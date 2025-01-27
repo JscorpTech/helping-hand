@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from ...models import NotificationModel, UserNotificationModel
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,10 +10,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id"]
 
 
-class BaseNotificationSerializer(serializers.ModelSerializer):
+class BaseNotificationSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = NotificationModel
         fields = ["id", "title", "body", "users", "created_at", "updated_at"]
+        translated_fields = ["title", "body"]
+        translated = 1
 
 
 class CreateNotificationSerializer(BaseNotificationSerializer):
@@ -42,10 +45,12 @@ class RetrieveNotificationSerializer(BaseNotificationSerializer):
 # ///
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class NotificationSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = NotificationModel
         fields = ["id", "title", "body", "created_at", "updated_at"]
+        translated_fields = ["title", "body"]
+        translated = 1
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):
