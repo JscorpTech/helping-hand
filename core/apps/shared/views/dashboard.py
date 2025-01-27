@@ -37,6 +37,7 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
         labels, chart_data = get_userrequest_chart_data(period)
         return Response({"labels": labels, "data": chart_data})
 
+
     def list(self, request) -> Any:
 
         UserModel = get_user_model()

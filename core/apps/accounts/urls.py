@@ -6,14 +6,14 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as jwt_views
 
-from .views import ChangePasswordView, MeView, RegisterView, ResetPasswordView,UserView
+from .views import ChangePasswordView, MeView, RegisterView, ResetPasswordView, UserView
 
 router = DefaultRouter()
 router.register("auth", RegisterView, basename="auth")
 router.register("auth", ResetPasswordView, basename="reset-password")
 router.register("auth", MeView, basename="me")
 router.register("auth", ChangePasswordView, basename="change-password")
-router.register("users",UserView,basename="users")
+router.register("users", UserView, basename="users")
 
 
 urlpatterns = [
