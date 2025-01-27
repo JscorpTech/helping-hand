@@ -13,11 +13,30 @@ from core.apps.education.models import TutorialModel
 from core.apps.education.models import SertificateModel, SertificateChoices
 
 from ..serializers.dashboard import DashboardSerializer
+from rest_framework.decorators import action
+from ..services import get_userrequest_chart_data
 
 
 @extend_schema(tags=["dashboard"])
 class DashboardView(BaseViewSetMixin, GenericViewSet):
     serializer_class = DashboardSerializer
+    periods = [
+        "day",
+        "week",
+        "month",
+        "year",
+    ]
+
+    @action(methods=["GET"], detail=False, url_name="chart", url_path="chart/(?P<period>[a-zA-Z]+)")
+    def chart(self, request, period):
+        """
+        period: day, week, month, year
+        """
+        if period not in self.periods:
+            return Response({"detail": "period not found"})
+        labels, chart_data = get_userrequest_chart_data(period)
+        return Response({"labels": labels, "data": chart_data})
+
 
     def list(self, request) -> Any:
 
@@ -31,9 +50,6 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
         videos_count = TutorialModel.objects.filter(video__isnull=False).exclude(video__exact="").count()
 
         sertificated_users_count = SertificateModel.objects.filter(status__exact=SertificateChoices.ACTIVE).count()
-        # isertificated_users_count = SertificateModel.objects.filter(
-        #     status__exact=SertificateChoices.INACTIVE
-        # ).count()
 
         endangered_users_count = "1"
 
