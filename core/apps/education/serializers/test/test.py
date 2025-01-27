@@ -33,6 +33,24 @@ class RetrieveTestSerializer(BaseTestSerializer):
     class Meta(BaseTestSerializer.Meta): ...
 
 
+class UpdateTestSerializer(AbstractTranslatedSerializer):
+
+    class Meta:
+        model = TestModel
+        fields = [
+            "id",
+            "topic",
+            "topic_uz",
+            "topic_kaa",
+            "topic_kril",
+            "desc",
+            "desc_uz",
+            "desc_kaa",
+            "desc_kril",
+            "time",
+        ]
+
+
 class CreateTestSerializer(BaseTestSerializer):
     questions = CreateQuestionSerializer(many=True)
 
