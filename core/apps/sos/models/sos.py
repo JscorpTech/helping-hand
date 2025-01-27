@@ -7,7 +7,9 @@ from ..choices import AreaChoice
 
 
 class UserRequestModel(AbstractBaseModel):
-    user = models.ForeignKey(verbose_name=_("user"), to=get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        verbose_name=_("user"), to=get_user_model(), on_delete=models.CASCADE, related_name="sos_requests"
+    )
     area = models.CharField(_("area"), choices=AreaChoice.choices, max_length=255)
 
     def __str__(self):
