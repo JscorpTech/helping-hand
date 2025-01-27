@@ -27,6 +27,17 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
         "year",
     ]
 
+    @extend_schema(
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "labels": {"type": "array", "items": {"type": "string"}},
+                    "data": {"type": "array", "items": {"type": "number"}},
+                },
+            }
+        }
+    )
     @action(methods=["GET"], detail=False, url_name="chart", url_path="chart/(?P<period>[a-zA-Z]+)")
     def chart(self, request, period):
         """
@@ -36,7 +47,6 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
             return Response({"detail": "period not found"})
         labels, chart_data = get_userrequest_chart_data(period)
         return Response({"labels": labels, "data": chart_data})
-
 
     def list(self, request) -> Any:
 
