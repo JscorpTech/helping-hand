@@ -17,8 +17,8 @@ class FaqCategoryModel(AbstractBaseModel):
 
     class Meta:
         db_table = "faq_category"
-        verbose_name = _("FaqCatergoryModel")
-        verbose_name_plural = _("FaqCatergoryModels")
+        verbose_name = _("FaqCategoryModel")
+        verbose_name_plural = _("FaqCategoryModels")
 
 
 class FaqModel(AbstractBaseModel):
