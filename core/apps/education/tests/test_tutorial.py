@@ -42,6 +42,7 @@ class TutorialTest(TestCase):
             "update": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "retrieve": reverse("tutorial-detail", kwargs={"pk": self.tutorial.pk}),
             "test": reverse("tutorial-test", kwargs={"pk": self.tutorial.pk}),
+            "test-update": reverse("tutorial-test-update", kwargs={"pk": self.tutorial.pk}),
             "completed": reverse("tutorial-completed"),
             "full-completed": reverse("tutorial-is-full-completed"),
         }
@@ -166,6 +167,21 @@ class TutorialTest(TestCase):
 
     def test_test_list(self):
         response = self.client.get(self.urls["test"])
+        self.assertEqual(response.json()["status"], True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_test_update(self):
+        response = self.client.patch(
+            self.urls["test-update"],
+            data={
+                "topic_uz": "uzbek",
+                "topic_kaa": "kazak",
+                "topic_kril": "kril",
+                "desc_uz": "uzdesc",
+                "desc_kaa": "kaadesc",
+                "desc_kril": "kril_desc",
+            },
+        )
         self.assertEqual(response.json()["status"], True)
         self.assertEqual(response.status_code, 200)
 

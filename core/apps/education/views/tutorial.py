@@ -17,7 +17,12 @@ from core.apps.accounts.permissions import AdminPermission
 from ..choices import ProgressChoices
 from ..models import TutorialModel, ResultModel, TaskResultModel
 from ..serializers.test.answer import AnswerSerializer
-from ..serializers.test import RetrieveTestSerializer, CreateTestSerializer, CreateQuestionSerializer
+from ..serializers.test import (
+    RetrieveTestSerializer,
+    CreateTestSerializer,
+    CreateQuestionSerializer,
+    UpdateTestSerializer,
+)
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.tutorial import (
     CreateTutorialSerializer,
@@ -72,6 +77,8 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 return CreateTutorialSerializer
             case "test":
                 return RetrieveTestSerializer
+            case "test_update":
+                return UpdateTestSerializer
             case "task":
                 return RetrieveTaskSerializer
             case "task_answer":
@@ -184,6 +191,24 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         """Darslik uchun testni olish uchun"""
         try:
             return Response(self.get_serializer(self.get_queryset()).data)
+        except TutorialModel.DoesNotExist:
+            raise NotFound(_("Tutorial not found"))
+
+    @extend_schema(
+        summary="Testni update qilish (PATCH)",
+        description="Testni update qilish (PATCH)",
+    )
+    @action(methods=["PATCH"], detail=True, url_path="test-update", url_name="test-update")
+    def test_update(self, request, pk=None):
+        """Testni update qilish (PATCH)"""
+        try:
+            test = self.get_queryset().get(pk=pk).test
+            serializer = self.get_serializer(test, request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+
+            return Response(serializer.errors, status=400)
         except TutorialModel.DoesNotExist:
             raise NotFound(_("Tutorial not found"))
 
