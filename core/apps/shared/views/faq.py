@@ -6,6 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from core.apps.accounts.permissions import AdminPermission
+
 
 from ..models import FaqCategoryModel, FaqModel
 from ..serializers import (
@@ -16,6 +18,7 @@ from ..serializers import (
     ListFaqCategorySerializer,
     ListFaqSerializer,
     RetreiveFaqCategorySerializer,
+    RetreiveFaqSerializer,
 )
 
 
