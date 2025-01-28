@@ -5,8 +5,6 @@ from django_core.models import AbstractBaseModel
 
 class FaqCategoryModel(AbstractBaseModel):
     name = models.CharField(_("name"), max_length=255)
-    updated_date = models.DateTimeField(_("updated date"), auto_now=True)
-    created_date = models.DateTimeField(_("created date"), auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -27,8 +25,6 @@ class FaqModel(AbstractBaseModel):
     )
     question = models.TextField(_("question"))
     answer = models.TextField(_("answer"))
-    updated_date = models.DateTimeField(_("updated date"), auto_now=True)
-    created_date = models.DateTimeField(_("created date"), auto_now_add=True)
 
     def __str__(self):
         return self.question

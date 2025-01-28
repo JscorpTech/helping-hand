@@ -29,4 +29,3 @@ class CreatePostSerializer(BasePostSerializer):
             "news_type",
             "is_top",
         ]
-

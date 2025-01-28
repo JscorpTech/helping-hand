@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from ..models import NotificationModel, UserNotificationModel
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.filters import SearchFilter
 from ..serializers import (
     CreateNotificationSerializer,
     # ListNotificationSerializer,  # noqa
@@ -19,6 +20,15 @@ from ..serializers import (
 @extend_schema(tags=["notification"])
 class NotificationView(BaseViewSetMixin, ModelViewSet):
     queryset = NotificationModel.objects.all()
+    filter_backends = [SearchFilter]
+    search_fields = [
+        "title_uz",
+        "title_kaa",
+        "title_kril",
+        "body_uz",
+        "body_kaa",
+        "body_kril",
+    ]
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -37,14 +47,12 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
             case "list":
                 perms.extend([IsAuthenticated])
             case _:
-                perms.extend([AllowAny])
+                perms.extend([IsAuthenticated, AdminPermission])
         self.permission_classes = perms
         return super().get_permissions()
 
     def list(self, request, *args, **kwargs):
         user_notifications = UserNotificationModel.objects.filter(user=self.request.user)
-        print(user_notifications)
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(user_notifications, many=True)
-        print(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)

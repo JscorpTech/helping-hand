@@ -7,7 +7,7 @@ from ...models import FaqCategoryModel, FaqModel
 class BaseFaqCategorySerializer(AbstractTranslatedSerializer):
     class Meta:
         model = FaqCategoryModel
-        fields = ["id", "name", "updated_date", "created_date"]
+        fields = ["id", "name", "updated_at", "created_at"]
         translated_fields = ["name"]
         translated = 1
 
@@ -28,7 +28,7 @@ class CreateFaqCategorySerializer(BaseFaqCategorySerializer):
 class BaseFaqSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = FaqModel
-        fields = ["id", "question", "answer", "updated_date", "category", "created_date"]
+        fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
         translated_fields = ["question", "answer"]
         translated = 1
 
