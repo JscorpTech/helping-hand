@@ -7,10 +7,16 @@ from rest_framework.viewsets import ModelViewSet
 from typing import Any
 
 from ..models import NotificationModel, UserNotificationModel
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.filters import SearchFilter
+from ..serializers import (
+
 
 # from rest_framework.response import Response
 # from rest_framework import status
 from ..serializers import (  # ListNotificationSerializer,  # noqa
+
     CreateNotificationSerializer,
     NotificationSerializer,
     RetrieveNotificationSerializer,
@@ -21,6 +27,15 @@ from ..serializers import (  # ListNotificationSerializer,  # noqa
 @extend_schema(tags=["notification"])
 class NotificationView(BaseViewSetMixin, ModelViewSet):
     queryset = NotificationModel.objects.all()
+    filter_backends = [SearchFilter]
+    search_fields = [
+        "title_uz",
+        "title_kaa",
+        "title_kril",
+        "body_uz",
+        "body_kaa",
+        "body_kril",
+    ]
 
     def get_serializer_class(self) -> Any:
         match self.action:
@@ -47,11 +62,9 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         user_notifications = UserNotificationModel.objects.filter(user=self.request.user)
-        paginator = self.paginator
         serializer_class = self.get_serializer_class()
-        paginated_queryset = paginator.paginate_queryset(user_notifications, request, view=self)
-        serializer = serializer_class(paginated_queryset, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        serializer = serializer_class(user_notifications, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="All notifications", description="All notifications")
     @action(detail=False, methods=["GET"], url_path="notifications")

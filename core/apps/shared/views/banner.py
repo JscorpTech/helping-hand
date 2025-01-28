@@ -9,11 +9,14 @@ from core.apps.accounts.permissions import AdminPermission
 
 from ..models import BannerModel
 from ..serializers.banner import CreateBannerSerializer, ListBannerSerializer, RetrieveBannerSerializer
+from rest_framework.filters import SearchFilter
 
 
 @extend_schema(tags=["banner"])
 class BannerView(BaseViewSetMixin, ModelViewSet):
     queryset = BannerModel.objects.all()
+    filter_backends = [SearchFilter]
+    search_fields = ["title_uz", "title_kaa", "title_kril", "subtitle_uz", "subtitle_kaa", "subtitle_kril"]
 
     def get_serializer_class(self) -> Any:
         match self.action:

@@ -3,6 +3,8 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from django_core.paginations import CustomPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from core.apps.accounts.choices import RoleChoice
+from rest_framework.filters import SearchFilter
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -18,8 +20,16 @@ from ..serializers.post import CreatePostSerializer, ListPostSerializer, Retriev
 
 @extend_schema(tags=["post"])
 class PostView(BaseViewSetMixin, ModelViewSet):
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["news_type"]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["news_type", "is_top"]
+    search_fields = [
+        "title_uz",
+        "title_kaa",
+        "title_kril",
+        "content_uz",
+        "content_kaa",
+        "content_kril",
+    ]
 
     def get_queryset(self):
         query = PostModel.objects.order_by("-created_at")
