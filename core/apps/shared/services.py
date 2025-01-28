@@ -1,7 +1,9 @@
-from django.db.models.functions import ExtractHour, ExtractMonth, ExtractDay
-from core.apps.sos.models import UserRequestModel
 from datetime import datetime, timedelta
+
 from django.db.models import Count
+from django.db.models.functions import ExtractDay, ExtractHour, ExtractMonth
+
+from core.apps.sos.models import UserRequestModel
 
 
 def get_userrequest_chart_data(period):

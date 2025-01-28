@@ -1,20 +1,19 @@
 from typing import Any
 
+from django.shortcuts import get_object_or_404
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
 from ..models import QuestionModel
-from django.shortcuts import get_object_or_404
-
-
 from ..serializers.test import (
-    CreateQuestionSerializer,
     CreateQuestionBulkSerializer,
-    RetrieveQuestionSerializer,
+    CreateQuestionSerializer,
     ListQuestionSerializer,
+    RetrieveQuestionSerializer,
 )
 
 

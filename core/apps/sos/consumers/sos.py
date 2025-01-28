@@ -1,6 +1,7 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
-import logging  # noqa
 import json
+import logging  # noqa
+
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 
 class SosConsumer(AsyncWebsocketConsumer):

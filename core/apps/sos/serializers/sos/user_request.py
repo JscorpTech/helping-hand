@@ -1,5 +1,6 @@
-from core.apps.accounts.serializers import UserSerializer
 from rest_framework import serializers
+
+from core.apps.accounts.serializers import UserSerializer
 
 from ...models import UserRequestModel
 

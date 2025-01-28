@@ -1,6 +1,9 @@
-from rest_framework import serializers
 from typing import Any
+
+from rest_framework import serializers
+
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
 from ...models import FaqCategoryModel, FaqModel
 
 

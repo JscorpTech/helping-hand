@@ -4,8 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from core.apps.accounts.models import AuthProviderChoice, User
 from core.apps.accounts.serializers import UserSerializer
-from core.apps.accounts.models import User, AuthProviderChoice
 
 
 class UserViewTest(TestCase):

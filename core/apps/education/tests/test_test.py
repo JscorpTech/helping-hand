@@ -1,11 +1,13 @@
+import logging  # noqa
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from ..models import QuestionModel, VariantModel, TestModel
-from django.contrib.auth import get_user_model
 from core.apps.accounts.choices import RoleChoice
-import logging  # noqa
+
+from ..models import QuestionModel, TestModel, VariantModel
 
 
 class QuestionTest(TestCase):

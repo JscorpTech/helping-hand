@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import GuideView, TutorialView, ExamView, SertificateView, QuestionView
+from .views import ExamView, GuideView, QuestionView, SertificateView, TutorialView
 
 router = DefaultRouter()
 router.register(r"tutorial", TutorialView, basename="tutorial")

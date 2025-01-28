@@ -1,19 +1,18 @@
 from typing import Any
 
-from drf_spectacular.utils import extend_schema
 from django.contrib.auth import get_user_model
+from django_core.mixins import BaseViewSetMixin
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from django_core.mixins import BaseViewSetMixin
 
-from core.apps.news.models import PostModel
 from core.apps.accounts.models import ModeratorModel
-from core.apps.education.models import TutorialModel
-from core.apps.education.models import SertificateModel, SertificateChoices
+from core.apps.education.models import SertificateChoices, SertificateModel, TutorialModel
+from core.apps.news.models import PostModel
 
 from ..serializers.dashboard import DashboardSerializer
-from rest_framework.decorators import action
 from ..services import get_userrequest_chart_data
 
 
