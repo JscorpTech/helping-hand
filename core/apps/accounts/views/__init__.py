@@ -1,2 +1,2 @@
 from .auth import *  # noqa
-from .user import UserView
+from .user import UserView  # noqa

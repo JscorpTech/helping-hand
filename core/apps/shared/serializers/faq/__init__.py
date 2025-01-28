@@ -1,9 +1,10 @@
-from .faq import (
-    CreateFaqSerializer,
-    ListFaqSerializer,
-    RetreiveFaqSerializer,
-    CreateFaqCategorySerializer,
-    ListFaqCategorySerializer,
-    RetreiveFaqCategorySerializer,
-    FaqsSerializer
-)
+from .faq import (  # noqa
+    CreateFaqSerializer,  # noqa
+    ListFaqSerializer,  # noqa
+    RetreiveFaqSerializer,  # noqa
+    CreateFaqCategorySerializer,  # noqa
+    ListFaqCategorySerializer,  # noqa
+    RetreiveFaqCategorySerializer,  # noqa
+    FaqsSerializer,  # noqa
+    CsListFaqCategorySerializer,  # noqa
+)  # noqa

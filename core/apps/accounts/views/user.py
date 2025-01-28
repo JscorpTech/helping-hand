@@ -1,7 +1,11 @@
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _  # noqa
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import  extend_schema
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+from rest_framework.viewsets import ModelViewSet
+
+from ..permissions import AdminPermission
 
 from ..serializers import (
     UserCreateSerializer,
@@ -10,18 +14,11 @@ from ..serializers import (
     UserUpdateSerializer,
 )
 
-from drf_spectacular.utils import extend_schema
-from django.contrib.auth import get_user_model
-from django_core.mixins import BaseViewSetMixin
-
-from rest_framework.viewsets import ModelViewSet
-from ..permissions import AdminPermission
-
 
 @extend_schema(tags=["user"])
 class UserView(BaseViewSetMixin, ModelViewSet):
     queryset = get_user_model().objects.all()
-    permission_classes = [IsAuthenticated,AdminPermission]
+    permission_classes = [IsAuthenticated, AdminPermission]
 
     def get_serializer_class(self):
         match self.action:
