@@ -27,6 +27,14 @@ class CreateFaqCategorySerializer(BaseFaqCategorySerializer):
     class Meta(BaseFaqCategorySerializer.Meta): ...
 
 
+class CsListFaqCategorySerializer(AbstractTranslatedSerializer):
+    class Meta:
+        model = FaqCategoryModel
+        fields = ["id", "name"]
+        translated_fields = ["name"]
+        translated = 0
+
+
 # ///
 class BaseFaqSerializer(AbstractTranslatedSerializer):
     class Meta:

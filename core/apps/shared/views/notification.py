@@ -4,29 +4,59 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated  # noqa
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.decorators import action
 from ..models import NotificationModel, UserNotificationModel
-from ..serializers import CreateNotificationSerializer, RetrieveNotificationSerializer, UserNotificationSerializer
+
+# from rest_framework.response import Response
+# from rest_framework import status
+from ..serializers import (
+    CreateNotificationSerializer,
+    # ListNotificationSerializer,  # noqa
+    NotificationSerializer,
+    RetrieveNotificationSerializer,
+    UserNotificationSerializer,
+)
 
 
 @extend_schema(tags=["notification"])
 class NotificationView(BaseViewSetMixin, ModelViewSet):
     queryset = NotificationModel.objects.all()
-    permission_classes = [AllowAny]
-    serializer_class = CreateNotificationSerializer
-    action_serializer_class = {
-        "create": CreateNotificationSerializer,
-        "list": UserNotificationSerializer,
-        "retrieve": RetrieveNotificationSerializer,
-    }
-    action_permission_classes = {
-        "list": [IsAuthenticated],
-    }
+    def get_serializer_class(self) -> Any:
+        match self.action:
+            case "create":
+                return CreateNotificationSerializer
+            case "list":
+                return UserNotificationSerializer
+            case "retrieve":
+                return RetrieveNotificationSerializer
+            case "notifications":
+                return NotificationSerializer
+            case _:
+                return UserNotificationSerializer
 
+    def get_permissions(self) -> Any:
+        perms = []
+        match self.action:
+            case "list":
+                perms.extend([IsAuthenticated])
+            case _:
+                perms.extend([IsAuthenticated, AdminPermission])
+        self.permission_classes = perms
+        return super().get_permissions()
     def list(self, request, *args, **kwargs):
         user_notifications = UserNotificationModel.objects.filter(user=self.request.user)
-        print(user_notifications)
+        paginator = self.paginator
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(user_notifications, many=True)
-        print(serializer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginated_queryset = paginator.paginate_queryset(user_notifications, request, view=self)
+        serializer = serializer_class(paginated_queryset, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    @extend_schema(summary="All notifications", description="All notifications")
+    @action(detail=False, methods=["GET"], url_path="notifications")
+    def notifications(self, request, *args, **kwargs):
+        notifications = NotificationModel.objects.all()
+        paginator = self.paginator
+        serializer_class = self.get_serializer_class()
+        paginated_queryset = paginator.paginate_queryset(notifications, request, view=self)
+        serializer = serializer_class(paginated_queryset, many=True)
+        return paginator.get_paginated_response(serializer.data)

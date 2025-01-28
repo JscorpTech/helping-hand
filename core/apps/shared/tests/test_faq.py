@@ -21,6 +21,7 @@ class FaqCategoryTest(TestCase):
             "list": reverse("faq-category-list"),
             "retrieve": reverse("faq-category-detail", kwargs={"pk": self.instance.pk}),
             "retrieve-not-found": reverse("faq-category-detail", kwargs={"pk": 1000}),
+            "faq-categories": reverse("faq-category-faq-categories"),
         }
 
     def test_create(self):
@@ -49,6 +50,11 @@ class FaqCategoryTest(TestCase):
 
     def test_list(self):
         response = self.client.get(self.urls["list"])
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_fcs(self):
+        response = self.client.get(self.urls["faq-categories"])
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
 

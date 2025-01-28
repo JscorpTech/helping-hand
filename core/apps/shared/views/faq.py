@@ -4,10 +4,11 @@ from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from ..models import FaqModel, FaqCategoryModel
 
-from core.apps.accounts.permissions import AdminPermission
 
-from ..models import FaqCategoryModel, FaqModel
 from ..serializers import (
     CreateFaqCategorySerializer,
     CreateFaqSerializer,
@@ -15,7 +16,8 @@ from ..serializers import (
     ListFaqCategorySerializer,
     ListFaqSerializer,
     RetreiveFaqCategorySerializer,
-    RetreiveFaqSerializer,
+    FaqsSerializer,
+    CsListFaqCategorySerializer,
 )
 
 
@@ -29,8 +31,10 @@ class FaqCategoryView(BaseViewSetMixin, ModelViewSet):
                 return CreateFaqCategorySerializer
             case "list":
                 return FaqsSerializer
-            case "retreive":
+            case "retrieve":
                 return RetreiveFaqCategorySerializer
+            case "faq_categories":
+                return CsListFaqCategorySerializer
             case _:
                 return ListFaqCategorySerializer
 
@@ -44,6 +48,14 @@ class FaqCategoryView(BaseViewSetMixin, ModelViewSet):
         self.permission_classes = perms
         self.permission_classes = [AllowAny]
         return super().get_permissions()
+
+    @extend_schema(summary="FAQ categories", description="FAQ categories list")
+    @action(detail=False, methods=["GET"], url_path="faq-categories")
+    def faq_categories(self, request) -> Any:
+        print(request.headers)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
 
 
 @extend_schema(tags=["faq"])

@@ -54,6 +54,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "level",
             "experience",
             "bio",
+            "is_active",
         ]
 
 
