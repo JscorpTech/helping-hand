@@ -1,5 +1,6 @@
-from core.utils import FileUtils
 from rest_framework import serializers
+
+from core.utils import FileUtils
 
 
 class FileSerializer(serializers.Serializer):

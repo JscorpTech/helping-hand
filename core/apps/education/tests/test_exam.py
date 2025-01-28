@@ -1,11 +1,11 @@
+import logging  # noqa
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-import logging  # noqa
 
 from ..models import ExamModel, SertificateModel
-
-from django.contrib.auth import get_user_model
 
 
 class ExamTest(TestCase):

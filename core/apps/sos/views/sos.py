@@ -1,21 +1,45 @@
 from typing import Any
 
+from django.contrib.auth import get_user_model
+from django.db import models
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from ..models import UserRequestModel
-from ..serializers.sos import CreateUserRequestSerializer, ListUserRequestSerializer, RetrieveUserRequestSerializer
+from ..serializers.sos import (
+    CreateUserRequestSerializer,
+    ListUserRequestSerializer,
+    RetrieveUserRequestSerializer,
+    TopRequestsSerializer,
+)
 
 
 @extend_schema(tags=["sos"])
 class UserRequestView(BaseViewSetMixin, CreateModelMixin, RetrieveModelMixin, ListModelMixin, GenericViewSet):
-    """Xafli hudud — dangerous
-    Xafsiz hudud — unsafe"""
+    """Xafli hudud — unsafe
+    Xafsiz hudud — safe"""
 
-    queryset = UserRequestModel.objects.all()
+    queryset = UserRequestModel.objects.order_by("-created_at").all()
+
+    @action(methods=["GET"], detail=False, url_name="top-users", url_path="top-users")
+    def top_users(self, request):
+        users = (
+            get_user_model().objects.annotate(requests_count=models.Count("sos_requests")).order_by("-requests_count")
+        )
+        data = []
+        for user in users:
+            data.append(
+                {
+                    "count": user.requests_count,
+                    "user": user,
+                }
+            )
+        return Response(self.get_serializer(data, many=True).data)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -28,6 +52,8 @@ class UserRequestView(BaseViewSetMixin, CreateModelMixin, RetrieveModelMixin, Li
                 return RetrieveUserRequestSerializer
             case "create":
                 return CreateUserRequestSerializer
+            case "top_users":
+                return TopRequestsSerializer
             case _:
                 return ListUserRequestSerializer
 

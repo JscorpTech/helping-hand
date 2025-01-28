@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from ...models import SertificateModel
 from core.apps.accounts.serializers import UserSerializer
+
+from ...models import SertificateModel
 
 
 class BaseSertificateSerializer(serializers.ModelSerializer):

@@ -1,11 +1,13 @@
+import logging  # noqa
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-from django.contrib.auth import get_user_model
 
 from core.apps.accounts.choices import RoleChoice  # noqa
+
 from ..models import NotificationModel, UserNotificationModel  # noqa
-import logging  # noqa
 
 
 class NotificationTest(TestCase):
@@ -27,6 +29,7 @@ class NotificationTest(TestCase):
             "list": reverse("notification-list"),
             "retrieve": reverse("notification-detail", kwargs={"pk": self.instance.pk}),
             "retrieve-not-found": reverse("notification-detail", kwargs={"pk": 1000}),
+            "notifications": reverse("notification-notifications"),
         }
 
     def test_create(self):
@@ -62,6 +65,11 @@ class NotificationTest(TestCase):
 
     def test_list(self):
         response = self.client.get(self.urls["list"])
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_ns(self):
+        response = self.client.get(self.urls["notifications"])
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)
 

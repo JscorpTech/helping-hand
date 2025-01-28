@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from core.apps.education.models import SertificateModel
 from core.apps.education.services.sertificate import SertificateService
 

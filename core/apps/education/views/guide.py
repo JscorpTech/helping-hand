@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+
 from ..models import GuideModel
 from ..serializers.guide import CreateGuideSerializer, ListGuideSerializer, RetrieveGuideSerializer
 
@@ -74,4 +75,3 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
                 perms.extend([AllowAny])
         self.permission_classes = perms
         return super().get_permissions()
-

@@ -17,7 +17,6 @@ from django_core.mixins import BaseViewSetMixin  # noqa
 from rest_framework.viewsets import ModelViewSet
 from ..permissions import AdminPermission
 
-
 @extend_schema(tags=["user"])
 class UserView(BaseViewSetMixin, ModelViewSet):
     queryset = get_user_model().objects.all()

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin, TabularInline
-
-from ..models import QuestionModel, ResultModel, TestModel, VariantModel
-from unfold.contrib.forms.widgets import WysiwygWidget
 from django.db.models import TextField
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
+from unfold.admin import ModelAdmin, TabularInline
+from unfold.contrib.forms.widgets import WysiwygWidget
+
+from ..models import QuestionModel, ResultModel, TestModel, VariantModel
 
 
 class VariantInline(TabularInline, TranslationTabularInline):

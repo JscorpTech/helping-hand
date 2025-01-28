@@ -1,10 +1,10 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-
-from ..models import GuideModel
-from unfold.contrib.forms.widgets import WysiwygWidget
 from django.db.models import TextField
 from modeltranslation.admin import TabbedTranslationAdmin
+from unfold.admin import ModelAdmin
+from unfold.contrib.forms.widgets import WysiwygWidget
+
+from ..models import GuideModel
 
 
 @admin.register(GuideModel)

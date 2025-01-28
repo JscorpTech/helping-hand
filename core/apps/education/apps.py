@@ -6,4 +6,4 @@ class ModuleConfig(AppConfig):
     name = "core.apps.education"
 
     def ready(self):
-        import core.apps.education.signals # noqa
+        import core.apps.education.signals  # noqa

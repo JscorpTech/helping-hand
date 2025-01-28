@@ -1,1 +1,1 @@
-from .news import * # noqa
+from .news import *  # noqa
