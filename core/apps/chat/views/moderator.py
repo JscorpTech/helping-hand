@@ -2,22 +2,22 @@ from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 from django_core.mixins import BaseViewSetMixin
+from django_core.paginations import CustomPagination
 from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from core.apps.accounts.permissions import AdminPermission
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from core.apps.accounts.serializers import UserSerializer, CreateModeratorSerializer
 
 from core.apps.accounts.choices import RoleChoice
+from core.apps.accounts.permissions import AdminPermission
+from core.apps.accounts.serializers import CreateModeratorSerializer, UserSerializer
 
 from ..filters import ModeratorFilter
-from django_core.paginations import CustomPagination
 from ..serializers.chat import ListUserSerializer
-from rest_framework import status
-from django.utils.translation import gettext_lazy as _
 
 
 @extend_schema(tags=["moderator"])

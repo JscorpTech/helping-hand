@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
 
-from ..choices import RoleChoice, AuthProviderChoice
+from ..choices import AuthProviderChoice, RoleChoice
 from ..managers import UserManager
 
 

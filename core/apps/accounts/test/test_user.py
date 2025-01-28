@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
+from rest_framework import status  # noqa
 from rest_framework.test import APIClient
 
-from core.apps.accounts.serializers import UserSerializer
-from core.apps.accounts.models import User, AuthProviderChoice
+from core.apps.accounts.models import AuthProviderChoice, User  # noqa
+from core.apps.accounts.serializers import UserSerializer  # noqa
 
 
 class UserViewTest(TestCase):
@@ -31,8 +31,8 @@ class UserViewTest(TestCase):
                 "phone": "998335190626",
                 "username": "user9090",
                 "bio": "biooooo",
-                "password":"password",
-                },
+                "password": "password",
+            },
         )
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 201)
@@ -44,8 +44,8 @@ class UserViewTest(TestCase):
                 "phone": "998335193726",
                 "username": "user99999",
                 "bio": "boiiiii",
-                "password":"qwerty",
-                },
+                "password": "qwerty",
+            },
         )
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 200)

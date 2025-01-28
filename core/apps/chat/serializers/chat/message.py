@@ -1,10 +1,12 @@
+from typing import Union
+
 from rest_framework import serializers
+
+from core.apps.shared.serializers import FileSerializer
 
 from ...models import MessageModel
 from ..user import ListUserSerializer
 from .group import WsGroupSerializer
-from core.apps.shared.serializers import FileSerializer
-from typing import Union
 
 
 class BaseMessageSerializer(serializers.ModelSerializer):

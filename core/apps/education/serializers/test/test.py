@@ -1,9 +1,10 @@
+from django.db import transaction
 from rest_framework import serializers
 
-from ...models import TestModel, QuestionModel, VariantModel
-from ...serializers.test.question import ListQuestionSerializer, CreateQuestionSerializer
-from django.db import transaction
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import QuestionModel, TestModel, VariantModel
+from ...serializers.test.question import CreateQuestionSerializer, ListQuestionSerializer
 
 
 class BaseTestSerializer(AbstractTranslatedSerializer):

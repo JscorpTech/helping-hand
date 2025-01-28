@@ -1,6 +1,5 @@
-from .notification import (  # noqa
-    CreateNotificationSerializer,  # noqa
-    ListNotificationSerializer,  # noqa
-    RetrieveNotificationSerializer,  # noqa
-    UserNotificationSerializer,  # noqa
-)  # noqa
+from .notification import CreateNotificationSerializer  # noqa
+from .notification import ListNotificationSerializer  # noqa
+from .notification import NotificationSerializer  # noqa
+from .notification import RetrieveNotificationSerializer  # noqa
+from .notification import UserNotificationSerializer  # noqa; noqa

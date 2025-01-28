@@ -1,6 +1,9 @@
-from rest_framework import serializers
 from typing import Any
+
+from rest_framework import serializers
+
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
 from ...models import FaqCategoryModel, FaqModel
 
 
@@ -22,6 +25,14 @@ class RetreiveFaqCategorySerializer(BaseFaqCategorySerializer):
 
 class CreateFaqCategorySerializer(BaseFaqCategorySerializer):
     class Meta(BaseFaqCategorySerializer.Meta): ...
+
+
+class CsListFaqCategorySerializer(AbstractTranslatedSerializer):
+    class Meta:
+        model = FaqCategoryModel
+        fields = ["id", "name"]
+        translated_fields = ["name"]
+        translated = 0
 
 
 # ///
