@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated  # noqa
 from core.apps.accounts.permissions import AdminPermission  # noqa
 from rest_framework.viewsets import ModelViewSet
 from ..models import NotificationModel, UserNotificationModel
-from rest_framework.response import Response
-from rest_framework import status
+# from rest_framework.response import Response
+# from rest_framework import status
 from ..serializers import (
     CreateNotificationSerializer,
     # ListNotificationSerializer,  # noqa
@@ -37,14 +37,14 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
             case "list":
                 perms.extend([IsAuthenticated])
             case _:
-                perms.extend([AllowAny])
+                perms.extend([IsAuthenticated, AdminPermission])
         self.permission_classes = perms
         return super().get_permissions()
 
     def list(self, request, *args, **kwargs):
         user_notifications = UserNotificationModel.objects.filter(user=self.request.user)
-        print(user_notifications)
+        paginator = self.paginator
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(user_notifications, many=True)
-        print(serializer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginated_queryset = paginator.paginate_queryset(user_notifications, request, view=self)
+        serializer = serializer_class(paginated_queryset, many=True)
+        return paginator.get_paginated_response(serializer.data)
