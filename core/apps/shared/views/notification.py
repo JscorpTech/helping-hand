@@ -10,13 +10,8 @@ from ..models import NotificationModel, UserNotificationModel
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.filters import SearchFilter
+
 from ..serializers import (
-
-
-# from rest_framework.response import Response
-# from rest_framework import status
-from ..serializers import (  # ListNotificationSerializer,  # noqa
-
     CreateNotificationSerializer,
     NotificationSerializer,
     RetrieveNotificationSerializer,
