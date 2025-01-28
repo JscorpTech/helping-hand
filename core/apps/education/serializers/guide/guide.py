@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
+from core.apps.shared.serializers import AbstractTranslatedSerializer, FileSerializer
+
 from ...models import GuideModel
-from core.apps.shared.serializers import FileSerializer
-from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 
 class BaseGuideSerializer(AbstractTranslatedSerializer):

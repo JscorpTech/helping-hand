@@ -1,9 +1,8 @@
-from typing import Any
-
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
+from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated  # noqa
-from core.apps.accounts.permissions import AdminPermission  # noqa
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from ..models import NotificationModel, UserNotificationModel
@@ -22,7 +21,6 @@ from ..serializers import (
 @extend_schema(tags=["notification"])
 class NotificationView(BaseViewSetMixin, ModelViewSet):
     queryset = NotificationModel.objects.all()
-
     def get_serializer_class(self) -> Any:
         match self.action:
             case "create":
@@ -45,7 +43,6 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
                 perms.extend([IsAuthenticated, AdminPermission])
         self.permission_classes = perms
         return super().get_permissions()
-
     def list(self, request, *args, **kwargs):
         user_notifications = UserNotificationModel.objects.filter(user=self.request.user)
         paginator = self.paginator

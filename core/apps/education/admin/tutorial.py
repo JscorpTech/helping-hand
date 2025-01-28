@@ -1,11 +1,11 @@
 from django.contrib import admin
+from django.contrib.postgres.fields import ArrayField
+from django.db.models import TextField
+from modeltranslation.admin import TabbedTranslationAdmin
 from unfold.admin import ModelAdmin
+from unfold.contrib.forms.widgets import ArrayWidget, WysiwygWidget
 
 from ..models import TutorialModel
-from unfold.contrib.forms.widgets import WysiwygWidget, ArrayWidget
-from django.db.models import TextField
-from django.contrib.postgres.fields import ArrayField
-from modeltranslation.admin import TabbedTranslationAdmin
 
 
 @admin.register(TutorialModel)

@@ -1,10 +1,11 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-from ..models import ExamModel, ExamResultModel, SertificateModel
-from unfold.decorators import display
-from ..choices import SertificateChoices
 from django.utils.translation import gettext_lazy as _
+from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import ChoicesDropdownFilter
+from unfold.decorators import display
+
+from ..choices import SertificateChoices
+from ..models import ExamModel, ExamResultModel, SertificateModel
 
 
 @admin.register(ExamModel)

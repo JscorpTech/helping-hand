@@ -1,5 +1,6 @@
-from ...models import PostModel
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import PostModel
 
 
 class BasePostSerializer(AbstractTranslatedSerializer):

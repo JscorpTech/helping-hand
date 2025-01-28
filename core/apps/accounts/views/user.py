@@ -15,6 +15,7 @@ from ..serializers import (
 )
 
 
+
 @extend_schema(tags=["user"])
 class UserView(BaseViewSetMixin, ModelViewSet):
     queryset = get_user_model().objects.all()

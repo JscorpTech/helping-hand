@@ -2,11 +2,12 @@ import json
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.db.models import Q
 from django.core.cache import cache
-from ..services import ChatService
+from django.db.models import Q
+
 from ..models import GroupModel
 from ..serializers import CallSerializer
+from ..services import ChatService
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

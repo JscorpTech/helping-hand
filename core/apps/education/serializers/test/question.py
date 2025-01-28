@@ -1,9 +1,11 @@
-from ...models import QuestionModel, VariantModel
-from ..test.variant import ListVariantSerializer, CreateVariantSerializer
-from core.apps.shared.serializers import AbstractTranslatedSerializer
 from django.utils.html import strip_tags
-from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import QuestionModel, VariantModel
+from ..test.variant import CreateVariantSerializer, ListVariantSerializer
 
 
 class BaseQuestionSerializer(AbstractTranslatedSerializer):

@@ -1,9 +1,12 @@
-from core.apps.accounts.models import User
-from ..models import SertificateModel
+from pathlib import Path
+from uuid import uuid4
+
 import pdfkit
 from django.conf import settings
-from uuid import uuid4
-from pathlib import Path
+
+from core.apps.accounts.models import User
+
+from ..models import SertificateModel
 
 
 class SertificateService:

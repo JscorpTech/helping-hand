@@ -3,17 +3,18 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from core.apps.accounts.permissions import AdminPermission
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..models import FaqModel, FaqCategoryModel
+
+
 from ..serializers import (
-    CreateFaqSerializer,
-    ListFaqSerializer,
-    RetreiveFaqSerializer,
     CreateFaqCategorySerializer,
+    CreateFaqSerializer,
+    FaqsSerializer,
     ListFaqCategorySerializer,
+    ListFaqSerializer,
     RetreiveFaqCategorySerializer,
     FaqsSerializer,
     CsListFaqCategorySerializer,

@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
 
-
-
 class DashboardSerializer(serializers.Serializer):
     moderators_count=serializers.IntegerField()
     news_count=serializers.IntegerField()

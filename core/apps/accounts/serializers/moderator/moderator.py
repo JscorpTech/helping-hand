@@ -1,11 +1,12 @@
-from rest_framework import serializers
-
-from ...models import ModeratorModel
-from rest_framework.exceptions import ValidationError
-from django.utils.translation import gettext as _
-from django.contrib.auth import get_user_model
 from datetime import datetime
+
+from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from ...choices import RoleChoice
+from ...models import ModeratorModel
 
 
 class BaseModeratorSerializer(serializers.ModelSerializer):

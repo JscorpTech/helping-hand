@@ -3,8 +3,9 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from core.apps.accounts.permissions import AdminPermission
 from rest_framework.viewsets import ModelViewSet
+
+from core.apps.accounts.permissions import AdminPermission
 
 from ..models import BannerModel
 from ..serializers.banner import CreateBannerSerializer, ListBannerSerializer, RetrieveBannerSerializer

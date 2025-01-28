@@ -1,25 +1,27 @@
 from typing import Any
 
+from django.utils.translation import gettext_lazy as _
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
-from django.utils.translation import gettext_lazy as _
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from ..models import ExamModel, SertificateModel, ExamResultModel
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
+
+from core.apps.accounts.permissions import AdminPermission
+
+from ..models import ExamModel, ExamResultModel, SertificateModel
 from ..serializers.exam import (
     CreateSertificateSerializer,
     ListExamSerializer,
-    ListSertificateSerializer,
-    RetrieveSertificateSerializer,
-    RetrieveExamSerializer,
     ListMeSertificateSerializer,
+    ListSertificateSerializer,
+    RetrieveExamSerializer,
+    RetrieveSertificateSerializer,
 )
-from core.apps.accounts.permissions import AdminPermission
-from ..services import TestService
 from ..serializers.test import AnswerSerializer
+from ..services import TestService
 
 
 @extend_schema(tags=["exam"], summary="Imtixon")

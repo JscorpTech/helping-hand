@@ -1,34 +1,34 @@
 from typing import Any
 
+from django.db import transaction
 from django.utils.translation import gettext as _
 from django_core.mixins import BaseViewSetMixin
 from django_core.paginations import CustomPagination
-from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiResponse
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from django.db import transaction
 
 from core.apps.accounts.permissions import AdminPermission
 
 from ..choices import ProgressChoices
-from ..models import TutorialModel, ResultModel, TaskResultModel
-from ..serializers.test.answer import AnswerSerializer
+from ..models import ResultModel, TaskResultModel, TutorialModel
+from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.test import (
-    RetrieveTestSerializer,
-    CreateTestSerializer,
     CreateQuestionSerializer,
+    CreateTestSerializer,
+    RetrieveTestSerializer,
     UpdateTestSerializer,
 )
-from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
+from ..serializers.test.answer import AnswerSerializer
 from ..serializers.tutorial import (
     CreateTutorialSerializer,
+    ListProgressSerializer,
     ListTutorialSerializer,
     RetrieveTutorialSerializer,
-    ListProgressSerializer,
 )
 from ..services import TestService
 

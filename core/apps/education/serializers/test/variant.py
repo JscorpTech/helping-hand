@@ -1,5 +1,6 @@
-from ...models import VariantModel
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import VariantModel
 
 
 class BaseVariantSerializer(AbstractTranslatedSerializer):
