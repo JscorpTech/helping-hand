@@ -3,4 +3,5 @@ from .notification import (  # noqa
     ListNotificationSerializer,  # noqa
     RetrieveNotificationSerializer,  # noqa
     UserNotificationSerializer,  # noqa
+    NotificationSerializer,  # noqa
 )  # noqa

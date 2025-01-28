@@ -29,7 +29,7 @@ class CsListFaqCategorySerializer(AbstractTranslatedSerializer):
         model = FaqCategoryModel
         fields = ["id", "name"]
         translated_fields = ["name"]
-        translated = 1
+        translated = 0
 
 
 # ///
