@@ -4,8 +4,8 @@ from django.urls import reverse
 from rest_framework import status  # noqa
 from rest_framework.test import APIClient
 
+from core.apps.accounts.models import AuthProviderChoice, User  # noqa
 from core.apps.accounts.serializers import UserSerializer  # noqa
-from core.apps.accounts.models import User, AuthProviderChoice  # noqa
 
 # from logging import log
 

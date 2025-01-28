@@ -5,18 +5,19 @@ Accounts app urls
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-# from rest_framework_simplejwt import views as jwt_views
-
 from .views import (
     ChangePasswordView,
+    CsTokenObtainPairView,
+    CsTokenRefreshView,
+    CsTokenVerifyView,
     MeView,
     RegisterView,
     ResetPasswordView,
     UserView,
-    CsTokenObtainPairView,
-    CsTokenRefreshView,
-    CsTokenVerifyView,
 )
+
+# from rest_framework_simplejwt import views as jwt_views
+
 
 router = DefaultRouter()
 router.register("auth", RegisterView, basename="auth")
