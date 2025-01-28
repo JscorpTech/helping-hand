@@ -1,21 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django_core.mixins import BaseViewSetMixin
-from drf_spectacular.utils import  extend_schema
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
-from ..serializers import (
-    UserCreateSerializer,
-    UserListSerializer,
-    UserRetrieveSerializer,
-    UserUpdateSerializer,
-)
-
 from drf_spectacular.utils import extend_schema
-from django.contrib.auth import get_user_model
-from django_core.mixins import BaseViewSetMixin
-
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+
 from ..permissions import AdminPermission
+from ..serializers import UserCreateSerializer, UserListSerializer, UserRetrieveSerializer, UserUpdateSerializer
 
 
 @extend_schema(tags=["user"])

@@ -1,9 +1,9 @@
 from .faq import (
-    CreateFaqSerializer,
-    ListFaqSerializer,
-    RetreiveFaqSerializer,
     CreateFaqCategorySerializer,
+    CreateFaqSerializer,
+    FaqsSerializer,
     ListFaqCategorySerializer,
+    ListFaqSerializer,
     RetreiveFaqCategorySerializer,
-    FaqsSerializer
+    RetreiveFaqSerializer,
 )

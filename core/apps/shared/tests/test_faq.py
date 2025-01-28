@@ -1,10 +1,11 @@
+import logging  # noqa
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
-from django.contrib.auth import get_user_model
 
-from ..models import FaqModel, FaqCategoryModel
-import logging  # noqa
+from ..models import FaqCategoryModel, FaqModel
 
 
 class FaqCategoryTest(TestCase):

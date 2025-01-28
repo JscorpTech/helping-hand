@@ -1,2 +1,2 @@
-from .test import * # noqa
-from .sertificate import * # noqa
+from .sertificate import *  # noqa
+from .test import *  # noqa

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from django_filters import rest_framework as filters
 from django.db.models import Q
+from django_filters import rest_framework as filters
 
 from core.apps.accounts.choices import RoleChoice
 

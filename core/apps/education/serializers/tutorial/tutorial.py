@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from ...models import TutorialModel, ResultModel, TaskResultModel
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import ResultModel, TaskResultModel, TutorialModel
 
 
 class BaseTutorialSerializer(serializers.ModelSerializer):

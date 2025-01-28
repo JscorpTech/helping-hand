@@ -6,8 +6,8 @@ from django.utils.translation import gettext as _
 from django_core import exceptions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt import tokens
-from core.apps.accounts.choices import AuthProviderChoice
 
+from core.apps.accounts.choices import AuthProviderChoice
 from core.services import sms
 
 
