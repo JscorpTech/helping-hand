@@ -21,8 +21,7 @@ from ..permissions import AdminPermission
 @extend_schema(tags=["user"])
 class UserView(BaseViewSetMixin, ModelViewSet):
     queryset = get_user_model().objects.all()
-    # permission_classes = [IsAuthenticated, AdminPermission]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, AdminPermission]
 
     def get_serializer_class(self):
         match self.action:

@@ -46,16 +46,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = "__all__"
-        # fields = [
-        #     "first_name",
-        #     "last_name",
-        #     "avatar",
-        #     "level",
-        #     "experience",
-        #     "bio",
-        #     "is_active",
-        # ]
+        fields = [
+            "first_name",
+            "last_name",
+            "avatar",
+            "level",
+            "experience",
+            "bio",
+            "is_active",
+        ]
 
 
 class UserListSerializer(UserSerializer):

@@ -14,30 +14,10 @@ from rest_framework_simplejwt.serializers import (
 
 class CsTokenObtainPairSerializer(TokenObtainPairSerializer):
 
-    @classmethod
-    def get_token(cls, user):
-        # This method creates the token
-        token = super().get_token(user)
-        print("sandnadnandj")
-        # Custom claims
-        token["email"] = user.email
-        token["userRole"] = user.role
-
-        # Check if user is active
-        if not user.is_active:
-            raise AuthenticationFailed("Your account is disabled. Please contact support.")
-
-        return token
-
     def validate(self, attrs):
-        # Validate the data and ensure the user is active
         data = super().validate(attrs)
-        print("sandnadnandj")
-
-        # If the user is not active, raise an error
         if not self.user.is_active:
             raise AuthenticationFailed("Your account is disabled. Please contact support.")
-
         return data
 
 
