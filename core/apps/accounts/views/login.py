@@ -1,10 +1,6 @@
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from ..serializers import (
-    CsTokenObtainPairSerializer,
-    CsTokenRefreshSerializer,
-    CsTokenVerifySerializer,
-)
+from ..serializers import CsTokenObtainPairSerializer, CsTokenRefreshSerializer, CsTokenVerifySerializer
 
 
 class CsTokenObtainPairView(TokenObtainPairView):

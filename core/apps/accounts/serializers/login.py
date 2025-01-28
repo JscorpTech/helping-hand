@@ -1,15 +1,12 @@
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.tokens import UntypedToken
 from django.contrib.auth import get_user_model
-
-from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework.exceptions import AuthenticationFailed
-
+from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer,
     TokenVerifySerializer,
 )
+from rest_framework_simplejwt.tokens import RefreshToken, UntypedToken
 
 
 class CsTokenObtainPairSerializer(TokenObtainPairSerializer):
