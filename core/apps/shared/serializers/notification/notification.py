@@ -61,7 +61,7 @@ class NotificationSerializer(AbstractTranslatedSerializer):
         model = NotificationModel
         fields = ["id", "title", "body", "created_at", "updated_at"]
         translated_fields = ["title", "body"]
-        translated = 1
+        translated = 0
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):
