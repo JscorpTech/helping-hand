@@ -51,7 +51,7 @@ class ListFaqSerializer(AbstractTranslatedSerializer):
         model = FaqModel
         fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
         translated_fields = ["question", "answer"]
-        translated = 1
+        translated = 0
 
 
 class RetreiveFaqSerializer(AbstractTranslatedSerializer):
@@ -61,7 +61,7 @@ class RetreiveFaqSerializer(AbstractTranslatedSerializer):
         model = FaqModel
         fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
         translated_fields = ["question", "answer"]
-        translated = 1
+        translated = 0
 
 
 class CreateFaqSerializer(BaseFaqSerializer):
