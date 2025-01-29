@@ -38,11 +38,19 @@ class CreateNotificationSerializer(BaseNotificationSerializer):
 
 
 class ListNotificationSerializer(BaseNotificationSerializer):
-    class Meta(BaseNotificationSerializer.Meta): ...
+    class Meta:
+        model = NotificationModel
+        fields = ["id", "title", "body", "users", "created_at", "updated_at"]
+        translated_fields = ["title", "body"]
+        translated = 0
 
 
 class RetrieveNotificationSerializer(BaseNotificationSerializer):
-    class Meta(BaseNotificationSerializer.Meta): ...
+    class Meta:
+        model = NotificationModel
+        fields = ["id", "title", "body", "users", "created_at", "updated_at"]
+        translated_fields = ["title", "body"]
+        translated = 0
 
 
 # ///
@@ -53,7 +61,7 @@ class NotificationSerializer(AbstractTranslatedSerializer):
         model = NotificationModel
         fields = ["id", "title", "body", "created_at", "updated_at"]
         translated_fields = ["title", "body"]
-        translated = 1
+        translated = 0
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):

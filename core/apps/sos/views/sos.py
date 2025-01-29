@@ -28,9 +28,13 @@ class UserRequestView(BaseViewSetMixin, CreateModelMixin, RetrieveModelMixin, Li
 
     @action(methods=["GET"], detail=False, url_name="top-users", url_path="top-users")
     def top_users(self, request):
+        try:
+            limit = int(request.GET.get("limit", 10))
+        except Exception:
+            limit = 10
         users = (
             get_user_model().objects.annotate(requests_count=models.Count("sos_requests")).order_by("-requests_count")
-        )
+        )[:limit]
         data = []
         for user in users:
             data.append(

@@ -50,17 +50,14 @@ class BaseUserSerializer(serializers.ModelSerializer):
         return obj.sos_requests.count()
 
     class Meta:
-        model = get_user_model()
-        fields = [
-            "first_name",
-            "last_name",
-            "avatar",
-            "level",
-            "experience",
-            "bio",
-            "is_active",
-            "sos_request_count",
+        exclude = [
+            "created_at",
+            "updated_at",
+            "password",
+            "groups",
+            "user_permissions",
         ]
+        model = get_user_model()
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -68,16 +65,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     experience = serializers.CharField(required=False)
 
     class Meta:
-        model = get_user_model()
-        fields = [
-            "first_name",
-            "last_name",
-            "avatar",
-            "level",
-            "experience",
-            "bio",
-            "is_active",
+        exclude = [
+            "created_at",
+            "updated_at",
+            "password",
+            "groups",
+            "user_permissions",
         ]
+        model = get_user_model()
 
 
 class UserListSerializer(BaseUserSerializer):
