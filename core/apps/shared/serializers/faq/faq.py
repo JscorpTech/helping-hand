@@ -1,13 +1,18 @@
-from rest_framework import serializers
 from typing import Any
+
+from rest_framework import serializers
+
+from core.apps.shared.serializers import AbstractTranslatedSerializer
 
 from ...models import FaqCategoryModel, FaqModel
 
 
-class BaseFaqCategorySerializer(serializers.ModelSerializer):
+class BaseFaqCategorySerializer(AbstractTranslatedSerializer):
     class Meta:
         model = FaqCategoryModel
-        fields = ["id", "name", "updated_date", "created_date"]
+        fields = ["id", "name", "updated_at", "created_at"]
+        translated_fields = ["name"]
+        translated = 1
 
 
 class ListFaqCategorySerializer(BaseFaqCategorySerializer):
@@ -22,11 +27,21 @@ class CreateFaqCategorySerializer(BaseFaqCategorySerializer):
     class Meta(BaseFaqCategorySerializer.Meta): ...
 
 
+class CsListFaqCategorySerializer(AbstractTranslatedSerializer):
+    class Meta:
+        model = FaqCategoryModel
+        fields = ["id", "name"]
+        translated_fields = ["name"]
+        translated = 0
+
+
 # ///
-class BaseFaqSerializer(serializers.ModelSerializer):
+class BaseFaqSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = FaqModel
-        fields = ["id", "question", "answer", "updated_date", "category", "created_date"]
+        fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
+        translated_fields = ["question", "answer"]
+        translated = 1
 
 
 class ListFaqSerializer(BaseFaqSerializer):

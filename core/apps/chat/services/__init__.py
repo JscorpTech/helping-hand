@@ -1,1 +1,1 @@
-from .chat import * # noqa
+from .chat import *  # noqa

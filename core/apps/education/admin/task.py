@@ -1,8 +1,8 @@
 from django.contrib import admin
+from modeltranslation.admin import TabbedTranslationAdmin
 from unfold.admin import ModelAdmin
 
 from ..models import TaskModel, TaskResultModel
-from modeltranslation.admin import TabbedTranslationAdmin
 
 
 @admin.register(TaskModel)

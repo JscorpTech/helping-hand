@@ -1,5 +1,6 @@
-from ...models import PostModel
 from core.apps.shared.serializers import AbstractTranslatedSerializer
+
+from ...models import PostModel
 
 
 class BasePostSerializer(AbstractTranslatedSerializer):
@@ -29,4 +30,3 @@ class CreatePostSerializer(BasePostSerializer):
             "news_type",
             "is_top",
         ]
-

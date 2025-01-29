@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from core.apps.chat.models import GroupModel
-from ..choices import RoleChoice
 from core.apps.accounts.choices import AuthProviderChoice
+from core.apps.chat.models import GroupModel
+
+from ..choices import RoleChoice
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,6 +54,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "level",
             "experience",
             "bio",
+            "is_active",
         ]
 
 

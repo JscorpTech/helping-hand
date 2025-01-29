@@ -1,23 +1,51 @@
 from typing import Any
 
-from drf_spectacular.utils import extend_schema
 from django.contrib.auth import get_user_model
+from django_core.mixins import BaseViewSetMixin
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from django_core.mixins import BaseViewSetMixin
 
-from core.apps.news.models import PostModel
 from core.apps.accounts.models import ModeratorModel
-from core.apps.education.models import TutorialModel
-from core.apps.education.models import SertificateModel, SertificateChoices
+from core.apps.education.models import SertificateChoices, SertificateModel, TutorialModel
+from core.apps.news.models import PostModel
 
 from ..serializers.dashboard import DashboardSerializer
+from ..services import get_userrequest_chart_data
 
 
 @extend_schema(tags=["dashboard"])
 class DashboardView(BaseViewSetMixin, GenericViewSet):
     serializer_class = DashboardSerializer
+    periods = [
+        "day",
+        "week",
+        "month",
+        "year",
+    ]
+
+    @extend_schema(
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "labels": {"type": "array", "items": {"type": "string"}},
+                    "data": {"type": "array", "items": {"type": "number"}},
+                },
+            }
+        }
+    )
+    @action(methods=["GET"], detail=False, url_name="chart", url_path="chart/(?P<period>[a-zA-Z]+)")
+    def chart(self, request, period):
+        """
+        period: day, week, month, year
+        """
+        if period not in self.periods:
+            return Response({"detail": "period not found"})
+        labels, chart_data = get_userrequest_chart_data(period)
+        return Response({"labels": labels, "data": chart_data})
 
     def list(self, request) -> Any:
 
@@ -31,9 +59,6 @@ class DashboardView(BaseViewSetMixin, GenericViewSet):
         videos_count = TutorialModel.objects.filter(video__isnull=False).exclude(video__exact="").count()
 
         sertificated_users_count = SertificateModel.objects.filter(status__exact=SertificateChoices.ACTIVE).count()
-        # isertificated_users_count = SertificateModel.objects.filter(
-        #     status__exact=SertificateChoices.INACTIVE
-        # ).count()
 
         endangered_users_count = "1"
 

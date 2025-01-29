@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AreaChoice(TextChoices):
-    """Xafli hudud — Dangerous area
-    Xafsiz hudud — Unsafe area"""
+    """Xafli hudud — unsafe
+    Xafsiz hudud — safe"""
 
-    DANGEROUS = "dangerous", _("Xafli hudud")
-    UNSAFE = "unsafe", _("Xafsiz hudud")
+    UNSAFE = "unsafe", _("Xafli hudud")
+    SAFE = "safe", _("Xafsiz hudud")

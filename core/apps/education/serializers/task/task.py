@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
+from core.apps.shared.serializers import AbstractTranslatedSerializer, FileSerializer
+
 from ...models import TaskModel
-from core.apps.shared.serializers import FileSerializer, AbstractTranslatedSerializer
 
 
 class BaseTaskSerializer(AbstractTranslatedSerializer):

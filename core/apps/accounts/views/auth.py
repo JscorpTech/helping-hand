@@ -7,22 +7,23 @@ from django.utils.translation import gettext_lazy as _
 from django_core import exceptions
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import OpenApiResponse, extend_schema
+from google.auth.transport import requests
+from google.oauth2 import id_token
 from rest_framework import request, status, throttling
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from ..choices import AuthProviderChoice, RoleChoice
 
 from core.services import SmsService, UserService
 
 from .. import models
+from ..choices import AuthProviderChoice, RoleChoice
 from ..serializers import (
     ChangePasswordSerializer,
     ConfirmSerializer,
+    GoogleSerializer,
     RegisterSerializer,
     ResendSerializer,
     ResetConfirmationSerializer,
@@ -30,7 +31,6 @@ from ..serializers import (
     SetPasswordSerializer,
     UserSerializer,
     UserUpdateSerializer,
-    GoogleSerializer,
 )
 
 

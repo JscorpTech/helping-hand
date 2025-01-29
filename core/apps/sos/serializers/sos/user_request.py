@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from ...models import UserRequestModel
 from core.apps.accounts.serializers import UserSerializer
+
+from ...models import UserRequestModel
 
 
 class BaseUserRequestSerializer(serializers.ModelSerializer):
@@ -18,6 +19,11 @@ class ListUserRequestSerializer(BaseUserRequestSerializer):
 
 class RetrieveUserRequestSerializer(BaseUserRequestSerializer):
     class Meta(BaseUserRequestSerializer.Meta): ...
+
+
+class TopRequestsSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    user = UserSerializer()
 
 
 class CreateUserRequestSerializer(BaseUserRequestSerializer):
