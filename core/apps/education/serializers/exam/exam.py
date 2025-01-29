@@ -22,7 +22,7 @@ class RetrieveExamSerializer(BaseExamSerializer):
     is_passed = serializers.SerializerMethodField()
 
     def get_is_passed(self, obj) -> bool:
-        user = self.context['request'].user
+        user = self.context["request"].user
         if user.is_authenticated:
             return ExamResultModel.objects.filter(user=self.context["request"].user, exam=obj).exists()
         return False
