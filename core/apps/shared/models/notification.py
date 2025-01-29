@@ -23,6 +23,7 @@ class NotificationModel(AbstractBaseModel):
         db_table = "notification"
         verbose_name = _("Notification")
         verbose_name_plural = _("Notifications")
+        ordering = ["-created_at"]
 
 
 class UserNotificationModel(AbstractBaseModel):
@@ -41,3 +42,4 @@ class UserNotificationModel(AbstractBaseModel):
         db_table = "user_notification"
         verbose_name = _("User Notification")
         verbose_name_plural = _("User Notifications")
+        ordering = ["-created_at"]
