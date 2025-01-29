@@ -44,12 +44,24 @@ class BaseFaqSerializer(AbstractTranslatedSerializer):
         translated = 1
 
 
-class ListFaqSerializer(BaseFaqSerializer):
-    class Meta(BaseFaqSerializer.Meta): ...
+class ListFaqSerializer(AbstractTranslatedSerializer):
+    category = CsListFaqCategorySerializer()
+
+    class Meta:
+        model = FaqModel
+        fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
+        translated_fields = ["question", "answer"]
+        translated = 1
 
 
-class RetreiveFaqSerializer(BaseFaqSerializer):
-    class Meta(BaseFaqSerializer.Meta): ...
+class RetreiveFaqSerializer(AbstractTranslatedSerializer):
+    category = CsListFaqCategorySerializer()
+
+    class Meta:
+        model = FaqModel
+        fields = ["id", "question", "answer", "category", "updated_at", "created_at"]
+        translated_fields = ["question", "answer"]
+        translated = 1
 
 
 class CreateFaqSerializer(BaseFaqSerializer):

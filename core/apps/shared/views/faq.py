@@ -82,11 +82,11 @@ class FaqView(BaseViewSetMixin, ModelViewSet):
 
     def get_serializer_class(self) -> Any:
         match self.action:
-            case "create":
+            case "create" | "update" | "partial_update":
                 return CreateFaqSerializer
             case "list":
                 return ListFaqSerializer
-            case "retreive":
+            case "retrieve":
                 return RetreiveFaqSerializer
             case _:
                 return ListFaqSerializer

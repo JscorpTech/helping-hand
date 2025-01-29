@@ -73,7 +73,6 @@ class FaqTest(TestCase):
 
     def _create_data(self):
         self.faq_category = FaqCategoryModel.objects.create(name="TEST")
-        print(self.faq_category.id, self.faq_category, "\n\n\n\n")
         return FaqModel.objects.create(category=self.faq_category, question="test_q", answer="test_a")
 
     def setUp(self):
