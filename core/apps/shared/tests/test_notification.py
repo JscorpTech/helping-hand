@@ -43,6 +43,14 @@ class NotificationTest(TestCase):
         self.assertTrue(response.json()["status"])
         self.assertEqual(response.status_code, 201)
 
+    def test_create_all_users(self):
+        response = self.client.post(
+            self.urls["list"],
+            {"title": "create_title", "body": "create_body", "is_all_users": True},
+        )
+        self.assertTrue(response.json()["status"])
+        self.assertEqual(response.status_code, 201)
+
     def test_update(self):
         response = self.client.put(
             self.urls["retrieve"],

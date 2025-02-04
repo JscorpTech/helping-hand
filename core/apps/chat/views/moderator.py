@@ -11,6 +11,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+
 
 from core.apps.accounts.choices import RoleChoice
 from core.apps.accounts.permissions import AdminPermission
@@ -23,6 +26,9 @@ from ..serializers.chat import ListUserSerializer
 @extend_schema(tags=["moderator"])
 class ModeratorView(BaseViewSetMixin, GenericViewSet):
     pagination_class = None
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["role", "experience__lte", "level__lte"]
+    search_fields = ["first_name", "last_name", "phone"]
 
     def get_serializer_context(self):
         data = super().get_serializer_context()
@@ -67,9 +73,12 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         serializer = self.get_serializer(instance=get_object_or_404(get_user_model(), pk=pk), data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({
-            "detail": "Moderator malumotlari yangilandi",
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "detail": "Moderator malumotlari yangilandi",
+            },
+            status=status.HTTP_200_OK,
+        )
 
     @extend_schema(summary="Moderator malumotlarini yangilash Admin")
     def partial_update(self, request, pk, *args, **kwargs):
@@ -79,9 +88,12 @@ class ModeratorView(BaseViewSetMixin, GenericViewSet):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({
-            "detail": "Moderator malumotlari yangilandi",
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "detail": "Moderator malumotlari yangilandi",
+            },
+            status=status.HTTP_200_OK,
+        )
 
     @extend_schema(summary="Moderatorni o'chirish Admin")
     def destroy(self, request, pk, *args, **kwargs):

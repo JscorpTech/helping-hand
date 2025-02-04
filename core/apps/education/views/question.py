@@ -7,6 +7,8 @@ from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveM
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models import QuestionModel
 from ..serializers.test import (
@@ -21,6 +23,13 @@ from ..serializers.test import (
 class QuestionView(
     BaseViewSetMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin, UpdateModelMixin, GenericViewSet
 ):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["test", "is_any", "is_many"]
+    search_fields = [
+        "question_uz",
+        "question_kaa",
+        "question_kril",
+    ]
 
     def get_queryset(self):
         query = QuestionModel.objects.all()

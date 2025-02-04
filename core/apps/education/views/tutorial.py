@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
 from core.apps.accounts.permissions import AdminPermission
 
@@ -41,8 +42,11 @@ from ..services import TestService
     ],
 )
 class TutorialView(BaseViewSetMixin, ModelViewSet):
-    filter_backends = [SearchFilter]
-    search_fields = ["name", "desc", "tags"]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = [
+        "test",
+    ]
+    search_fields = ["name_uz", "name_kaa", "name_kril", "desc_uz", "desc_kaa", "desc_kril", "tags"]
 
     def get_object(self):
         match self.action:

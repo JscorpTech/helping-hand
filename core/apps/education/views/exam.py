@@ -8,6 +8,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from core.apps.accounts.permissions import AdminPermission
 
@@ -27,6 +29,9 @@ from ..services import TestService
 @extend_schema(tags=["exam"], summary="Imtixon")
 class ExamView(BaseViewSetMixin, GenericViewSet):
     queryset = ExamModel.objects.all()
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["test", "is_active"]
+    search_fields = ["name"]
 
     @action(methods=["GET"], detail=False, url_name="exam", url_path="exam")
     def exam(self, request):
@@ -81,6 +86,8 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
 @extend_schema(tags=["sertificate"])
 class SertificateView(BaseViewSetMixin, ModelViewSet):
     queryset = SertificateModel.objects.all()
+    filter_backends = [SearchFilter]
+    filterset_fields = ["user", "exam"]
 
     @action(methods=["GET"], detail=False, url_name="me", url_path="me")
     def me(self, request):
