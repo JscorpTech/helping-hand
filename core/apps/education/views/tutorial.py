@@ -11,11 +11,12 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from django.shortcuts import get_object_or_404
 
 from core.apps.accounts.permissions import AdminPermission
 
 from ..choices import ProgressChoices
-from ..models import ResultModel, TaskResultModel, TutorialModel
+from ..models import ResultModel, TaskResultModel, TutorialModel, TestModel
 from ..serializers.task import RetrieveTaskSerializer, TaskAnswerSerializer
 from ..serializers.test import (
     CreateQuestionSerializer,
@@ -153,7 +154,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
-        test = self.get_queryset()
+        test = get_object_or_404(TestModel, pk=pk)
         questions = test.questions.all()
 
         if len(data) != len(questions):
