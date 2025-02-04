@@ -179,7 +179,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
             TutorialModel.objects.get(pk=test.tutorials.first().id).users.add(request.user)
             ResultModel.objects.update_or_create(
                 user=request.user,
-                tutorial_id=pk,
+                tutorial_id=test.tutorials.first().id,
                 defaults={"score": success, "total": len(questions), "bal": bal},
             )
 
