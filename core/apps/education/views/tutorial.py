@@ -176,7 +176,7 @@ class TutorialView(BaseViewSetMixin, ModelViewSet):
                 success += s
                 bal += b
 
-            TutorialModel.objects.get(pk=pk).users.add(request.user)
+            TutorialModel.objects.get(pk=test.tutorials.first().id).users.add(request.user)
             ResultModel.objects.update_or_create(
                 user=request.user,
                 tutorial_id=pk,
