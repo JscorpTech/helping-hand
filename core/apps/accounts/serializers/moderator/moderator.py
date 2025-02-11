@@ -63,9 +63,7 @@ class CreateModeratorSerializer(serializers.Serializer):
         if "avatar" in validated_data:
             user.avatar = validated_data["avatar"]
         user.save()
-        if not hasattr(instance, "moderator"):
-            return instance
-        moderator = instance.moderator
+        moderator, created = ModeratorModel.objects.get_or_create(user=user)
         moderator.experience = validated_data.get("experience", moderator.experience)
         moderator.level = validated_data.get("level", moderator.level)
         moderator.save()
