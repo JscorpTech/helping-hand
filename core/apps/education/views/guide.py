@@ -63,7 +63,7 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
                 return ListGuideSerializer
             case "retrieve":
                 return RetrieveGuideSerializer
-            case "create":
+            case "create" | "update" | "partial_update":
                 return CreateGuideSerializer
             case _:
                 return ListGuideSerializer
