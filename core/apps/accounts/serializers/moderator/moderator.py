@@ -34,6 +34,7 @@ class CreateModeratorSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255)
     level = serializers.CharField(max_length=255)
     experience = serializers.CharField(max_length=255)
+    bio = serializers.CharField(required=False)
     role = serializers.ChoiceField(choices=RoleChoice.choices)
     avatar = serializers.ImageField(required=False, allow_null=True)
 
