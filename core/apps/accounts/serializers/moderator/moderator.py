@@ -46,6 +46,7 @@ class CreateModeratorSerializer(serializers.Serializer):
             last_name=validated_data["last_name"],
             validated_at=datetime.now(),
             role=validated_data["role"],
+            bio=validated_data.get("bio", None),
         )
         if "avatar" in validated_data:
             user.avatar = validated_data["avatar"]
@@ -58,6 +59,7 @@ class CreateModeratorSerializer(serializers.Serializer):
         user.first_name = validated_data.get("first_name", user.first_name)
         user.last_name = validated_data.get("last_name", user.last_name)
         user.role = validated_data.get("role", user.role)
+        user.bio = validated_data.get("bio", user.bio)
         user.phone = validated_data.get("phone", user.phone)
         if "password" in validated_data:
             user.set_password(validated_data["password"])
