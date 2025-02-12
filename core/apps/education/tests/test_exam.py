@@ -5,17 +5,13 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from ..models import ExamModel, SertificateModel
+from ..models import SertificateModel
 
 
 class ExamTest(TestCase):
 
-    def _create_data(self):
-        return ExamModel._create_fake()
-
     def setUp(self):
         self.client = APIClient()
-        self.instance = self._create_data()
         self.urls = {
             "detail": reverse("exam-exam"),
         }
@@ -36,7 +32,6 @@ class ExamTest(TestCase):
         response = self.client.get(self.urls["detail"])
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["status"])
-        self.assertEqual(response.json()["data"]["id"], self.instance.id)
 
 
 class SertificateTest(TestCase):

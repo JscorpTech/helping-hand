@@ -12,8 +12,7 @@ class BaseSertificateSerializer(serializers.ModelSerializer):
         model = SertificateModel
         exclude = [
             "created_at",
-            "updated_at",
-            "exam",
+            "updated_at"
         ]
 
 

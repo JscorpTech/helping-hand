@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -13,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from core.apps.accounts.permissions import AdminPermission
 
-from ..models import ExamModel, ExamResultModel, SertificateModel
+from ..models import ExamModel, ExamResultModel, SertificateModel, TestModel
 from ..serializers.exam import (
     CreateSertificateSerializer,
     ListExamSerializer,
@@ -22,7 +21,7 @@ from ..serializers.exam import (
     RetrieveExamSerializer,
     RetrieveSertificateSerializer,
 )
-from ..serializers.test import AnswerSerializer
+from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..services import TestService
 
 
@@ -36,33 +35,27 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
     @action(methods=["GET"], detail=False, url_name="exam", url_path="exam")
     def exam(self, request):
         """Imtixon uchun testlarni olish"""
-        return Response(self.get_serializer(ExamModel.get_exam()).data)
+        return Response({"id": 1, "test": RetrieveTestSerializer(TestModel.objects.order_by("?").first()).data})
 
     @extend_schema(request=AnswerSerializer)
     @action(methods=["POST"], detail=False, url_name="exam-answer", url_path="exam-answer")
     def exam_answer(self, request):
         """Imtixon javoblarini yuborish"""
-        exam = ExamModel.get_exam()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        test = exam.test
-        questions = test.questions.all()
-
-        if len(data) != len(questions):
-            raise ValidationError({"question": [_("Test javoblar soni noto'g'ri.")]})
+        data_len = len(data)
 
         success, bal = TestService().proccess_answers(data)
 
         ExamResultModel.objects.update_or_create(
             user=request.user,
-            exam=exam,
-            defaults={"score": success, "total": len(questions), "bal": bal},
+            defaults={"score": success, "total": data_len, "bal": bal},
         )
-        SertificateModel.objects.get_or_create(user=request.user, exam=exam)
+        SertificateModel.objects.get_or_create(user=request.user)
 
         return Response(
-            {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": len(questions), "bal": bal}
+            {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": data_len, "bal": bal}
         )
 
     def get_serializer_class(self) -> Any:

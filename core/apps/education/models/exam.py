@@ -45,14 +45,6 @@ class SertificateModel(AbstractBaseModel):
         _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT
     )
     file = models.FileField(_("file"), upload_to="sertificates/")
-    exam = models.ForeignKey(
-        "ExamModel",
-        verbose_name=_("exam"),
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=False,
-        related_name="sertificates",
-    )
 
     def __str__(self):
         return self.user.full_name
@@ -62,7 +54,6 @@ class SertificateModel(AbstractBaseModel):
         return self.objects.create(
             user=get_user_model()._create_fake(),
             file="file.pdf",
-            exam=ExamModel._create_fake(),
         )
 
     class Meta:
@@ -73,7 +64,6 @@ class SertificateModel(AbstractBaseModel):
 
 class ExamResultModel(AbstractBaseModel):
     user = models.ForeignKey(to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE)
-    exam = models.ForeignKey(to="ExamModel", verbose_name=_("exam"), on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     total = models.IntegerField(default=0)
     bal = models.IntegerField(default=0)
@@ -85,7 +75,6 @@ class ExamResultModel(AbstractBaseModel):
     def _create_fake(self):
         return self.objects.create(
             user=get_user_model()._create_fake(),
-            exam=ExamModel._create_fake(),
             score=10,
             total=10,
             bal=10,
