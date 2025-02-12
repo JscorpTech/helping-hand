@@ -47,7 +47,7 @@ class VariantModel(AbstractBaseModel):
     question = models.ForeignKey(
         "QuestionModel", verbose_name=_("question"), on_delete=models.CASCADE, related_name="variants"
     )
-    variant = models.CharField(_("variant"), max_length=255)
+    variant = models.CharField(_("variant"), max_length=1000)
     bal = models.IntegerField()
     is_true = models.BooleanField(_("is true"), default=False)
 
