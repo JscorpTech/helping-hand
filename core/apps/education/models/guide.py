@@ -12,6 +12,7 @@ class GuideModel(AbstractBaseModel):
     file = models.FileField(_("file"), upload_to="guides/", blank=True, null=True)
     video = models.FileField(_("video"), upload_to="guides/", blank=True, null=True)
     guide_type = models.CharField(_("type"), choices=TutorialTypeChoice.choices, max_length=255)
+    source = models.URLField(_("source"), blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -24,6 +25,7 @@ class GuideModel(AbstractBaseModel):
             image="guide.jpg",  # image of the guide
             file="guide.pdf",  # file of the guide
             video="guide.mp4",  # video of the guide
+            url="https://example.com"
         )
 
     class Meta:
