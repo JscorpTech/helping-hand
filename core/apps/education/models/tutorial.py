@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
+from ..choices import TutorialTypeChoice
 
 
 class TutorialModel(AbstractBaseModel):
@@ -20,6 +21,9 @@ class TutorialModel(AbstractBaseModel):
     tags = ArrayField(verbose_name=_("tags"), blank=True, null=True, base_field=models.CharField(max_length=255))
     position = models.PositiveIntegerField(_("position"), default=0)
     source = models.URLField(_("source"), blank=True, null=True)
+    tutorial_type = models.CharField(
+        _("type"), choices=TutorialTypeChoice.choices, max_length=255, default=TutorialTypeChoice.LAWYER
+    )
     users = models.ManyToManyField(
         verbose_name=_("users"),
         to=get_user_model(),
@@ -36,6 +40,7 @@ class TutorialModel(AbstractBaseModel):
             file="file.zip",
             video="video.mp4",
             tags=[],
+            tutorial_type=TutorialTypeChoice.LAWYER,
             position=1,
             source="http://example.com",
         )

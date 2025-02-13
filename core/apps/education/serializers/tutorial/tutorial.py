@@ -36,6 +36,7 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
             "position",
             "source",
             "test_count",
+            "tutorial_type",
             "updated_at"
         ]
 
@@ -98,6 +99,7 @@ class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSeriali
             "file",
             "video",
             "test",
+            "tutorial_type",
             "tags",
             "position",
             "source",
