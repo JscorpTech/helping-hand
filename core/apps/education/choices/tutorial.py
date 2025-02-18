@@ -6,6 +6,7 @@ class TutorialTypeChoice(models.TextChoices):
     PSIXOLOG = "psixolog", _("Psixolog")
     LAWYER = "lawyer", _("Lawyer")
     BUSINESS = "business", _("Business")
+    DOCUMENT = "document", _("Document")
 
     @property
     def tuple():
@@ -13,4 +14,5 @@ class TutorialTypeChoice(models.TextChoices):
             (TutorialTypeChoice.LAWYER.value, TutorialTypeChoice.LAWYER.label),
             (TutorialTypeChoice.PSIXOLOG.value, TutorialTypeChoice.PSIXOLOG.label),
             (TutorialTypeChoice.BUSINESS.value, TutorialTypeChoice.BUSINESS.label),
+            (TutorialTypeChoice.DOCUMENT.value, TutorialTypeChoice.DOCUMENT.label),
         ]
