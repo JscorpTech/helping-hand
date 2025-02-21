@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from core.apps.accounts.permissions import AdminPermission
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from ..models import FaqCategoryModel, FaqModel
@@ -70,7 +71,8 @@ class FaqCategoryView(BaseViewSetMixin, ModelViewSet):
 @extend_schema(tags=["faq"])
 class FaqView(BaseViewSetMixin, ModelViewSet):
     queryset = FaqModel.objects.all()
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_fields = ["category"]
     search_fields = [
         "question_uz",
         "question_kaa",
