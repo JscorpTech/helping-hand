@@ -8,7 +8,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from ..models import GuideModel
+from ..models import GuideModel, TutorialTypeChoice
 from ..serializers.guide import CreateGuideSerializer, ListGuideSerializer, RetrieveGuideSerializer
 
 
@@ -22,12 +22,17 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
         match self.action:
             case "videos":
                 # Video qo'llanmalarini qaytaradi
-                return GuideModel.objects.filter(video__isnull=False).exclude(video="")
+                queryset = GuideModel.objects.filter(video__isnull=False).exclude(video="")
             case "files":
                 # Foydalanuvchi qo'llanmalarini qaytaradi
-                return GuideModel.objects.filter(file__isnull=False).exclude(file="")
+                queryset = GuideModel.objects.filter(file__isnull=False).exclude(file="")
             case _:
-                return GuideModel.objects.all()
+                queryset = GuideModel.objects.all()
+
+        guide_type = self.request.query_params.get("guide_type", None)
+        if guide_type == TutorialTypeChoice.DOCUMENT:
+            queryset = queryset.exclude(guide_type=TutorialTypeChoice.DOCUMENT)
+        return queryset
 
     @extend_schema(
         summary="Video qo'llanmalar ro'yxatini qaytaradi",
