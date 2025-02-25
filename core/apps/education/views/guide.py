@@ -30,8 +30,9 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
                 queryset = GuideModel.objects.all()
 
         guide_type = self.request.query_params.get("guide_type", None)
-        if guide_type == TutorialTypeChoice.DOCUMENT:
+        if not guide_type == TutorialTypeChoice.DOCUMENT:
             queryset = queryset.exclude(guide_type=TutorialTypeChoice.DOCUMENT)
+        print(queryset)
         return queryset
 
     @extend_schema(
