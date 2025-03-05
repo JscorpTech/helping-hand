@@ -21,7 +21,6 @@ ALLOWED_HOSTS: Union[List[str]] = ["*"]
 if env.bool("PROTOCOL_HTTPS", False):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-
 DATABASES = {
     "default": {
         "ENGINE": env.str("DB_ENGINE"),
@@ -37,22 +36,21 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptPasswordHasher",
 ]
 
-
 INSTALLED_APPS = [
-    "modeltranslation",
-    "unfold",
-    "unfold.contrib.filters",
-    "unfold.contrib.forms",
-    "unfold.contrib.guardian",
-    "unfold.contrib.simple_history",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django.contrib.gis",
-] + APPS
+                     "modeltranslation",
+                     "unfold",
+                     "unfold.contrib.filters",
+                     "unfold.contrib.forms",
+                     "unfold.contrib.guardian",
+                     "unfold.contrib.simple_history",
+                     "django.contrib.admin",
+                     "django.contrib.auth",
+                     "django.contrib.contenttypes",
+                     "django.contrib.sessions",
+                     "django.contrib.messages",
+                     "django.contrib.staticfiles",
+                     "django.contrib.gis",
+                 ] + APPS
 
 MODULES = [app for app in MODULES if isinstance(app, str)]
 
@@ -121,7 +119,6 @@ DATE_FORMAT = "d.m.y"
 TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
-
 SEEDERS = [
     # "core.apps.accounts.seeder.UserSeeder",
     "core.apps.chat.seeders.ChatSeeder",
@@ -147,6 +144,21 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "resources/locale")]
 MODELTRANSLATION_LANGUAGES = ["uz", "kaa", "kril"]
 MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
 LANGUAGE_CODE = "uz"
+JST_LANGUAGES = [
+    {
+        "code": "uz",
+        "name": "Uzbek",
+        "is_default": True,
+    },
+    {
+        "code": "en",
+        "name": "English",
+    },
+    {
+        "code": "ru",
+        "name": "Russia",
+    }
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
 MEDIA_URL = "/resources/media/"

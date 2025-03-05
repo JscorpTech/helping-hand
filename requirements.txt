@@ -4,7 +4,6 @@ django-cors-headers==4.6.0
 django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
-django-modeltranslation==0.19.11
 django-redis==5.4.0
 django-unfold==0.42.0
 djangorestframework-simplejwt==5.3.1
@@ -31,7 +30,7 @@ bcrypt
 faker~=33.1.0
 GDAL==3.6.2
 pdfkit
-
+django-modeltranslation~=0.19.11
 
 pytest
 pytest-django
