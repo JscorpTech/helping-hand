@@ -35,7 +35,7 @@ django-modeltranslation~=0.19.11
 pytest
 pytest-django
 # !NOTE: on-server
-# gunicorn
+gunicorn
 
 
 django-storages
