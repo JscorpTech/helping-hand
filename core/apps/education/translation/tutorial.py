@@ -8,4 +8,5 @@ class TutorialTranslation(TranslationOptions):
     fields = [
         "name",
         "desc",
+        "file"
     ]
