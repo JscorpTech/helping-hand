@@ -5,6 +5,8 @@ import pdfkit
 from django.conf import settings
 
 from core.apps.accounts.models import User
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 from ..models import SertificateModel
 
@@ -25,5 +27,8 @@ class SertificateService:
 
     def generate(self) -> str:
         file_name = "sertificates/sertificate_%s.pdf" % uuid4()
-        pdfkit.from_string(self.get_sertificate(), str(Path(settings.BASE_DIR, "resources/media/%s" % file_name)))
+        file_path = str(Path(settings.BASE_DIR, "resources/media/%s" % file_name))
+        pdfkit.from_string(self.get_sertificate(), file_path)
+        with open(file_path, "r") as file:
+            default_storage.save(file_name, ContentFile(file.read()))
         return file_name
