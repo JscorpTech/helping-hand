@@ -92,6 +92,7 @@ class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSeriali
         translated_fields = [
             "name",
             "desc",
+            "file"
         ]
         fields = [
             "id",
