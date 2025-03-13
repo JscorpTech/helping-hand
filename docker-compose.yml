@@ -32,7 +32,7 @@ services:
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
     volumes:
-      - .:/code
+      - ../files/media:/code/resources/media
       - pycache:/var/cache/pycache
     depends_on:
       - db
