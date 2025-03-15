@@ -8,7 +8,7 @@ from ...models import GuideModel
 class BaseGuideSerializer(AbstractTranslatedSerializer):
     class Meta:
         model = GuideModel
-        translated_fields = ["name", "desc"]
+        translated_fields = ["name", "desc", "file"]
         fields = ["id", "name", "desc", "image", "file", "video", "guide_type", "source", "updated_at"]
 
 
