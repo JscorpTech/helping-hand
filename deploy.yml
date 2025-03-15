@@ -8,6 +8,17 @@ volumes:
   pycache: null
 
 services:
+  nginx:
+    networks:
+      - dokploy-network
+    volumes:
+      - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
+      - ./resources/:/usr/share/nginx/html/resources/
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.nginx
+    depends_on:
+      - helping-web
   helping-web:
     networks:
       - dokploy-network

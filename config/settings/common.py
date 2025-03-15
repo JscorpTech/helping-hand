@@ -37,20 +37,20 @@ PASSWORD_HASHERS = [
 ]
 
 INSTALLED_APPS = [
-                     "modeltranslation",
-                     "unfold",
-                     "unfold.contrib.filters",
-                     "unfold.contrib.forms",
-                     "unfold.contrib.guardian",
-                     "unfold.contrib.simple_history",
-                     "django.contrib.admin",
-                     "django.contrib.auth",
-                     "django.contrib.contenttypes",
-                     "django.contrib.sessions",
-                     "django.contrib.messages",
-                     "django.contrib.staticfiles",
-                     "django.contrib.gis",
-                 ] + APPS
+    "modeltranslation",
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.guardian",
+    "unfold.contrib.simple_history",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.gis",
+] + APPS
 
 MODULES = [app for app in MODULES if isinstance(app, str)]
 
@@ -157,7 +157,7 @@ JST_LANGUAGES = [
     {
         "code": "ru",
         "name": "Russia",
-    }
+    },
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
