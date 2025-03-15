@@ -8,7 +8,7 @@ volumes:
   pycache: null
 
 services:
-  web:
+  helping-web:
     networks:
       - dokploy-network
     build:
@@ -23,9 +23,9 @@ services:
       - ../files/media:/code/resources/media
       - pycache:/var/cache/pycache
     depends_on:
-      - db
-      - redis
-  db:
+      - helping-db
+      - helping-redis
+  helping-db:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.postgres
@@ -38,7 +38,7 @@ services:
       POSTGRES_PASSWORD: '2309'
     volumes:
       - pg_data:/var/lib/postgresql/data
-  redis:
+  helping-redis:
     networks:
       - dokploy-network
     restart: always
