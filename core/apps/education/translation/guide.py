@@ -8,4 +8,5 @@ class GuideTranslation(TranslationOptions):
     fields = [
         "name",
         "desc",
+        "file"
     ]
