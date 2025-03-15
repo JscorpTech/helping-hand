@@ -13,7 +13,10 @@ services:
       - dokploy-network
     volumes:
       - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
-      - ./resources/:/usr/share/nginx/html/resources/
+      - ../files/media:/usr/share/nginx/html/resources/media/
+      - ../files/static:/usr/share/nginx/html/resources/static/
+      - ../files/staticfiles:/usr/share/nginx/html/resources/staticfiles/
+      - ../files/assets:/usr/share/nginx/html/resources/assets/
     build:
       context: .
       dockerfile: ./docker/Dockerfile.nginx
@@ -32,6 +35,9 @@ services:
     volumes:
       - './:/code'
       - ../files/media:/code/resources/media
+      - ../files/static:/code/resources/static
+      - ../files/staticfiles:/code/resources/staticfiles
+      - ../files/assets:/code/resources/assets
       - ../files/locale:/code/resources/locale
       - pycache:/var/cache/pycache
     depends_on:
