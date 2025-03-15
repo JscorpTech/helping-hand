@@ -1,6 +1,6 @@
 networks:
-  helping_hand:
-    driver: bridge
+  dokploy-network:
+    external: true
 
 volumes:
   pg_data: null
@@ -8,22 +8,9 @@ volumes:
   pycache: null
 
 services:
-  nginx:
-    networks:
-      - helping_hand
-    ports:
-      - ${PORT:-8001}:80
-    volumes:
-      - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
-      - ./resources/:/usr/share/nginx/html/resources/
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.nginx
-    depends_on:
-      - web
   web:
     networks:
-      - helping_hand
+      - dokploy-network
     build:
       context: .
       dockerfile: ./docker/Dockerfile.web
@@ -43,7 +30,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.postgres
     networks:
-      - helping_hand
+      - dokploy-network
     restart: always
     environment:
       POSTGRES_DB: django
@@ -53,16 +40,6 @@ services:
       - pg_data:/var/lib/postgresql/data
   redis:
     networks:
-      - helping_hand
+      - dokploy-network
     restart: always
     image: redis
-  rabbitmq:
-    networks:
-      - helping_hand
-    restart: always
-    image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_DEFAULT_PASS=2309
-      - RABBITMQ_DEFAULT_VHOST=vhost
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq
