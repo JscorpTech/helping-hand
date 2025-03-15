@@ -8,7 +8,7 @@ volumes:
   pycache: null
 
 services:
-  nginx:
+  helping-nginx:
     networks:
       - dokploy-network
     volumes:
