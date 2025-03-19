@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from django_core import exceptions, models, tasks
+from django_core import exceptions, models  # , tasks
 
 
 class SmsService:
@@ -28,7 +28,7 @@ class SmsService:
         )  # noqa
         sms_confirm.save()
 
-        tasks.SendConfirm.delay(phone, code)
+        # tasks.SendConfirm.delay(phone, code)
         return True
 
     @staticmethod
