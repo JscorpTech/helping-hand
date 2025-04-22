@@ -69,9 +69,8 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
         responses={200: ListGuideSerializer(many=True)},
     )
     @action(methods=["GET"], detail=False, url_path="document", url_name="document")
-    def documents(self, request, *args, **kwargs):
+    def document(self, request, *args, **kwargs):
         wanted = request.query_params.get("guide_type")
-
         if wanted:
             qs = GuideModel.objects.filter(Q(guide_type=wanted) | Q(guide_type=TutorialTypeChoice.DOCUMENT))
         else:
@@ -83,10 +82,10 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
 
         page = self.paginate_queryset(qs)
         if page is not None:
-            serializer = ListGuideSerializer(page, many=True)
+            serializer = ListGuideSerializer(page, many=True, context={"request": request})
             return self.get_paginated_response(serializer.data)
 
-        serializer = ListGuideSerializer(qs, many=True)
+        serializer = ListGuideSerializer(qs, many=True, context={"request": request})
         return Response(serializer.data)
 
     def get_serializer_class(self) -> Any:
