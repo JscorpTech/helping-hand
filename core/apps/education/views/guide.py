@@ -1,12 +1,14 @@
 from typing import Any
 
 from django_core.mixins import BaseViewSetMixin
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 
 from ..models import GuideModel, TutorialTypeChoice
 from ..serializers.guide import CreateGuideSerializer, ListGuideSerializer, RetrieveGuideSerializer
@@ -28,7 +30,6 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
                 queryset = GuideModel.objects.filter(file__isnull=False).exclude(file="")
             case _:
                 queryset = GuideModel.objects.all()
-
         guide_type = self.request.query_params.get("guide_type", None)
         if not guide_type == TutorialTypeChoice.DOCUMENT and self.action != "retrieve":
             queryset = queryset.exclude(guide_type=TutorialTypeChoice.DOCUMENT)
@@ -61,6 +62,30 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
     def list(self, request, *args, **kwargs):
         """Qo'llanma list"""
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(
+        summary="Dokument",
+        responses={200: ListGuideSerializer(many=True)},
+    )
+    @action(methods=["GET"], detail=False, url_path="document", url_name="document")
+    def document(self, request, *args, **kwargs):
+        wanted = request.query_params.get("guide_type")
+        if wanted:
+            qs = GuideModel.objects.filter(Q(guide_type=wanted) | Q(guide_type=TutorialTypeChoice.DOCUMENT))
+        else:
+            qs = GuideModel.objects.all()
+
+        search = request.query_params.get("search")
+        if search:
+            qs = qs.filter(Q(name__icontains=search) | Q(desc__icontains=search))
+
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer = ListGuideSerializer(page, many=True, context={"request": request})
+            return self.get_paginated_response(serializer.data)
+
+        serializer = ListGuideSerializer(qs, many=True, context={"request": request})
+        return Response(serializer.data)
 
     def get_serializer_class(self) -> Any:
         match self.action:
