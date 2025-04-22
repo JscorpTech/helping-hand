@@ -75,7 +75,7 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
         if wanted:
             qs = GuideModel.objects.filter(Q(guide_type=wanted) | Q(guide_type=TutorialTypeChoice.DOCUMENT))
         else:
-            qs = GuideModel.objects.filter(guide_type=TutorialTypeChoice.DOCUMENT)
+            qs = GuideModel.objects.all()
 
         search = request.query_params.get("search")
         if search:
