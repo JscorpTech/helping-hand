@@ -31,7 +31,7 @@ class GuideView(BaseViewSetMixin, ModelViewSet):
             case _:
                 queryset = GuideModel.objects.all()
         guide_type = self.request.query_params.get("guide_type", None)
-        if not guide_type == TutorialTypeChoice.DOCUMENT and self.action not in ['retrieve', "update", "update_partial"]:
+        if not guide_type == TutorialTypeChoice.DOCUMENT and self.action not in ['retrieve', "update", "partial_update"]:
             queryset = queryset.exclude(guide_type=TutorialTypeChoice.DOCUMENT)
         return queryset
 
