@@ -33,6 +33,10 @@ class RetrieveGuideSerializer(BaseGuideSerializer):
 class CreateGuideSerializer(BaseGuideSerializer):
     class Meta(BaseGuideSerializer.Meta):
         translated = 2
+        translated_fields = [
+            "name",
+            "desc"
+        ]
         fields = [
             "id",
             "image",
@@ -42,4 +46,7 @@ class CreateGuideSerializer(BaseGuideSerializer):
             "video",
             "source",
             "guide_type",
+            "file_uz",
+            "file_kaa",
+            "file_kril",
         ]
