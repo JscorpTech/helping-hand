@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotFound
 
 from ..choices import SertificateChoices
 from ..models.test import TestModel
+from ..choices import TutorialTypeChoice
 
 
 class ExamModel(AbstractBaseModel):
@@ -41,6 +42,7 @@ class SertificateModel(AbstractBaseModel):
     user = models.ForeignKey(
         to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE, related_name="sertificates"
     )
+    tutorial_type = models.CharField(verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, null=True, blank=True)
     status = models.CharField(
         _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT
     )

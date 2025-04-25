@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import ValidationError, NotFound
 
 from core.apps.accounts.permissions import AdminPermission
 
@@ -23,6 +24,7 @@ from ..serializers.exam import (
 )
 from ..serializers.test import AnswerSerializer, RetrieveTestSerializer
 from ..services import TestService
+from ..choices import TutorialTypeChoice
 
 
 @extend_schema(tags=["exam"], summary="Imtixon")
@@ -82,9 +84,16 @@ class SertificateView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [SearchFilter]
     filterset_fields = ["user", "exam"]
 
-    @action(methods=["GET"], detail=False, url_name="me", url_path="me")
-    def me(self, request):
-        return Response(self.get_serializer(SertificateModel.objects.filter(user=request.user).first()).data)
+    @action(methods=["GET"], detail=False, url_name="me", url_path="me/(?P<tutorial_type>[0-9a-zA-Z]+)")
+    def me(self, request, tutorial_type):
+        if tutorial_type not in TutorialTypeChoice.values:
+            raise ValidationError({
+                "tutorial_type": "tutorial type not allowed"
+            })
+        sertificate = SertificateModel.objects.filter(user=request.user, tutorial_type=tutorial_type).first()
+        if sertificate is None:
+            raise NotFound({"detail": _("Sertificate not found")})
+        return Response(self.get_serializer().data)
 
     def get_serializer_class(self) -> Any:
         match self.action:
