@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0009_notificationmodel_body_kaa_and_more'),
-        ('shared', '0010_remove_faqcategorymodel_created_date_and_more'),
+        ("shared", "0009_notificationmodel_body_kaa_and_more"),
+        ("shared", "0010_remove_faqcategorymodel_created_date_and_more"),
     ]
 
-    operations = [
-    ]
+    operations = []

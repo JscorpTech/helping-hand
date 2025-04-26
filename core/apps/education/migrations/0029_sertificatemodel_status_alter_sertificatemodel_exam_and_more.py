@@ -8,24 +8,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0028_taskmodel_desc_kaa_taskmodel_desc_kril_and_more'),
+        ("education", "0028_taskmodel_desc_kaa_taskmodel_desc_kril_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sertificatemodel',
-            name='status',
-            field=models.CharField(choices=[('active', 'Active'), ('inactive', 'Inactive'), ('draft', 'Draft')], default='draft', max_length=255, verbose_name='status'),
+            model_name="sertificatemodel",
+            name="status",
+            field=models.CharField(
+                choices=[("active", "Active"), ("inactive", "Inactive"), ("draft", "Draft")],
+                default="draft",
+                max_length=255,
+                verbose_name="status",
+            ),
         ),
         migrations.AlterField(
-            model_name='sertificatemodel',
-            name='exam',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='sertificates', to='education.exammodel', verbose_name='exam'),
+            model_name="sertificatemodel",
+            name="exam",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="sertificates",
+                to="education.exammodel",
+                verbose_name="exam",
+            ),
         ),
         migrations.AlterField(
-            model_name='sertificatemodel',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sertificates', to=settings.AUTH_USER_MODEL, verbose_name='user'),
+            model_name="sertificatemodel",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="sertificates",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="user",
+            ),
         ),
     ]

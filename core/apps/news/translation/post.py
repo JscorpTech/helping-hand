@@ -5,7 +5,4 @@ from ..models import PostModel
 
 @register(PostModel)
 class PostTranslation(TranslationOptions):
-    fields = [
-        "title",
-        "content"
-    ]
+    fields = ["title", "content"]

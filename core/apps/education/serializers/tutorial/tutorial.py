@@ -37,7 +37,7 @@ class BaseTutorialSerializer(serializers.ModelSerializer):
             "source",
             "test_count",
             "tutorial_type",
-            "updated_at"
+            "updated_at",
         ]
 
 
@@ -89,11 +89,7 @@ class CreateTutorialSerializer(AbstractTranslatedSerializer, BaseTutorialSeriali
 
     class Meta(BaseTutorialSerializer.Meta):
         exclude = None
-        translated_fields = [
-            "name",
-            "desc",
-            "file"
-        ]
+        translated_fields = ["name", "desc", "file"]
         fields = [
             "id",
             "image",

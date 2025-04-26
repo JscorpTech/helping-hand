@@ -6,38 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0008_alter_notificationmodel_users'),
+        ("shared", "0008_alter_notificationmodel_users"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='notificationmodel',
-            name='body_kaa',
-            field=models.TextField(blank=True, null=True, verbose_name='body'),
+            model_name="notificationmodel",
+            name="body_kaa",
+            field=models.TextField(blank=True, null=True, verbose_name="body"),
         ),
         migrations.AddField(
-            model_name='notificationmodel',
-            name='body_kril',
-            field=models.TextField(blank=True, null=True, verbose_name='body'),
+            model_name="notificationmodel",
+            name="body_kril",
+            field=models.TextField(blank=True, null=True, verbose_name="body"),
         ),
         migrations.AddField(
-            model_name='notificationmodel',
-            name='body_uz',
-            field=models.TextField(blank=True, null=True, verbose_name='body'),
+            model_name="notificationmodel",
+            name="body_uz",
+            field=models.TextField(blank=True, null=True, verbose_name="body"),
         ),
         migrations.AddField(
-            model_name='notificationmodel',
-            name='title_kaa',
-            field=models.CharField(max_length=255, null=True, verbose_name='title'),
+            model_name="notificationmodel",
+            name="title_kaa",
+            field=models.CharField(max_length=255, null=True, verbose_name="title"),
         ),
         migrations.AddField(
-            model_name='notificationmodel',
-            name='title_kril',
-            field=models.CharField(max_length=255, null=True, verbose_name='title'),
+            model_name="notificationmodel",
+            name="title_kril",
+            field=models.CharField(max_length=255, null=True, verbose_name="title"),
         ),
         migrations.AddField(
-            model_name='notificationmodel',
-            name='title_uz',
-            field=models.CharField(max_length=255, null=True, verbose_name='title'),
+            model_name="notificationmodel",
+            name="title_uz",
+            field=models.CharField(max_length=255, null=True, verbose_name="title"),
         ),
     ]

@@ -7,17 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0007_groupmodel_chat_type'),
+        ("chat", "0007_groupmodel_chat_type"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddIndex(
-            model_name='groupmodel',
-            index=models.Index(fields=['name'], name='group_name_9aba6c_idx'),
+            model_name="groupmodel",
+            index=models.Index(fields=["name"], name="group_name_9aba6c_idx"),
         ),
         migrations.AddIndex(
-            model_name='groupmodel',
-            index=models.Index(fields=['chat_type'], name='group_chat_ty_7e3843_idx'),
+            model_name="groupmodel",
+            index=models.Index(fields=["chat_type"], name="group_chat_ty_7e3843_idx"),
         ),
     ]

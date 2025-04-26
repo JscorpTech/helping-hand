@@ -9,19 +9,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sos', '0003_userrequestmodel'),
+        ("sos", "0003_userrequestmodel"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userrequestmodel',
-            name='area',
-            field=models.CharField(choices=[('unsafe', 'Xafli hudud'), ('safe', 'Xafsiz hudud')], max_length=255, verbose_name='area'),
+            model_name="userrequestmodel",
+            name="area",
+            field=models.CharField(
+                choices=[("unsafe", "Xafli hudud"), ("safe", "Xafsiz hudud")], max_length=255, verbose_name="area"
+            ),
         ),
         migrations.AlterField(
-            model_name='userrequestmodel',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sos_requests', to=settings.AUTH_USER_MODEL, verbose_name='user'),
+            model_name="userrequestmodel",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="sos_requests",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="user",
+            ),
         ),
     ]

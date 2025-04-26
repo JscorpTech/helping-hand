@@ -8,25 +8,41 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0011_answermodel_tutorial'),
+        ("education", "0011_answermodel_tutorial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ResultModel',
+            name="ResultModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('score', models.PositiveIntegerField(default=0, verbose_name='score')),
-                ('tutorial', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to='education.tutorialmodel', verbose_name='tutorial')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to=settings.AUTH_USER_MODEL, verbose_name='user')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("score", models.PositiveIntegerField(default=0, verbose_name="score")),
+                (
+                    "tutorial",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="results",
+                        to="education.tutorialmodel",
+                        verbose_name="tutorial",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="results",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'ResultModel',
-                'verbose_name_plural': 'ResultModels',
-                'db_table': 'result',
+                "verbose_name": "ResultModel",
+                "verbose_name_plural": "ResultModels",
+                "db_table": "result",
             },
         ),
     ]

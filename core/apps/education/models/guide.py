@@ -25,7 +25,7 @@ class GuideModel(AbstractBaseModel):
             image="guide.jpg",  # image of the guide
             file="guide.pdf",  # file of the guide
             video="guide.mp4",  # video of the guide
-            source="https://example.com"
+            source="https://example.com",
         )
 
     class Meta:

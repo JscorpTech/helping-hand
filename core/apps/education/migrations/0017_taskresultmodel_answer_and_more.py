@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0016_taskresultmodel_tutorial'),
+        ("education", "0016_taskresultmodel_tutorial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='taskresultmodel',
-            name='answer',
-            field=models.TextField(blank=True, null=True, verbose_name='answer'),
+            model_name="taskresultmodel",
+            name="answer",
+            field=models.TextField(blank=True, null=True, verbose_name="answer"),
         ),
         migrations.AddField(
-            model_name='taskresultmodel',
-            name='is_file_answer',
-            field=models.BooleanField(default=False, verbose_name='is answer file'),
+            model_name="taskresultmodel",
+            name="is_file_answer",
+            field=models.BooleanField(default=False, verbose_name="is answer file"),
         ),
     ]

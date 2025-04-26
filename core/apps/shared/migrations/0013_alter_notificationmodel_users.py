@@ -7,14 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0012_merge_20250129_1658'),
+        ("shared", "0012_merge_20250129_1658"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='notificationmodel',
-            name='users',
-            field=models.ManyToManyField(blank=True, related_name='notifications', through='shared.UserNotificationModel', through_fields=('notification', 'user'), to=settings.AUTH_USER_MODEL, verbose_name='users'),
+            model_name="notificationmodel",
+            name="users",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="notifications",
+                through="shared.UserNotificationModel",
+                through_fields=("notification", "user"),
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="users",
+            ),
         ),
     ]

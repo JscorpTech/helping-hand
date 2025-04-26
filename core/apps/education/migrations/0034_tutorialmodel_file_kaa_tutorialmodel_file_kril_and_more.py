@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0033_alter_guidemodel_guide_type_and_more'),
+        ("education", "0033_alter_guidemodel_guide_type_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tutorialmodel',
-            name='file_kaa',
-            field=models.FileField(blank=True, null=True, upload_to='tutorials/', verbose_name='file'),
+            model_name="tutorialmodel",
+            name="file_kaa",
+            field=models.FileField(blank=True, null=True, upload_to="tutorials/", verbose_name="file"),
         ),
         migrations.AddField(
-            model_name='tutorialmodel',
-            name='file_kril',
-            field=models.FileField(blank=True, null=True, upload_to='tutorials/', verbose_name='file'),
+            model_name="tutorialmodel",
+            name="file_kril",
+            field=models.FileField(blank=True, null=True, upload_to="tutorials/", verbose_name="file"),
         ),
         migrations.AddField(
-            model_name='tutorialmodel',
-            name='file_uz',
-            field=models.FileField(blank=True, null=True, upload_to='tutorials/', verbose_name='file'),
+            model_name="tutorialmodel",
+            name="file_uz",
+            field=models.FileField(blank=True, null=True, upload_to="tutorials/", verbose_name="file"),
         ),
     ]

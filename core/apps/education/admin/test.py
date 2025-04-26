@@ -32,12 +32,7 @@ class TestAdmin(ModelAdmin, TabbedTranslationAdmin):
 
 @admin.register(VariantModel)
 class VariantAdmin(ModelAdmin, TabbedTranslationAdmin):
-    list_display = (
-        "id",
-        "__str__",
-        "is_true",
-        "question"
-    )
+    list_display = ("id", "__str__", "is_true", "question")
 
 
 @admin.register(QuestionModel)

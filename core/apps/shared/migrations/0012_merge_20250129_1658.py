@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0011_merge_20250129_1512'),
-        ('shared', '0011_merge_20250129_1548'),
+        ("shared", "0011_merge_20250129_1512"),
+        ("shared", "0011_merge_20250129_1548"),
     ]
 
-    operations = [
-    ]
+    operations = []

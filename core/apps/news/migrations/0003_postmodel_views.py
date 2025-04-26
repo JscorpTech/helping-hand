@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0002_postmodel_is_top'),
+        ("news", "0002_postmodel_is_top"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='postmodel',
-            name='views',
-            field=models.BigIntegerField(default=0, verbose_name='views'),
+            model_name="postmodel",
+            name="views",
+            field=models.BigIntegerField(default=0, verbose_name="views"),
         ),
     ]

@@ -6,13 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0008_groupmodel_group_name_9aba6c_idx_and_more'),
+        ("chat", "0008_groupmodel_group_name_9aba6c_idx_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='messagemodel',
-            name='file_type',
-            field=models.CharField(blank=True, choices=[('image', 'Image'), ('file', 'File'), ('video', 'Video'), ('audio', 'Audio'), ('text', 'Text'), ('other', 'Other')], max_length=50, null=True, verbose_name='file type'),
+            model_name="messagemodel",
+            name="file_type",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("image", "Image"),
+                    ("file", "File"),
+                    ("video", "Video"),
+                    ("audio", "Audio"),
+                    ("text", "Text"),
+                    ("other", "Other"),
+                ],
+                max_length=50,
+                null=True,
+                verbose_name="file type",
+            ),
         ),
     ]

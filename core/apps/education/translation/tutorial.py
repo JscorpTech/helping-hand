@@ -5,8 +5,4 @@ from ..models import TutorialModel
 
 @register(TutorialModel)
 class TutorialTranslation(TranslationOptions):
-    fields = [
-        "name",
-        "desc",
-        "file"
-    ]
+    fields = ["name", "desc", "file"]

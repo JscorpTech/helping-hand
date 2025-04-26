@@ -10,6 +10,4 @@ class PositionAdmin(ModelAdmin, gisadmin.GISModelAdmin):
     list_display = ("id", "__str__", "location")
 
     class Media:
-        css = {
-            "all": ("/resources/static/css/gis.css",)
-        }
+        css = {"all": ("/resources/static/css/gis.css",)}

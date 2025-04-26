@@ -50,6 +50,7 @@ class WsMessageSerializer(BaseMessageSerializer):
 
 class RetrieveMessageSerializer(BaseMessageSerializer):
     file = serializers.SerializerMethodField()
+
     class Meta(BaseMessageSerializer.Meta): ...
 
 

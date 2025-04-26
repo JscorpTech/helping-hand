@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0006_guidemodel_remove_tutorialmodel_type_and_more'),
+        ("education", "0006_guidemodel_remove_tutorialmodel_type_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tutorialmodel',
-            name='tags',
-            field=models.JSONField(blank=True, default=[], null=True, verbose_name='tags'),
+            model_name="tutorialmodel",
+            name="tags",
+            field=models.JSONField(blank=True, default=[], null=True, verbose_name="tags"),
         ),
     ]

@@ -6,18 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0031_remove_examresultmodel_exam_and_more'),
+        ("education", "0031_remove_examresultmodel_exam_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='guidemodel',
-            name='source',
-            field=models.URLField(blank=True, null=True, verbose_name='source'),
+            model_name="guidemodel",
+            name="source",
+            field=models.URLField(blank=True, null=True, verbose_name="source"),
         ),
         migrations.AddField(
-            model_name='tutorialmodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business')], default='lawyer', max_length=255, verbose_name='type'),
+            model_name="tutorialmodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[("psixolog", "Psixolog"), ("lawyer", "Lawyer"), ("business", "Business")],
+                default="lawyer",
+                max_length=255,
+                verbose_name="type",
+            ),
         ),
     ]

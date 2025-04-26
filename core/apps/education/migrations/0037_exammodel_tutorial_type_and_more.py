@@ -6,28 +6,64 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0036_sertificatemodel_tutorial_type'),
+        ("education", "0036_sertificatemodel_tutorial_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='exammodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], default='lawyer', verbose_name='tutorial type'),
+            model_name="exammodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                default="lawyer",
+                verbose_name="tutorial type",
+            ),
         ),
         migrations.AddField(
-            model_name='examresultmodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], default='lawyer', verbose_name='tutorial type'),
+            model_name="examresultmodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                default="lawyer",
+                verbose_name="tutorial type",
+            ),
         ),
         migrations.AddField(
-            model_name='testmodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], default='lawyer', verbose_name='tutorial type'),
+            model_name="testmodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                default="lawyer",
+                verbose_name="tutorial type",
+            ),
         ),
         migrations.AlterField(
-            model_name='sertificatemodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], default='lawyer', verbose_name='tutorial type'),
+            model_name="sertificatemodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                default="lawyer",
+                verbose_name="tutorial type",
+            ),
         ),
     ]

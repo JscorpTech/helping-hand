@@ -8,29 +8,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0001_initial'),
+        ("chat", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='messagemodel',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='message/', verbose_name='file'),
+            model_name="messagemodel",
+            name="file",
+            field=models.FileField(blank=True, null=True, upload_to="message/", verbose_name="file"),
         ),
         migrations.AlterField(
-            model_name='messagemodel',
-            name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chat.groupmodel', verbose_name='group'),
+            model_name="messagemodel",
+            name="group",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="chat.groupmodel", verbose_name="group"
+            ),
         ),
         migrations.AlterField(
-            model_name='messagemodel',
-            name='text',
-            field=models.CharField(blank=True, max_length=500, null=True, verbose_name='text'),
+            model_name="messagemodel",
+            name="text",
+            field=models.CharField(blank=True, max_length=500, null=True, verbose_name="text"),
         ),
         migrations.AlterField(
-            model_name='messagemodel',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='user'),
+            model_name="messagemodel",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name="user"
+            ),
         ),
     ]

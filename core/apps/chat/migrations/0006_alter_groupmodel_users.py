@@ -7,14 +7,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0005_alter_groupmodel_users'),
+        ("chat", "0005_alter_groupmodel_users"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='groupmodel',
-            name='users',
-            field=models.ManyToManyField(blank=True, related_name='chats', to=settings.AUTH_USER_MODEL, verbose_name='users'),
+            model_name="groupmodel",
+            name="users",
+            field=models.ManyToManyField(
+                blank=True, related_name="chats", to=settings.AUTH_USER_MODEL, verbose_name="users"
+            ),
         ),
     ]

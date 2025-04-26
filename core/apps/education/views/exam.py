@@ -44,7 +44,12 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
         return Response({"id": 1, "test": RetrieveTestSerializer(test).data})
 
     @extend_schema(request=AnswerSerializer)
-    @action(methods=["POST"], detail=False, url_name="exam-answer", url_path="exam-answer/(?P<tutorial_type>lawyer|psixolog|business)")
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_name="exam-answer",
+        url_path="exam-answer/(?P<tutorial_type>lawyer|psixolog|business)",
+    )
     def exam_answer(self, request, tutorial_type):
         """Imtixon javoblarini yuborish"""
         validate_tutorial_type(tutorial_type)
@@ -88,20 +93,30 @@ class SertificateView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [SearchFilter]
     filterset_fields = ["user", "exam"]
 
+    def get_queryset(self):
+        query = SertificateModel.objects.all()
+        if self.action in ["all", "me"]:
+            query = query.filter(user=self.request.user)
+        return query
+
+    @action(methods=["GET"], detail=False, url_name="all", url_path="all")
+    def all(self, request, *args, **kwargs):
+        return Response(self.get_serializer(self.get_queryset(), many=True).data)
+
     @action(methods=["GET"], detail=False, url_name="me", url_path="me/(?P<tutorial_type>[0-9a-zA-Z]+)")
     def me(self, request, tutorial_type):
         validate_tutorial_type(tutorial_type)
-        sertificate = SertificateModel.objects.filter(user=request.user)
+        sertificate = self.get_queryset()
         if tutorial_type != "all":
             sertificate = sertificate.filter(tutorial_type=tutorial_type)
         sertificate = sertificate.first()
         if sertificate is None:
             raise NotFound({"detail": _("Sertificate not found")})
-        return Response(self.get_serializer().data)
+        return Response(self.get_serializer(sertificate).data)
 
     def get_serializer_class(self) -> Any:
         match self.action:
-            case "me":
+            case "me" | "all":
                 return ListMeSertificateSerializer
             case "list":
                 return ListSertificateSerializer

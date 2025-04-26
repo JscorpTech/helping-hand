@@ -33,10 +33,7 @@ class RetrieveGuideSerializer(BaseGuideSerializer):
 class CreateGuideSerializer(BaseGuideSerializer):
     class Meta(BaseGuideSerializer.Meta):
         translated = 2
-        translated_fields = [
-            "name",
-            "desc"
-        ]
+        translated_fields = ["name", "desc"]
         fields = [
             "id",
             "image",

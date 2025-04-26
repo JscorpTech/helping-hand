@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0002_messagemodel_file_alter_messagemodel_group_and_more'),
+        ("chat", "0002_messagemodel_file_alter_messagemodel_group_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='groupmodel',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='groups/', verbose_name='image'),
+            model_name="groupmodel",
+            name="image",
+            field=models.ImageField(blank=True, null=True, upload_to="groups/", verbose_name="image"),
         ),
         migrations.AddField(
-            model_name='groupmodel',
-            name='is_public',
-            field=models.BooleanField(default=False, verbose_name='is:public'),
+            model_name="groupmodel",
+            name="is_public",
+            field=models.BooleanField(default=False, verbose_name="is:public"),
         ),
     ]

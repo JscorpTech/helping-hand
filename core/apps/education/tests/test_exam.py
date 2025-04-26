@@ -58,14 +58,10 @@ class SertificateTest(TestCase):
     def test_partial_update(self):
         response = self.client.patch(
             self.urls["retrieve"],
-            {
-                "status": "active"
-            },
+            {"status": "active"},
         )
         self.assertTrue(response.json()["status"])
-        self.assertEqual(
-            response.status_code, 200
-        )
+        self.assertEqual(response.status_code, 200)
 
     def test_destroy(self):
         self.assertTrue(True)

@@ -7,14 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0015_taskmodel_tutorialmodel_task_taskresultmodel'),
+        ("education", "0015_taskmodel_tutorialmodel_task_taskresultmodel"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='taskresultmodel',
-            name='tutorial',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='taskresults', to='education.tutorialmodel', verbose_name='tutorial'),
+            model_name="taskresultmodel",
+            name="tutorial",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="taskresults",
+                to="education.tutorialmodel",
+                verbose_name="tutorial",
+            ),
             preserve_default=False,
         ),
     ]

@@ -10,16 +10,18 @@ class BaseSertificateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SertificateModel
-        exclude = [
-            "created_at",
-            "updated_at"
-        ]
+        exclude = ["created_at", "updated_at"]
 
 
 class ListMeSertificateSerializer(BaseSertificateSerializer):
     class Meta(BaseSertificateSerializer.Meta):
         exclude = None
-        fields = ["id", "status", "file"]
+        fields = [
+            "id",
+            "status",
+            "file",
+            "tutorial_type",
+        ]
 
 
 class ListSertificateSerializer(BaseSertificateSerializer):

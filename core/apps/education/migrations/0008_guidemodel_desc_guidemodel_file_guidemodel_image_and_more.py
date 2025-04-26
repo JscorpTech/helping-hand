@@ -6,29 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0007_alter_tutorialmodel_tags'),
+        ("education", "0007_alter_tutorialmodel_tags"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='guidemodel',
-            name='desc',
-            field=models.TextField(blank=True, null=True, verbose_name='description'),
+            model_name="guidemodel",
+            name="desc",
+            field=models.TextField(blank=True, null=True, verbose_name="description"),
         ),
         migrations.AddField(
-            model_name='guidemodel',
-            name='file',
-            field=models.FileField(blank=True, null=True, upload_to='guides/', verbose_name='file'),
+            model_name="guidemodel",
+            name="file",
+            field=models.FileField(blank=True, null=True, upload_to="guides/", verbose_name="file"),
         ),
         migrations.AddField(
-            model_name='guidemodel',
-            name='image',
-            field=models.ImageField(default=1, upload_to='guides/', verbose_name='banner'),
+            model_name="guidemodel",
+            name="image",
+            field=models.ImageField(default=1, upload_to="guides/", verbose_name="banner"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='guidemodel',
-            name='video',
-            field=models.FileField(blank=True, null=True, upload_to='guides/', verbose_name='video'),
+            model_name="guidemodel",
+            name="video",
+            field=models.FileField(blank=True, null=True, upload_to="guides/", verbose_name="video"),
         ),
     ]
