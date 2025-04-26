@@ -45,9 +45,9 @@ class SertificateModel(AbstractBaseModel):
     )
     tutorial_type = models.CharField(verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, default=TutorialTypeChoice.LAWYER.value)
     status = models.CharField(
-        _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT
+        _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT.value
     )
-    file = models.FileField(_("file"), upload_to="sertificates/")
+    file = models.FileField(_("file"), upload_to="sertificates/", null=True, blank=True)
 
     def __str__(self):
         return self.user.full_name

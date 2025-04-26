@@ -52,7 +52,6 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         data_len = len(data)
-
         success, bal = TestService().proccess_answers(data)
 
         ExamResultModel.objects.update_or_create(
@@ -60,8 +59,7 @@ class ExamView(BaseViewSetMixin, GenericViewSet):
             tutorial_type=tutorial_type,
             defaults={"score": success, "total": data_len, "bal": bal},
         )
-        SertificateModel.objects.get_or_create(user=request.user)
-
+        SertificateModel.objects.get_or_create(user_id=request.user.id, tutorial_type=tutorial_type)
         return Response(
             {"detail": _("Test javoblari qabul qilindi."), "success": success, "total": data_len, "bal": bal}
         )

@@ -29,6 +29,6 @@ class SertificateService:
         file_name = "sertificates/sertificate_%s.pdf" % uuid4()
         file_path = str(Path(settings.BASE_DIR, "resources/media/%s" % file_name))
         pdfkit.from_string(self.get_sertificate(), file_path)
-        with open(file_path, "r") as file:
+        with open(file_path, "rb") as file:
             default_storage.save(file_name, ContentFile(file.read()))
         return file_name
