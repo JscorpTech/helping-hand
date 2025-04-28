@@ -6,11 +6,15 @@ from rest_framework.exceptions import NotFound
 
 from ..choices import SertificateChoices
 from ..models.test import TestModel
+from ..choices import TutorialTypeChoice
 
 
 class ExamModel(AbstractBaseModel):
     name = models.CharField(_("name"), max_length=255)
     is_active = models.BooleanField(_("is active"), default=False, unique=True)
+    tutorial_type = models.CharField(
+        verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, default=TutorialTypeChoice.LAWYER.value
+    )
     test = models.ForeignKey(to="TestModel", verbose_name=_("test"), on_delete=models.CASCADE)
 
     def __str__(self):
@@ -41,10 +45,13 @@ class SertificateModel(AbstractBaseModel):
     user = models.ForeignKey(
         to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE, related_name="sertificates"
     )
-    status = models.CharField(
-        _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT
+    tutorial_type = models.CharField(
+        verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, default=TutorialTypeChoice.LAWYER.value
     )
-    file = models.FileField(_("file"), upload_to="sertificates/")
+    status = models.CharField(
+        _("status"), max_length=255, choices=SertificateChoices.choices, default=SertificateChoices.DRAFT.value
+    )
+    file = models.FileField(_("file"), upload_to="sertificates/", null=True, blank=True)
 
     def __str__(self):
         return self.user.full_name
@@ -66,6 +73,9 @@ class ExamResultModel(AbstractBaseModel):
     user = models.ForeignKey(to=get_user_model(), verbose_name=_("user"), on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     total = models.IntegerField(default=0)
+    tutorial_type = models.CharField(
+        verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, default=TutorialTypeChoice.LAWYER.value
+    )
     bal = models.IntegerField(default=0)
 
     def __str__(self):

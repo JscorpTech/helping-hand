@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0006_alter_groupmodel_users'),
+        ("chat", "0006_alter_groupmodel_users"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='groupmodel',
-            name='chat_type',
-            field=models.CharField(blank=True, choices=[('lawyer', 'Lawyer'), ('psixolog', 'Psixolog')], null=True, verbose_name='chat type'),
+            model_name="groupmodel",
+            name="chat_type",
+            field=models.CharField(
+                blank=True,
+                choices=[("lawyer", "Lawyer"), ("psixolog", "Psixolog")],
+                null=True,
+                verbose_name="chat type",
+            ),
         ),
     ]

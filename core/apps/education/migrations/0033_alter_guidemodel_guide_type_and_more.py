@@ -6,18 +6,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0032_guidemodel_source_tutorialmodel_tutorial_type'),
+        ("education", "0032_guidemodel_source_tutorialmodel_tutorial_type"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='guidemodel',
-            name='guide_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], max_length=255, verbose_name='type'),
+            model_name="guidemodel",
+            name="guide_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                max_length=255,
+                verbose_name="type",
+            ),
         ),
         migrations.AlterField(
-            model_name='tutorialmodel',
-            name='tutorial_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business'), ('document', 'Document')], default='lawyer', max_length=255, verbose_name='type'),
+            model_name="tutorialmodel",
+            name="tutorial_type",
+            field=models.CharField(
+                choices=[
+                    ("psixolog", "Psixolog"),
+                    ("lawyer", "Lawyer"),
+                    ("business", "Business"),
+                    ("document", "Document"),
+                ],
+                default="lawyer",
+                max_length=255,
+                verbose_name="type",
+            ),
         ),
     ]

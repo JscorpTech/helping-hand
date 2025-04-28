@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_alter_user_role'),
+        ("accounts", "0006_alter_user_role"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='auth_provider',
-            field=models.CharField(choices=[('phone', 'Phone'), ('google', 'Google')], default='phone', max_length=255),
+            model_name="user",
+            name="auth_provider",
+            field=models.CharField(choices=[("phone", "Phone"), ("google", "Google")], default="phone", max_length=255),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='phone',
+            model_name="user",
+            name="phone",
             field=models.CharField(blank=True, max_length=255, null=True, unique=True),
         ),
     ]

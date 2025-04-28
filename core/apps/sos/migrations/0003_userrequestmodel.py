@@ -8,24 +8,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sos', '0002_positionmodel_user'),
+        ("sos", "0002_positionmodel_user"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserRequestModel',
+            name="UserRequestModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('area', models.CharField(choices=[('dangerous', 'Xafli hudud'), ('unsafe', 'Xafsiz hudud')], max_length=255, verbose_name='area')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='user')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "area",
+                    models.CharField(
+                        choices=[("dangerous", "Xafli hudud"), ("unsafe", "Xafsiz hudud")],
+                        max_length=255,
+                        verbose_name="area",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name="user"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'UserrequestModel',
-                'verbose_name_plural': 'UserrequestModels',
-                'db_table': 'user_request',
+                "verbose_name": "UserrequestModel",
+                "verbose_name_plural": "UserrequestModels",
+                "db_table": "user_request",
             },
         ),
     ]

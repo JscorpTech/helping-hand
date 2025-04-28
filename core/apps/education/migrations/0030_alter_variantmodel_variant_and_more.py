@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0029_sertificatemodel_status_alter_sertificatemodel_exam_and_more'),
+        ("education", "0029_sertificatemodel_status_alter_sertificatemodel_exam_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='variantmodel',
-            name='variant',
-            field=models.CharField(max_length=1000, verbose_name='variant'),
+            model_name="variantmodel",
+            name="variant",
+            field=models.CharField(max_length=1000, verbose_name="variant"),
         ),
         migrations.AlterField(
-            model_name='variantmodel',
-            name='variant_kaa',
-            field=models.CharField(max_length=1000, null=True, verbose_name='variant'),
+            model_name="variantmodel",
+            name="variant_kaa",
+            field=models.CharField(max_length=1000, null=True, verbose_name="variant"),
         ),
         migrations.AlterField(
-            model_name='variantmodel',
-            name='variant_kril',
-            field=models.CharField(max_length=1000, null=True, verbose_name='variant'),
+            model_name="variantmodel",
+            name="variant_kril",
+            field=models.CharField(max_length=1000, null=True, verbose_name="variant"),
         ),
         migrations.AlterField(
-            model_name='variantmodel',
-            name='variant_uz',
-            field=models.CharField(max_length=1000, null=True, verbose_name='variant'),
+            model_name="variantmodel",
+            name="variant_uz",
+            field=models.CharField(max_length=1000, null=True, verbose_name="variant"),
         ),
     ]

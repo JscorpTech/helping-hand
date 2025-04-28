@@ -6,28 +6,28 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0001_initial'),
+        ("shared", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='bannermodel',
-            old_name='subtitle_en',
-            new_name='subtitle_kaa',
+            model_name="bannermodel",
+            old_name="subtitle_en",
+            new_name="subtitle_kaa",
         ),
         migrations.RenameField(
-            model_name='bannermodel',
-            old_name='subtitle_ru',
-            new_name='subtitle_kril',
+            model_name="bannermodel",
+            old_name="subtitle_ru",
+            new_name="subtitle_kril",
         ),
         migrations.RenameField(
-            model_name='bannermodel',
-            old_name='title_en',
-            new_name='title_kaa',
+            model_name="bannermodel",
+            old_name="title_en",
+            new_name="title_kaa",
         ),
         migrations.RenameField(
-            model_name='bannermodel',
-            old_name='title_ru',
-            new_name='title_kril',
+            model_name="bannermodel",
+            old_name="title_ru",
+            new_name="title_kril",
         ),
     ]

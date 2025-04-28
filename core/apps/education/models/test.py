@@ -4,12 +4,16 @@ from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
 
 from .tutorial import TutorialModel
+from ..choices import TutorialTypeChoice
 
 
 class TestModel(AbstractBaseModel):
     topic = models.CharField(_("topic"), max_length=255)
     desc = models.TextField(_("description"), blank=True, null=True)
     time = models.PositiveIntegerField(_("time"), default=0)
+    tutorial_type = models.CharField(
+        verbose_name=_("tutorial type"), choices=TutorialTypeChoice.choices, default=TutorialTypeChoice.LAWYER.value
+    )
 
     def __str__(self):
         return self.topic

@@ -6,25 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0002_rename_subtitle_en_bannermodel_subtitle_kaa_and_more'),
+        ("shared", "0002_rename_subtitle_en_bannermodel_subtitle_kaa_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FaqModel',
+            name="FaqModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('question', models.TextField(verbose_name='question')),
-                ('answer', models.TextField(verbose_name='answer')),
-                ('updated_date', models.DateTimeField(auto_now=True, verbose_name='updated date')),
-                ('created_date', models.DateTimeField(auto_now_add=True, verbose_name='created date')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("question", models.TextField(verbose_name="question")),
+                ("answer", models.TextField(verbose_name="answer")),
+                ("updated_date", models.DateTimeField(auto_now=True, verbose_name="updated date")),
+                ("created_date", models.DateTimeField(auto_now_add=True, verbose_name="created date")),
             ],
             options={
-                'verbose_name': 'FAQModel',
-                'verbose_name_plural': 'FAQModels',
-                'db_table': 'faq',
+                "verbose_name": "FAQModel",
+                "verbose_name_plural": "FAQModels",
+                "db_table": "faq",
             },
         ),
     ]

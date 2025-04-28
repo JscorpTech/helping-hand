@@ -13,13 +13,9 @@ class TestTranslation(TranslationOptions):
 
 @register(VariantModel)
 class VariantTranslation(TranslationOptions):
-    fields = [
-        "variant"
-    ]
+    fields = ["variant"]
 
 
 @register(QuestionModel)
 class QuestionTranslation(TranslationOptions):
-    fields = [
-        "question"
-    ]
+    fields = ["question"]

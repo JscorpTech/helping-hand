@@ -7,14 +7,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0003_groupmodel_image_groupmodel_is_public'),
+        ("chat", "0003_groupmodel_image_groupmodel_is_public"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='groupmodel',
-            name='users',
-            field=models.ManyToManyField(related_name='chats', to=settings.AUTH_USER_MODEL, verbose_name='users'),
+            model_name="groupmodel",
+            name="users",
+            field=models.ManyToManyField(related_name="chats", to=settings.AUTH_USER_MODEL, verbose_name="users"),
         ),
     ]

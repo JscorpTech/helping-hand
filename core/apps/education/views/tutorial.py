@@ -43,10 +43,7 @@ from ..services import TestService
 )
 class TutorialView(BaseViewSetMixin, ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = [
-        "test",
-        "tutorial_type"
-    ]
+    filterset_fields = ["test", "tutorial_type"]
     search_fields = ["name_uz", "name_kaa", "name_kril", "desc_uz", "desc_kaa", "desc_kril", "tags"]
 
     def get_object(self):

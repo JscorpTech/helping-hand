@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0003_postmodel_views'),
+        ("news", "0003_postmodel_views"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='postmodel',
-            name='news_type',
-            field=models.CharField(choices=[('psixolog', 'Psixolog'), ('lawyer', 'Lawyer'), ('business', 'Business')], default='business', max_length=255, verbose_name='type'),
+            model_name="postmodel",
+            name="news_type",
+            field=models.CharField(
+                choices=[("psixolog", "Psixolog"), ("lawyer", "Lawyer"), ("business", "Business")],
+                default="business",
+                max_length=255,
+                verbose_name="type",
+            ),
         ),
     ]

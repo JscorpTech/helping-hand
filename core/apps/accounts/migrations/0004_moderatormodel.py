@@ -8,24 +8,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0003_user_avatar'),
+        ("accounts", "0003_user_avatar"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ModeratorModel',
+            name="ModeratorModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('experience', models.PositiveIntegerField(default=0)),
-                ('level', models.PositiveIntegerField(default=1)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='moderator', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("experience", models.PositiveIntegerField(default=0)),
+                ("level", models.PositiveIntegerField(default=1)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="moderator",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'ModeratorModel',
-                'verbose_name_plural': 'ModeratorModels',
-                'db_table': 'moderator',
+                "verbose_name": "ModeratorModel",
+                "verbose_name_plural": "ModeratorModels",
+                "db_table": "moderator",
             },
         ),
     ]

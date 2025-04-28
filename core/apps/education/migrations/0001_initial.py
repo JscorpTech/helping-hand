@@ -7,27 +7,34 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='TutorialModel',
+            name="TutorialModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('type', models.CharField(choices=[('manual', 'Manual'), ('video', 'Video')], default='manual', max_length=255, verbose_name='type')),
-                ('name', models.CharField(max_length=255, verbose_name='name')),
-                ('desc', models.TextField(blank=True, null=True, verbose_name='description')),
-                ('image', models.ImageField(upload_to='tutorials/', verbose_name='banner')),
-                ('file', models.FileField(blank=True, null=True, upload_to='tutorials/', verbose_name='file')),
-                ('video', models.FileField(blank=True, null=True, upload_to='tutorials/', verbose_name='video')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("manual", "Manual"), ("video", "Video")],
+                        default="manual",
+                        max_length=255,
+                        verbose_name="type",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, verbose_name="name")),
+                ("desc", models.TextField(blank=True, null=True, verbose_name="description")),
+                ("image", models.ImageField(upload_to="tutorials/", verbose_name="banner")),
+                ("file", models.FileField(blank=True, null=True, upload_to="tutorials/", verbose_name="file")),
+                ("video", models.FileField(blank=True, null=True, upload_to="tutorials/", verbose_name="video")),
             ],
             options={
-                'verbose_name': 'TutorialModel',
-                'verbose_name_plural': 'TutorialModels',
-                'db_table': 'tutorial',
+                "verbose_name": "TutorialModel",
+                "verbose_name_plural": "TutorialModels",
+                "db_table": "tutorial",
             },
         ),
     ]

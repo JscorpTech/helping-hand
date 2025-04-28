@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0018_remove_taskresultmodel_is_file_answer_and_more'),
+        ("education", "0018_remove_taskresultmodel_is_file_answer_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='resultmodel',
-            name='bal',
+            model_name="resultmodel",
+            name="bal",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='variantmodel',
-            name='bal',
+            model_name="variantmodel",
+            name="bal",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),

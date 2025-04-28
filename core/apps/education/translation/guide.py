@@ -5,8 +5,4 @@ from ..models import GuideModel
 
 @register(GuideModel)
 class GuideTranslation(TranslationOptions):
-    fields = [
-        "name",
-        "desc",
-        "file"
-    ]
+    fields = ["name", "desc", "file"]

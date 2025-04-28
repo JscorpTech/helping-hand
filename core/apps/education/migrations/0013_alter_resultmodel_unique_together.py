@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0012_resultmodel'),
+        ("education", "0012_resultmodel"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='resultmodel',
-            unique_together={('user', 'tutorial')},
+            name="resultmodel",
+            unique_together={("user", "tutorial")},
         ),
     ]

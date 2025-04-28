@@ -8,22 +8,21 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='PositionModel',
+            name="PositionModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('location', django.contrib.gis.db.models.fields.PointField(srid=4326, verbose_name='location')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("location", django.contrib.gis.db.models.fields.PointField(srid=4326, verbose_name="location")),
             ],
             options={
-                'verbose_name': 'PositionModel',
-                'verbose_name_plural': 'PositionModels',
-                'db_table': 'position',
+                "verbose_name": "PositionModel",
+                "verbose_name_plural": "PositionModels",
+                "db_table": "position",
             },
         ),
     ]

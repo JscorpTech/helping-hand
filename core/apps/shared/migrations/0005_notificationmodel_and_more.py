@@ -8,45 +8,59 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0004_faqcatergorymodel_faqmodel_category'),
+        ("shared", "0004_faqcatergorymodel_faqmodel_category"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NotificationModel',
+            name="NotificationModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(max_length=255, verbose_name='title')),
-                ('body', models.TextField(blank=True, null=True, verbose_name='body')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("title", models.CharField(max_length=255, verbose_name="title")),
+                ("body", models.TextField(blank=True, null=True, verbose_name="body")),
             ],
             options={
-                'verbose_name': 'Notification',
-                'verbose_name_plural': 'Notifications',
-                'db_table': 'notification',
+                "verbose_name": "Notification",
+                "verbose_name_plural": "Notifications",
+                "db_table": "notification",
             },
         ),
         migrations.RenameModel(
-            old_name='FaqCatergoryModel',
-            new_name='FaqCategoryModel',
+            old_name="FaqCatergoryModel",
+            new_name="FaqCategoryModel",
         ),
         migrations.CreateModel(
-            name='UserNotificationModel',
+            name="UserNotificationModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_read', models.BooleanField(default=False, verbose_name='is read')),
-                ('read_at', models.DateTimeField(blank=True, null=True, verbose_name='read at')),
-                ('notification', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_notifications', to='shared.notificationmodel')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_notifications', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_read", models.BooleanField(default=False, verbose_name="is read")),
+                ("read_at", models.DateTimeField(blank=True, null=True, verbose_name="read at")),
+                (
+                    "notification",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="user_notifications",
+                        to="shared.notificationmodel",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="user_notifications",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'User Notification',
-                'verbose_name_plural': 'User Notifications',
-                'db_table': 'user_notification',
+                "verbose_name": "User Notification",
+                "verbose_name_plural": "User Notifications",
+                "db_table": "user_notification",
             },
         ),
     ]

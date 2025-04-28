@@ -7,30 +7,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0003_faqmodel'),
+        ("shared", "0003_faqmodel"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FaqCatergoryModel',
+            name="FaqCatergoryModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=255, verbose_name='name')),
-                ('updated_date', models.DateTimeField(auto_now=True, verbose_name='updated date')),
-                ('created_date', models.DateTimeField(auto_now_add=True, verbose_name='created date')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=255, verbose_name="name")),
+                ("updated_date", models.DateTimeField(auto_now=True, verbose_name="updated date")),
+                ("created_date", models.DateTimeField(auto_now_add=True, verbose_name="created date")),
             ],
             options={
-                'verbose_name': 'FaqCatergoryModel',
-                'verbose_name_plural': 'FaqCatergoryModels',
-                'db_table': 'faq_category',
+                "verbose_name": "FaqCatergoryModel",
+                "verbose_name_plural": "FaqCatergoryModels",
+                "db_table": "faq_category",
             },
         ),
         migrations.AddField(
-            model_name='faqmodel',
-            name='category',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='shared.faqcatergorymodel', verbose_name='category'),
+            model_name="faqmodel",
+            name="category",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="questions",
+                to="shared.faqcatergorymodel",
+                verbose_name="category",
+            ),
             preserve_default=False,
         ),
     ]

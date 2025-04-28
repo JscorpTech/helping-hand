@@ -6,38 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0027_guidemodel_desc_kaa_guidemodel_desc_kril_and_more'),
+        ("education", "0027_guidemodel_desc_kaa_guidemodel_desc_kril_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='taskmodel',
-            name='desc_kaa',
-            field=models.TextField(blank=True, null=True, verbose_name='description'),
+            model_name="taskmodel",
+            name="desc_kaa",
+            field=models.TextField(blank=True, null=True, verbose_name="description"),
         ),
         migrations.AddField(
-            model_name='taskmodel',
-            name='desc_kril',
-            field=models.TextField(blank=True, null=True, verbose_name='description'),
+            model_name="taskmodel",
+            name="desc_kril",
+            field=models.TextField(blank=True, null=True, verbose_name="description"),
         ),
         migrations.AddField(
-            model_name='taskmodel',
-            name='desc_uz',
-            field=models.TextField(blank=True, null=True, verbose_name='description'),
+            model_name="taskmodel",
+            name="desc_uz",
+            field=models.TextField(blank=True, null=True, verbose_name="description"),
         ),
         migrations.AddField(
-            model_name='taskmodel',
-            name='name_kaa',
-            field=models.CharField(max_length=255, null=True, verbose_name='name'),
+            model_name="taskmodel",
+            name="name_kaa",
+            field=models.CharField(max_length=255, null=True, verbose_name="name"),
         ),
         migrations.AddField(
-            model_name='taskmodel',
-            name='name_kril',
-            field=models.CharField(max_length=255, null=True, verbose_name='name'),
+            model_name="taskmodel",
+            name="name_kril",
+            field=models.CharField(max_length=255, null=True, verbose_name="name"),
         ),
         migrations.AddField(
-            model_name='taskmodel',
-            name='name_uz',
-            field=models.CharField(max_length=255, null=True, verbose_name='name'),
+            model_name="taskmodel",
+            name="name_uz",
+            field=models.CharField(max_length=255, null=True, verbose_name="name"),
         ),
     ]

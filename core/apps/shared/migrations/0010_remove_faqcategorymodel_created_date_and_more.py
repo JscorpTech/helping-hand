@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shared', '0009_alter_faqcategorymodel_options_and_more'),
+        ("shared", "0009_alter_faqcategorymodel_options_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='faqcategorymodel',
-            name='created_date',
+            model_name="faqcategorymodel",
+            name="created_date",
         ),
         migrations.RemoveField(
-            model_name='faqcategorymodel',
-            name='updated_date',
+            model_name="faqcategorymodel",
+            name="updated_date",
         ),
         migrations.RemoveField(
-            model_name='faqmodel',
-            name='created_date',
+            model_name="faqmodel",
+            name="created_date",
         ),
         migrations.RemoveField(
-            model_name='faqmodel',
-            name='updated_date',
+            model_name="faqmodel",
+            name="updated_date",
         ),
     ]

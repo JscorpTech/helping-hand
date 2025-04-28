@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('education', '0013_alter_resultmodel_unique_together'),
+        ("education", "0013_alter_resultmodel_unique_together"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='resultmodel',
-            name='total',
-            field=models.PositiveIntegerField(default=0, verbose_name='total'),
+            model_name="resultmodel",
+            name="total",
+            field=models.PositiveIntegerField(default=0, verbose_name="total"),
         ),
     ]

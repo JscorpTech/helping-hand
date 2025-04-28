@@ -6,28 +6,28 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0004_postmodel_news_type'),
+        ("news", "0004_postmodel_news_type"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='postmodel',
-            old_name='content_en',
-            new_name='content_kaa',
+            model_name="postmodel",
+            old_name="content_en",
+            new_name="content_kaa",
         ),
         migrations.RenameField(
-            model_name='postmodel',
-            old_name='content_ru',
-            new_name='content_kril',
+            model_name="postmodel",
+            old_name="content_ru",
+            new_name="content_kril",
         ),
         migrations.RenameField(
-            model_name='postmodel',
-            old_name='title_en',
-            new_name='title_kaa',
+            model_name="postmodel",
+            old_name="title_en",
+            new_name="title_kaa",
         ),
         migrations.RenameField(
-            model_name='postmodel',
-            old_name='title_ru',
-            new_name='title_kril',
+            model_name="postmodel",
+            old_name="title_ru",
+            new_name="title_kril",
         ),
     ]

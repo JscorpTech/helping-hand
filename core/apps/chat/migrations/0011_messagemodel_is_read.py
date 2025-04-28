@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0010_alter_groupmodel_chat_type_alter_groupmodel_name_and_more'),
+        ("chat", "0010_alter_groupmodel_chat_type_alter_groupmodel_name_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='messagemodel',
-            name='is_read',
-            field=models.BooleanField(default=False, verbose_name='is read'),
+            model_name="messagemodel",
+            name="is_read",
+            field=models.BooleanField(default=False, verbose_name="is read"),
         ),
     ]

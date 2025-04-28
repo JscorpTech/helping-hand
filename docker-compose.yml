@@ -19,8 +19,8 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.nginx
     depends_on:
-      - web
-  web:
+      - helping-web
+  helping-web:
     networks:
       - helping_hand
     build:
