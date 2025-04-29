@@ -52,6 +52,9 @@ class User(auth_models.AbstractUser):
             role=RoleChoice.ADMIN,
         )
 
+    class Meta:
+        ordering = ["-created_at"]
+
 
 class ModeratorModel(AbstractBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="moderator")
