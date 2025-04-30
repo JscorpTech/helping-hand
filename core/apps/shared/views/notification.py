@@ -24,6 +24,8 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
     queryset = NotificationModel.objects.all()
     filter_backends = [SearchFilter]
     search_fields = [
+        "title",
+        "body",
         "title_uz",
         "title_kaa",
         "title_kril",
@@ -64,7 +66,7 @@ class NotificationView(BaseViewSetMixin, ModelViewSet):
     @extend_schema(summary="All notifications", description="All notifications")
     @action(detail=False, methods=["GET"], url_path="notifications")
     def notifications(self, request, *args, **kwargs):
-        notifications = NotificationModel.objects.all()
+        notifications = self.filter_queryset(self.get_queryset())
         paginator = self.paginator
         serializer_class = self.get_serializer_class()
         paginated_queryset = paginator.paginate_queryset(notifications, request, view=self)
