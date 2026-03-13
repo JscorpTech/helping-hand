@@ -7,20 +7,7 @@ volumes:
   pycache: null
 
 services:
-  nginx:
-    networks:
-      - helping_hand
-    ports:
-      - ${PORT:-8001}:80
-    volumes:
-      - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
-      - ./resources/:/usr/share/nginx/html/resources/
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.nginx
-    depends_on:
-      - helping-web
-  helping-web:
+  web:
     env_file:
       - .env
     networks:
@@ -29,22 +16,21 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.web
     restart: always
+    container_name: test_web
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
       - SCRIPT=${SCRIPT:-entrypoint.sh}
     volumes:
-      - './:/code'
       - pycache:/var/cache/pycache
     depends_on:
       - db
       - redis
   db:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.postgres
     networks:
       - helping_hand
+    image: postgres:16
     restart: always
+    container_name: test_db
     environment:
       POSTGRES_DB: ${DB_NAME:-django}
       POSTGRES_USER: ${DB_USER:-postgres}
@@ -52,7 +38,9 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   redis:
+    container_name: test_redis
     networks:
       - helping_hand
     restart: always
+
     image: redis

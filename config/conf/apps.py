@@ -15,7 +15,7 @@ APPS = [
     "core.apps.accounts.apps.AccountsConfig",
 ]
 
-if env.str("PROJECT_ENV") == "debug":
+if env.bool("SILK_ENABLED", False):
     APPS += [
         "silk",
     ]

@@ -1,0 +1,188 @@
+pipeline {
+    agent any
+
+    environment {
+        PROD_ENV     = "/opt/env/.env.helping_hand"
+        IMAGE_NAME   = "helping_hand"
+        TEST_TAG     = "test"
+        PROD_TAG     = "latest"
+        CONTAINER_DB = "helping_hand_db_test"
+        CONTAINER_WEB = "helping_hand_web_test"
+        CONTAINER_REDIS = "helping_hand_redis_test"
+        STACK_NAME = "helping_hand"
+    }
+
+    stages {
+        stage('Check Commit Message') {
+            steps {
+                script {
+                    def commitMsg = sh(
+                        script: "git log -1 --pretty=%B",
+                        returnStdout: true
+                    ).trim()
+                    
+                    if (commitMsg.contains("[ci skip]")) {
+                        echo "Commit message contains [ci skip], aborting pipeline 🚫"
+                        currentBuild.result = 'ABORTED'
+                        error("Pipeline aborted because of [ci skip]")
+                    }
+                }
+            }
+        }
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: 'ssh', url: 'git@github.com:JscorpTech/helping_hand.git'
+            }
+        }
+        stage('Prepare') {
+            steps {
+                script {
+                    env.GIT_MESSAGE = sh(
+                        script: "git log -1 --pretty=%B ${env.GIT_COMMIT}",
+                        returnStdout: true
+                    ).trim()
+                }
+            }
+        }
+        stage("Update files") {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
+                        sed -i 's/return HttpResponse("OK.*"/return HttpResponse("OK: #${GIT_COMMIT}"/' config/urls.py
+                    """
+                        // git config --global user.email "admin@jscorp.uz"
+                        // git config --global user.name "Jenkins"
+                        // if ! git diff --quiet stack.yaml; then
+                        //     git add stack.yaml
+                        //     git commit -m "feat(swarm) Update image tag to ${BUILD_NUMBER} [ci skip]"
+                        //     git push origin main
+                        // else
+                        //     echo "No changes in stack.yaml"
+                        // fi
+                }
+
+            }
+        }
+        stage('Build Image') {
+            steps {
+                sh '''
+                    if [ -e ${PROD_ENV} ]; then
+                       echo env exists
+                    else
+                        mkdir -p $(dirname ${PROD_ENV})
+                        cp ./.env.example ${PROD_ENV}
+                    fi
+                    cp ${PROD_ENV} ./.env
+                '''
+                sh """
+                    docker build -t ${IMAGE_NAME}:${PROD_TAG} --build-arg SCRIPT=entrypoint-server.sh -f ./docker/Dockerfile.web .
+                """
+            }
+        }
+
+
+        stage('Start Test DB') {
+            steps {
+                sh """
+                    docker run -d --rm --name ${CONTAINER_DB} -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=testdb postgres:16
+                    docker run -d --rm --name ${CONTAINER_REDIS} redis
+                    echo "⏳ Waiting for database..."
+                    for i in {1..30}; do
+                        if docker exec ${CONTAINER_DB} pg_isready -U postgres >/dev/null 2>&1; then
+                            echo "✅ Database ready"
+                            break
+                        fi
+                        echo "Database not ready yet... retrying..."
+                        sleep 2
+                    done
+                """
+            }
+        }
+
+        stage('Run Migrations & Tests') {
+            steps {
+                sh """
+                    docker run --rm --name ${CONTAINER_WEB} --link ${CONTAINER_DB}:db --link ${CONTAINER_REDIS}:redis \
+                        -e DB_HOST=db \
+                        -e DB_PORT=5432 \
+                        -e DB_NAME=testdb \
+                        -e DB_USER=postgres \
+                        -e DB_PASSWORD=postgres \
+                        -e DJANGO_SETTINGS_MODULE=config.settings.test \
+                        ${IMAGE_NAME}:${PROD_TAG} \
+                        sh -c "python manage.py migrate && pytest -v"
+                """
+            }
+        }
+
+        stage('Publish to DockerHub') {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+                        docker tag ${IMAGE_NAME}:${PROD_TAG} ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                        docker tag ${IMAGE_NAME}:${PROD_TAG} ${DOCKER_USER}/${IMAGE_NAME}:${PROD_TAG}
+                        docker push ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                        docker push ${DOCKER_USER}/${IMAGE_NAME}:${PROD_TAG}
+                    '''
+                }
+            }
+        }
+        stage('Deploy stack') {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                       docker stack deploy -c stack.yaml ${STACK_NAME}
+                    '''
+                }
+            }
+        }
+ 
+    }
+
+    post {
+        always {
+            sh """
+                docker stop ${CONTAINER_DB} || true
+                docker stop ${CONTAINER_REDIS} || true
+            """
+            echo "Pipeline finished: ${currentBuild.currentResult}"
+        }
+
+        success {
+            withCredentials([
+                string(credentialsId: 'bot-token', variable: 'BOT_TOKEN'),
+                string(credentialsId: 'chat-id', variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                -d chat_id=${CHAT_ID} \
+                -d text="✅ SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}\nRepo: ${GIT_URL}\nBranch: ${GIT_BRANCH}\nCommit: ${GIT_COMMIT}\nMessage: ${GIT_MESSAGE}"
+                '''
+            }
+        }
+
+        failure {
+            withCredentials([
+                string(credentialsId: 'bot-token', variable: 'BOT_TOKEN'),
+                string(credentialsId: 'chat-id', variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                -d chat_id=${CHAT_ID} \
+                -d text="🚨 FAILED: ${JOB_NAME} #${BUILD_NUMBER}\nRepo: ${GIT_URL}\nBranch: ${GIT_BRANCH}\nCommit: ${GIT_COMMIT}\nMessage: ${GIT_MESSAGE}"
+                '''
+            }
+        }
+    }
+}

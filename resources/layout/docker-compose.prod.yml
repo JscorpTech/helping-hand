@@ -5,6 +5,8 @@ networks:
 volumes:
   pg_data: null
   pycache: null
+  media: null
+  static: null
 
 services:
   nginx:
@@ -14,45 +16,46 @@ services:
       - ${PORT:-8001}:80
     volumes:
       - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
-      - ./resources/:/usr/share/nginx/html/resources/
+      - media:/usr/share/nginx/html/resources/media/:ro
+      - static:/usr/share/nginx/html/resources/staticfiles/:ro
     build:
       context: .
       dockerfile: ./docker/Dockerfile.nginx
     depends_on:
-      - helping-web
-  helping-web:
-    env_file:
-      - .env
+      - web
+  web:
     networks:
       - helping_hand
     build:
       context: .
       dockerfile: ./docker/Dockerfile.web
     restart: always
+    env_file:
+      - .env
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
       - SCRIPT=${SCRIPT:-entrypoint.sh}
     volumes:
-      - './:/code'
+      - media:/code/resources/media/
+      - static:/code/resources/staticfiles/
       - pycache:/var/cache/pycache
     depends_on:
       - db
       - redis
   db:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.postgres
     networks:
       - helping_hand
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME:-django}
       POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-2309}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Database password must be set in .env file}
     volumes:
       - pg_data:/var/lib/postgresql/data
   redis:
     networks:
       - helping_hand
     restart: always
+
     image: redis

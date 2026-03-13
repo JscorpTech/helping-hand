@@ -1,26 +1,32 @@
-FROM python:3.12-bookworm
+FROM jscorptech/django:v1.0.0
+
+ARG SCRIPT="entrypoint.sh"
+ENV SCRIPT=$SCRIPT
 
 WORKDIR /code
 
-# Install required dependencies including a specific version of GDAL
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# Install required dependencies that are missing in the base image (Alpine based)
+# Note: wkhtmltopdf is problematic on Alpine, might need a different approach if needed
+RUN apk update && \
+    apk add --no-cache \
     binutils \
-    gdal-bin \
-    libgdal-dev \
-    libgeos-dev \
-    libproj-dev \
+    gdal \
+    gdal-dev \
+    geos-dev \
+    proj-dev \
     g++ \
     make \
-    wkhtmltopdf && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    ttf-dejavu \
+    ttf-freefont \
+    ttf-liberation
 
-# Verify GDAL version (for troubleshooting)
-RUN gdalinfo --version
+COPY requirements.txt /code/requirements.txt
 
-# Install Python dependencies
+# Use uv for faster installation
+RUN uv pip install --system -r requirements.txt
+
 COPY ./ /code
-RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install -r requirements.txt
 
-CMD ["sh", "./resources/scripts/entrypoint.sh"]
+RUN chmod +x /code/resources/scripts/$SCRIPT
+
+CMD sh /code/resources/scripts/$SCRIPT

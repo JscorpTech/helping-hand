@@ -3,5 +3,6 @@
         "apps": "./core/apps/",
         "locale": "./resources/locale/"
     },
-    "apps": "core.apps."
+    "apps": "core.apps.",
+    "jst": true
 }

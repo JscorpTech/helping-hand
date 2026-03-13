@@ -19,3 +19,10 @@ filterwarnings = [
 [tool.flake8]
 max-line-length = 120
 ignore = ["E701", "E704", "W503"]
+
+[tool.pyright]
+typeCheckingMode = "basic"
+reportMissingImports = false
+reportMissingTypeStubs = false
+pythonVersion = "3.12"
+enableReachabilityAnalysis = false

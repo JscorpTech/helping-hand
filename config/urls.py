@@ -4,22 +4,30 @@ All urls configurations tree
 
 from django.conf import settings
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import include, path, re_path
 from django.views.static import serve
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 
 from config.env import env
+
+
+def home(request):
+    return HttpResponse("OK")
 
 ################
 # My apps url
 ################
 urlpatterns = [
+    path("health/", home),
     path("", include("core.apps.accounts.urls")),
     path("chat/", include("core.apps.chat.urls")),
     path("news/", include("core.apps.news.urls")),
     path("sos/", include("core.apps.sos.urls")),
     path("education/", include("core.apps.education.urls")),
     path("shared/", include("core.apps.shared.urls")),
+    path("api/", include("core.apps.shared.urls")),
 ]
 
 
@@ -37,7 +45,7 @@ urlpatterns += [
 ################
 # Project env debug mode
 ################
-if env.str("PROJECT_ENV") == "debug":
+if env.bool("SILK_ENABLED", False):
     urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
 
     ################

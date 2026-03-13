@@ -1,13 +1,28 @@
+# type: ignore
+import random
 from datetime import datetime, timedelta
 
-from django_core import exceptions, models, tasks
+from config.env import env
+from core.apps.accounts.tasks.sms import SendConfirm
+from django_core import exceptions, models
 
 
 class SmsService:
     @staticmethod
     def send_confirm(phone):
+        """Tasdiqlash ko'dini yuborish
+
+        Args:
+            phone (str): telefon no'mer
+
+        Raises:
+            exceptions.SmsException: [TODO:description]
+        """
         # TODO: Deploy this change when deploying -> code = random.randint(1000, 9999) # noqa
-        code = 1111
+        if env.bool("OTP_PROD", False):
+            code = "".join(str(random.randint(0, 9)) for _ in range(env.int("OTP_SIZE", 4)))
+        else:
+            code = env.int("OTP_DEFAULT", 1111)
 
         sms_confirm, status = models.SmsConfirm.objects.get_or_create(phone=phone, defaults={"code": code})
 
@@ -22,17 +37,29 @@ class SmsService:
         sms_confirm.try_count = 0
         sms_confirm.resend_count += 1
         sms_confirm.phone = phone
-        sms_confirm.expired_time = datetime.now() + timedelta(seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS)  # noqa
+        sms_confirm.expire_time = datetime.now() + timedelta(seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS)  # noqa
         sms_confirm.resend_unlock_time = datetime.now() + timedelta(
             seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS
         )  # noqa
         sms_confirm.save()
 
-        tasks.SendConfirm.delay(phone, code)
+        SendConfirm.delay(phone, code)
         return True
 
     @staticmethod
     def check_confirm(phone, code):
+        """Tasdiqlash ko'dini haqiqiyligini tekshirish
+
+        Args:
+            phone ([TODO:type]): [TODO:description]
+            code ([TODO:type]): [TODO:description]
+
+        Raises:
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+        """
         sms_confirm = models.SmsConfirm.objects.filter(phone=phone).first()
 
         if sms_confirm is None:
@@ -47,7 +74,7 @@ class SmsService:
             expired = sms_confirm.interval(sms_confirm.unlock_time)
             raise exceptions.SmsException(f"Try again in {expired}")
 
-        if sms_confirm.code == code:
+        if str(sms_confirm.code) == str(code):
             sms_confirm.delete()
             return True
 
