@@ -31,7 +31,7 @@ requests
 model_bakery
 faker~=33.1.0
 GDAL==3.6.2
-pdfkit
+weasyprint
 django-modeltranslation~=0.19.11
 
 pytest

@@ -1,5 +1,6 @@
 FROM jscorptech/django:v1.0.0
 
+
 ARG SCRIPT="entrypoint.sh"
 ENV SCRIPT=$SCRIPT
 
@@ -18,12 +19,27 @@ RUN apk update && \
     make \
     ttf-dejavu \
     ttf-freefont \
-    ttf-liberation
+    ttf-liberation \
+    pango-dev \
+    libffi-dev \
+    py3-pip \
+    python3-dev \
+    jpeg-dev \
+    zlib-dev \
+    freetype-dev \
+    lcms2-dev \
+    openjpeg-dev \
+    tiff-dev \
+    tk-dev \
+    tcl-dev \
+    harfbuzz-dev \
+    fribidi-dev \
+    ghostscript-dev
 
 COPY requirements.txt /code/requirements.txt
 
-# Use uv for faster installation
-RUN uv pip install --system -r requirements.txt
+# Install to the existing venv
+RUN uv pip install -r requirements.txt
 
 COPY ./ /code
 

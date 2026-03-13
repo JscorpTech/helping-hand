@@ -1,7 +1,7 @@
 from pathlib import Path
 from uuid import uuid4
 
-import pdfkit
+from weasyprint import HTML
 from django.conf import settings
 
 from core.apps.accounts.models import User
@@ -27,8 +27,6 @@ class SertificateService:
 
     def generate(self) -> str:
         file_name = "sertificates/sertificate_%s.pdf" % uuid4()
-        file_path = str(Path(settings.BASE_DIR, "resources/media/%s" % file_name))
-        pdfkit.from_string(self.get_sertificate(), file_path)
-        with open(file_path, "rb") as file:
-            default_storage.save(file_name, ContentFile(file.read()))
+        pdf_data = HTML(string=self.get_sertificate()).write_pdf()
+        default_storage.save(file_name, ContentFile(pdf_data))
         return file_name
