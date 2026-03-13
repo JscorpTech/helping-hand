@@ -1,13 +1,13 @@
-FROM python:3.12
+FROM python:3.12-bookworm
 
 WORKDIR /code
 
 # Install required dependencies including a specific version of GDAL
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
+    binutils \
     gdal-bin \
     libgdal-dev \
-    python3-gdal \
     libgeos-dev \
     libproj-dev \
     g++ \
