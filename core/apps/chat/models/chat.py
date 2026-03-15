@@ -7,6 +7,8 @@ from django_core.models import AbstractBaseModel
 from ..choices import ChatTypeChoice, FileTypeChoice
 
 
+
+
 class GroupModel(AbstractBaseModel):
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("name"))
     is_public = models.BooleanField(_("is:public"), default=False)

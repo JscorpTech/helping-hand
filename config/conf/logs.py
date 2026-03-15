@@ -27,32 +27,37 @@ LOGGING = {
         },
     },
     "handlers": {
-        "daily_rotating_file": {
+        "console": {
             "level": "INFO",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": LOG_DIR / "django.log",
-            "when": "midnight",
-            "backupCount": 30,
-            "formatter": "verbose",
-            "filters": ["exclude_errors"],
-        },
-        "error_file": {
-            "level": "ERROR",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": LOG_DIR / "django_error.log",
-            "when": "midnight",
-            "backupCount": 30,
+            "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
+        # "daily_rotating_file": {
+        #     "level": "INFO",
+        #     "class": "logging.handlers.TimedRotatingFileHandler",
+        #     "filename": str(LOG_DIR / "django.log"),
+        #     "when": "midnight",
+        #     "backupCount": 30,
+        #     "formatter": "verbose",
+        #     "filters": ["exclude_errors"],
+        # },
+        # "error_file": {
+        #     "level": "ERROR",
+        #     "class": "logging.handlers.TimedRotatingFileHandler",
+        #     "filename": str(LOG_DIR / "django_error.log"),
+        #     "when": "midnight",
+        #     "backupCount": 30,
+        #     "formatter": "verbose",
+        # },
     },
     "loggers": {
         "django": {
-            "handlers": ["daily_rotating_file", "error_file"],
+            "handlers": ["console"], #, "daily_rotating_file", "error_file"],
             "level": "INFO",
             "propagate": True,
         },
         "root": {
-            "handlers": ["daily_rotating_file", "error_file"],
+            "handlers": ["console"], #, "daily_rotating_file", "error_file"],
             "level": "INFO",
             "propagate": True,
         },

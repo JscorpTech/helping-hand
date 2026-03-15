@@ -5,16 +5,23 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.cache import cache
 from django.db.models import Q
 
+import logging
 from ..models import GroupModel
 from ..serializers import CallSerializer
 from ..services import ChatService
 
+logger = logging.getLogger(__name__)
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        if self.scope["user"].is_authenticated:
-            cache.set("channel_%s" % self.scope["user"].username, self.channel_name, 60 * 60 * 24)
-        await self._add_groups(await self._get_user_groups())
+        user = self.scope["user"]
+        if user.is_authenticated:
+            cache.set("channel_%s" % user.username, self.channel_name, 60 * 60 * 24)
+        
+        groups = await self._get_user_groups()
+        logger.info(f"WS CONNECT: User {user} joined groups: {groups}")
+        await self._add_groups(groups)
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -30,13 +37,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if not serializer.is_valid():
                 return await self.send(text_data=json.dumps({"status": False, "data": serializer.errors}))
             response = service.process(serializer.validated_data)
+            # Direct response for testing
+            await self.send(text_data=json.dumps({"status": True, "data": response["data"], "action": "direct_response"}))
+            
+            logger.info(f"WS SEND: User {self.scope['user']} sending to group {response['group']}")
             await self.channel_layer.group_send(
                 response["group"], {"type": "chat_message", "status": True, "data": response["data"], "action": "call"}
             )
         except Exception as e:
+            logger.error(f"WS ERROR in receive: {e}", exc_info=True)
             await self.send(text_data=json.dumps({"status": False, "detail": str(e)}))
 
     async def chat_message(self, event):
+        logger.info(f"WS RECEIVE: chat_message in {self.channel_name} for user {self.scope.get('user')}")
         await self.send(
             text_data=json.dumps(
                 {
