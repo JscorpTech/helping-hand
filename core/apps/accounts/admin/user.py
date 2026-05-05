@@ -57,6 +57,14 @@ class SmsConfirmAdmin(ModelAdmin):
     search_fields = ["phone", "code"]
 
 
+class SmsLogAdmin(ModelAdmin):
+    list_display = ["phone", "sms_count", "status", "created_at"]
+    list_filter = ["status", "created_at"]
+    search_fields = ["phone"]
+    readonly_fields = ["phone", "message", "sms_count", "status", "error", "created_at"]
+    date_hierarchy = "created_at"
+
+
 @admin.register(ModeratorModel)
 class ModeratorAdmin(ModelAdmin):
     list_display = (

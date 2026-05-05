@@ -51,6 +51,24 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-2309}
     volumes:
       - pg_data:/var/lib/postgresql/data
+  celery:
+    env_file:
+      - .env
+    networks:
+      - helping_hand
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.web
+    restart: always
+    environment:
+      - PYTHONPYCACHEPREFIX=/var/cache/pycache
+      - SCRIPT=celery.sh
+    volumes:
+      - './:/code'
+      - pycache:/var/cache/pycache
+    depends_on:
+      - db
+      - redis
   redis:
     networks:
       - helping_hand

@@ -1,7 +1,43 @@
 # type: ignore
+import math
+import uuid
+
 import requests
 
 from config.env import env
+
+
+class SmsXabarService:
+    def __init__(self, api_url=None, login=None, password=None, originator=None):
+        self.api_url = api_url or env("SMS_XABAR_URL", default="https://send.smsxabar.uz/broker-api/send")
+        self.login = login or env("SMS_XABAR_LOGIN")
+        self.password = password or env("SMS_XABAR_PASSWORD")
+        self.originator = originator or env("SMS_XABAR_ORIGINATOR", default="3700")
+
+    def send_sms(self, phone_number, message):
+        message_id = uuid.uuid4().hex[:12]
+
+        payload = {
+            "messages": [
+                {
+                    "recipient": str(phone_number),
+                    "message-id": message_id,
+                    "sms": {
+                        "originator": self.originator,
+                        "content": {"text": message},
+                    },
+                }
+            ]
+        }
+
+        response = requests.post(
+            self.api_url,
+            json=payload,
+            auth=(self.login, self.password),
+            timeout=10,
+        )
+        response.raise_for_status()
+        return response.text
 
 
 class EskizService:
